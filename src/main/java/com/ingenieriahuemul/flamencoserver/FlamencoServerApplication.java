@@ -17,7 +17,7 @@ public class FlamencoServerApplication extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
-    	logger.info("iniciando");
+    	logger.info("prueba log");
         SpringApplication.run(FlamencoServerApplication.class, args);
     }
 }
