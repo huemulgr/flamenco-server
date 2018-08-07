@@ -3,8 +3,8 @@ package com.ingenieriahuemul.flamencoserver.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.ingenieriahuemul.flamencoserver.dominio.User0;
-import com.ingenieriahuemul.flamencoserver.services.UserService;
+import com.ingenieriahuemul.flamencoserver.dominio.Usuario;
+import com.ingenieriahuemul.flamencoserver.services.UsuarioService;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UsuarioService userService;
 
     @PostMapping
-    public User0 create(@RequestBody User0 user){
+    public Usuario create(@RequestBody Usuario user){
         return userService.create(user);
     }
 
@@ -26,7 +26,7 @@ public class UserController {
 //    }
 
     @PutMapping
-    public User0 update(@RequestBody User0 user){
+    public Usuario update(@RequestBody Usuario user){
         return userService.update(user);
     }
 

@@ -5,18 +5,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ingenieriahuemul.flamencoserver.dominio.DaoUser0;
-import com.ingenieriahuemul.flamencoserver.dominio.User0;
-import com.ingenieriahuemul.flamencoserver.services.UserService;
+import com.ingenieriahuemul.flamencoserver.dominio.UsuarioDao;
+import com.ingenieriahuemul.flamencoserver.dominio.PerfilDao;
+import com.ingenieriahuemul.flamencoserver.dominio.Usuario;
+import com.ingenieriahuemul.flamencoserver.services.UsuarioService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
-    private DaoUser0 repository;
+    private UsuarioDao repository;
 
+    @Autowired
+    private PerfilDao perfilDao;
+    
     @Override
-    public User0 create(User0 user) {
+    public Usuario create(Usuario user) {
         return repository.save(user);
     }
 
@@ -31,12 +35,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List findAll() {
-        return repository.findAll();
+//        return repository.findAll();
+    	return perfilDao.findAll();
     }
 
 
     @Override
-    public User0 update(User0 user) {
+    public Usuario update(Usuario user) {
         return null;
     }
 }
