@@ -1,23 +1,23 @@
 package com.ingenieriahuemul.flamencoserver.dominio;
 
-import javax.persistence.*;
+//SELECT 
+//USR.`idusuario`
+//,USR.`nombreusuario`
+//,USR.`nombrecompleto`
+//,USR.`email`
+//,group_concat(PERF.nombre) PerfilesAsignados
 
-@Entity
-@Table(name = "usuario")
 public class Usuario {
 
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idusuario;
-    @Column
     private String nombreusuario;
-    @Column
     private String nombrecompleto;
-    @Column
     private String email;
-    @Column
+    
+    //este parametro se usa para insertar o modificar la password de un user, 
+    //pero quedaria vacio en todos los demas casos y es recomendable igualarla a null despues de usarla
     private String password;
+    private String perfilesAsignados;
     
     
 	public int getIdusuario() {
@@ -49,6 +49,12 @@ public class Usuario {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public void setPerfilesAsignados(String string) {
+		this.perfilesAsignados = string;
+	}
+	public String getPerfilesAsignados() {
+		return perfilesAsignados;
 	}
    
     
