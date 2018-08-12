@@ -17,7 +17,7 @@ import com.ingenieriahuemul.flamencoserver.dominio.Usuario;
 import com.ingenieriahuemul.flamencoserver.services.UsuarioService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/")
 public class UserController {
 	private static final Logger logger = Logger.getLogger(UserController.class);
     
@@ -31,9 +31,9 @@ public class UserController {
         return usuarioService.create(usuario);
     }
 
-    @GetMapping(path = {"/{id}"})
+    @GetMapping("/{id}")
     public Usuario findOne(@PathVariable("id") int id){
-        return usuarioService.findById(id);
+        return usuarioService.findById(Long.valueOf(id));
     }
 
     @PutMapping
@@ -42,10 +42,10 @@ public class UserController {
         return usuarioService.update(usuario);
     }
 
-    @DeleteMapping(path = {"/{id}"})
+    @DeleteMapping(path = "/{id}")
     public void delete(@PathVariable("id") int idUsuario) {
     	logger.info("borrando usuario con id " + idUsuario + "...");
-        usuarioService.delete(idUsuario);
+        usuarioService.delete(Long.valueOf(idUsuario));
     }
 
     @GetMapping

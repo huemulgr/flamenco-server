@@ -22,7 +22,7 @@ public class UsuarioService {
     	return usuario;
     }
 
-    public void delete(int idUsuario) {
+    public void delete(Long idUsuario) {
     	usuarioDao.delete(idUsuario);
     }
 
@@ -30,7 +30,7 @@ public class UsuarioService {
     	return usuarioDao.findAll();
     }
     
-    public Usuario findById(Integer idUsuario) {
+    public Usuario findById(Long idUsuario) {
     	return usuarioDao.findById(idUsuario);
     }
 

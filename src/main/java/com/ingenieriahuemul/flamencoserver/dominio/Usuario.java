@@ -6,10 +6,9 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 //,USR.`nombrecompleto`
 //,USR.`email`
 //,group_concat(PERF.nombre) PerfilesAsignados
-
 public class Usuario {
 
-    private int idusuario;
+    private Long idusuario;
     private String nombreusuario;
     private String nombrecompleto;
     private String email;
@@ -19,11 +18,11 @@ public class Usuario {
     private String password;
     private String perfilesAsignados;
     
-    
-	public int getIdusuario() {
+    	
+	public Long getIdusuario() {
 		return idusuario;
 	}
-	public void setIdusuario(int idusuario) {
+	public void setIdusuario(Long idusuario) {
 		this.idusuario = idusuario;
 	}
 	public String getNombreusuario() {
@@ -55,7 +54,6 @@ public class Usuario {
 	}
 	public String getPerfilesAsignados() {
 		return perfilesAsignados;
-	}
-   
+	}   
     
 }

@@ -12,18 +12,17 @@ import com.ingenieriahuemul.flamencoserver.dominio.Usuario;
 public class UsuarioDao extends BaseDao{
 	
 	//parametros
-	private final String P_ID_USUARIO = "PidUsuario";
-	private final String P_NOMBRE_USUARIO = "PnombreUsuario";
-	private final String P_NOMBRE_COMPLETO = "PnombreCompleto";
-	private final String P_EMAIL = "Pemail";
-	private final String P_PASSWORD = "Ppassword";
+	private static final String P_ID_USUARIO = "PidUsuario";
+	private static final String P_NOMBRE_USUARIO = "PnombreUsuario";
+	private static final String P_NOMBRE_COMPLETO = "PnombreCompleto";
+	private static final String P_EMAIL = "Pemail";
+	private static final String P_PASSWORD = "Ppassword";
 	
 	//stored procedures
-	private final String CONSULTA = "flaUsuarioSele";
-	private final String ALTA = "flaUsuarioAlta";
-	private final String BAJA = "flaUsuarioBaja";	
-	private final String MODIFICACION = "flaUsuarioModif";
-		
+	private static final String CONSULTA = "flaUsuarioSele";
+	private static final String ALTA = "flaUsuarioAlta";
+	private static final String BAJA = "flaUsuarioBaja";	
+	private static final String MODIFICACION = "flaUsuarioModif";
 	
 	//	IN `Pidusuario` MEDIUMINT UNSIGNED	
 	public List<Usuario> findAll() {
@@ -33,7 +32,7 @@ public class UsuarioDao extends BaseDao{
 	}
 	
 	//	IN `Pidusuario` MEDIUMINT UNSIGNED	
-	public Usuario findById(Integer idUsuario) {
+	public Usuario findById(Long idUsuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_USUARIO, idUsuario);
 		return ((List<Usuario>)super.ejecutarStoredProcedure(CONSULTA, in, null, Usuario.class)).get(0);
@@ -47,18 +46,18 @@ public class UsuarioDao extends BaseDao{
 	public Usuario save(Usuario usuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_NOMBRE_USUARIO, usuario.getNombreusuario());
-		in.put(P_NOMBRE_USUARIO, usuario.getNombrecompleto());
+		in.put(P_NOMBRE_COMPLETO, usuario.getNombrecompleto());
 		in.put(P_PASSWORD, usuario.getPassword());
 		in.put(P_EMAIL, usuario.getEmail());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
 		super.ejecutarStoredProcedure(ALTA, in, out, Usuario.class);
-		usuario.setIdusuario((Integer) out.get(P_ID_USUARIO.toLowerCase()));
+		usuario.setIdusuario((Long) out.get(P_ID_USUARIO.toLowerCase()));
 		return usuario;
 	}
 	
 	//	IN PIdUsuario mediumint unsigned 
-	public void delete (Integer idUsuario) {
+	public void delete (Long idUsuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_USUARIO, idUsuario);
 		super.ejecutarStoredProcedure(BAJA, in, null, Usuario.class);
@@ -71,13 +70,14 @@ public class UsuarioDao extends BaseDao{
 	//  IN Pemail varchar(40)
 	public Usuario update (Usuario usuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_USUARIO, usuario.getNombreusuario());
+		in.put(P_ID_USUARIO, usuario.getIdusuario());
 		in.put(P_NOMBRE_USUARIO, usuario.getNombreusuario());
-		in.put(P_NOMBRE_USUARIO, usuario.getNombrecompleto());
+		in.put(P_NOMBRE_COMPLETO, usuario.getNombrecompleto());
 		in.put(P_PASSWORD, usuario.getPassword());
 		in.put(P_EMAIL, usuario.getEmail());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, Usuario.class);
 		return usuario;
 	}
+	
 }

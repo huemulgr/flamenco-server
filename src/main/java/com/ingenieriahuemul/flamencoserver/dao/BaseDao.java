@@ -11,6 +11,12 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
+//esta clase se va a usar de base para el acceso a datos, todas las clases de acceso a base con los SP la heredan y tienen este esquema:
+//contienen constantes con los nombres de los SP y sus parametros, para cambiarlos en un solo lugar si es necesario
+//contienen metodos de acceso que se encargan de llamar los SP con los parametros recibidos
+//cargan los parametros en maps para llamar al metodo ejecutarStoredProcedure(), este se encarga de llamar el procedimiento 
+//con los parametros cargados y mapear la salida a objetos
+
 public class BaseDao {
 
 	@Autowired

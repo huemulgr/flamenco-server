@@ -1,51 +1,60 @@
 package com.ingenieriahuemul.flamencoserver.dominio;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "perfil")
+//SELECT 
+//PERF.`idperfil` ID
+//,PERF.`nombre`	Nombre
+//,EMP.razonsocial		Empresa
+//,group_concat(distinct USR.nombrecompleto) UsuariosAsignados
+//,group_concat(distinct SEPE.idSensor) SensoresAsignados
+//,count(SEPE.idSensor) CantidadSensores
 public class Perfil {
 	
-	@Id
-	@Column
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idperfil;
-	
-	@Column
+	//tabla
+	private Long idperfil;
 	private String nombre;
+	private Long idempresa;
 	
-	@Column
-	private int idempresa;
-
+	//select
+	private String empresa;
+	private String usuariosAsignados;
+	private Integer cantidadSensores;
 	
-	public int getIdperfil() {
+	
+	public Long getIdperfil() {
 		return idperfil;
 	}
-
-	public void setIdperfil(int idperfil) {
+	public void setIdperfil(Long idperfil) {
 		this.idperfil = idperfil;
 	}
-
 	public String getNombre() {
 		return nombre;
 	}
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-	public int getIdempresa() {
+	public Long getIdempresa() {
 		return idempresa;
 	}
-
-	public void setIdempresa(int idEmpresa) {
-		this.idempresa = idEmpresa;
+	public void setIdempresa(Long idempresa) {
+		this.idempresa = idempresa;
 	}
-	
-	
+	public String getEmpresa() {
+		return empresa;
+	}
+	public void setEmpresa(String empresa) {
+		this.empresa = empresa;
+	}
+	public String getUsuariosAsignados() {
+		return usuariosAsignados;
+	}
+	public void setUsuariosAsignados(String usuariosAsignados) {
+		this.usuariosAsignados = usuariosAsignados;
+	}
+	public Integer getCantidadSensores() {
+		return cantidadSensores;
+	}
+	public void setCantidadSensores(Integer cantidadSensores) {
+		this.cantidadSensores = cantidadSensores;
+	}
+		
 }
