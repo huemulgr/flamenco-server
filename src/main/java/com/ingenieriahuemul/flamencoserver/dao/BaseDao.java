@@ -25,7 +25,8 @@ public class BaseDao {
 	private static final Logger logger = Logger.getLogger(BaseDao.class);
 	
 //  Se va a mapear clases a los resultados de los SP de select. Deben cumplir con tener constructor vacio y getter setters para 
-//  cada parametro recibido, pero pueden tener otros atributos y metodos adicionalmente            
+//  cada parametro recibido, pero pueden tener otros atributos y metodos adicionalmente
+//  recordatorio: las clases a mapear deben tener sus parametros con los nombres de las columnas retornadas x el SELECT, no las de la tabla. Deberia ser caseinsensitiv	
     
   /**
    * Utilitario para llamar stored procedure y mapear su salida a objetos. En caso de error se muestra la excepcion por log y por consola, 

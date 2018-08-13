@@ -33,14 +33,14 @@ public class PlantaDao extends BaseDao{
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public Planta findById(Integer idPlanta) {
+	public Planta findById(Long idPlanta) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_PLANTA, idPlanta);
 		return ((List<Planta>)super.ejecutarStoredProcedure(CONSULTA_1, in, null, Planta.class)).get(0);
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public Planta findByIdEmpresa(Integer idEmpresa) {
+	public Planta findByIdEmpresa(Long idEmpresa) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_EMPRESA, idEmpresa);
 		return ((List<Planta>)super.ejecutarStoredProcedure(CONSULTA_2, in, null, Planta.class)).get(0);
@@ -53,21 +53,21 @@ public class PlantaDao extends BaseDao{
 //  IN Pidempresa mediumint unsigned
 	public Planta save(Planta planta) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_PLANTA, planta.getIdplanta());
+		in.put(P_ID_PLANTA, planta.getId());
 		in.put(P_NOMBRE, planta.getNombre());
 		in.put(P_HABILITADO, planta.getHabilitado());
-		in.put(P_IMAGEN, planta.getImagen());
-		in.put(P_ID_EMPRESA, planta.getIdempresa());
+		in.put(P_IMAGEN, planta.getRutaImagen());
+		in.put(P_ID_EMPRESA, planta.getIdEmpresa());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
-		out.put(P_ID_PLANTA, planta.getIdplanta());
+		out.put(P_ID_PLANTA, planta.getId());
 		super.ejecutarStoredProcedure(ALTA, in, out, Planta.class);
-		planta.setIdplanta((Long)out.get(P_ID_PLANTA.toLowerCase()));
+		planta.setId((Long)out.get(P_ID_PLANTA.toLowerCase()));
 		return planta;
 	}
 	
 //	IN PIdPlanta mediumint unsigned 
-	public void delete (Integer idPlanta) {
+	public void delete (Long idPlanta) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_PLANTA, idPlanta);
 		super.ejecutarStoredProcedure(BAJA, in, null, Planta.class);
@@ -80,11 +80,11 @@ public class PlantaDao extends BaseDao{
 //  IN Pidempresa mediumint unsigned
 	public Planta update (Planta alarma) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_PLANTA, alarma.getIdplanta());
+		in.put(P_ID_PLANTA, alarma.getId());
 		in.put(P_NOMBRE, alarma.getNombre());
 		in.put(P_HABILITADO, alarma.getHabilitado());
-		in.put(P_IMAGEN, alarma.getImagen());
-		in.put(P_ID_EMPRESA, alarma.getIdempresa());
+		in.put(P_IMAGEN, alarma.getRutaImagen());
+		in.put(P_ID_EMPRESA, alarma.getIdEmpresa());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, Planta.class);
 		return alarma;

@@ -1,6 +1,6 @@
 package com.ingenieriahuemul.flamencoserver.dominio;
 
-import java.util.Date;
+import java.sql.Time;
 
 
 //SELECT 
@@ -13,50 +13,50 @@ import java.util.Date;
 public class Empresa {
 	
 	//tabla
-	private Long idempresa;
-	private String razonsocial;
-	private String encabezadoinforme;
-	private String passwordconfiguracion;
-	private Date horaprimerregistro;
-	private Integer periodoimpresion;
+	private Long id;
+	private String razonSocial;
+	private String encabezado;
+	private String passwordConfiguracion;
+	private Time primerRegistro;
+	private Integer periodo;
+	
 	private Integer columnasImpresion;
 	
-	
-	public Long getIdempresa() {
-		return idempresa;
+	public Long getId() {
+		return id;
 	}
-	public void setIdempresa(Long idempresa) {
-		this.idempresa = idempresa;
+	public void setId(Long idempresa) {
+		this.id = idempresa;
 	}
-	public String getRazonsocial() {
-		return razonsocial;
+	public String getRazonSocial() {
+		return razonSocial;
 	}
-	public void setRazonsocial(String razonsocial) {
-		this.razonsocial = razonsocial;
+	public void setRazonSocial(String razonsocial) {
+		this.razonSocial = razonsocial;
 	}
-	public String getEncabezadoinforme() {
-		return encabezadoinforme;
+	public String getEncabezado() {
+		return encabezado;
 	}
-	public void setEncabezadoinforme(String encabezadoinforme) {
-		this.encabezadoinforme = encabezadoinforme;
+	public void setEncabezado(String encabezadoinforme) {
+		this.encabezado = encabezadoinforme;
 	}
-	public String getPasswordconfiguracion() {
-		return passwordconfiguracion;
+	public String getPasswordConfiguracion() {
+		return passwordConfiguracion;
 	}
-	public void setPasswordconfiguracion(String passwordconfiguracion) {
-		this.passwordconfiguracion = passwordconfiguracion;
+	public void setPasswordConfiguracion(String passwordconfiguracion) {
+		this.passwordConfiguracion = passwordconfiguracion;
 	}
-	public Date getHoraprimerregistro() {
-		return horaprimerregistro;
+	public Time getPrimerRegistro() {
+		return primerRegistro;
 	}
-	public void setHoraprimerregistro(Date horaprimerregistro) {
-		this.horaprimerregistro = horaprimerregistro;
+	public void setPrimerRegistro(Time horaprimerregistro) {
+		this.primerRegistro = horaprimerregistro;
 	}
-	public Integer getPeriodoimpresion() {
-		return periodoimpresion;
+	public Integer getPeriodo() {
+		return periodo;
 	}
-	public void setPeriodoimpresion(Integer periodoimpresion) {
-		this.periodoimpresion = periodoimpresion;
+	public void setPeriodo(Integer periodoimpresion) {
+		this.periodo = periodoimpresion;
 	}
 	public Integer getColumnasImpresion() {
 		return columnasImpresion;

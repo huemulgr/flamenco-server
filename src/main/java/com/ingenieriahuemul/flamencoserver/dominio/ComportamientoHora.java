@@ -1,6 +1,6 @@
 package com.ingenieriahuemul.flamencoserver.dominio;
 
-import java.util.Date;
+import java.sql.Time;
 
 //COMPH.`idch`	ID
 //,COMPH.`horaInicio`	HoraInicio
@@ -13,50 +13,46 @@ import java.util.Date;
 //,ifnull(PSENS.nombre,'No ubicado') PuntoSensado
 public class ComportamientoHora {
 
-//revisar comportamiento campos fecha	
-	//tabla
-	private Long idch;
-	private Integer habilitado;
-	private Date horaInicio;
-	private Date periodo;
-	private Date horaFin;
+	private Long id;
+	private Time horaInicio;
+	private Time horaFin;
+	private Time periodo;
 	private Integer contactorSalida;
-	private Long idsensor;
-	
-	//select
+	private Integer habilitado;
+	private Long idSensor;
 	private String sensor;
 	private String puntoSensado;
+		
 	
-	
-	public Long getIdch() {
-		return idch;
+	public Long getId() {
+		return id;
 	}
-	public void setIdch(Long idch) {
-		this.idch = idch;
+	public void setId(Long idch) {
+		this.id = idch;
 	}
-	public Date getHoraInicio() {
+	public Time getHoraInicio() {
 		return horaInicio;
 	}
-	public void setHoraInicio(Date horaInicio) {
+	public void setHoraInicio(Time horaInicio) {
 		this.horaInicio = horaInicio;
 	}
-	public Date getHoraFin() {
+	public Time getHoraFin() {
 		return horaFin;
 	}
-	public void setHoraFin(Date horaFin) {
+	public void setHoraFin(Time horaFin) {
 		this.horaFin = horaFin;
 	}
-	public Date getPeriodo() {
+	public Time getPeriodo() {
 		return periodo;
 	}
-	public void setPeriodo(Date periodo) {
+	public void setPeriodo(Time periodo) {
 		this.periodo = periodo;
 	}
-	public Long getIdsensor() {
-		return idsensor;
+	public Long getIdSensor() {
+		return idSensor;
 	}
-	public void setIdsensor(Long idsensor) {
-		this.idsensor = idsensor;
+	public void setIdSensor(Long idsensor) {
+		this.idSensor = idsensor;
 	}
 	public String getSensor() {
 		return sensor;

@@ -16,29 +16,28 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 //,ifnull((select 1 from medicion MED where MED.idpuntoSensado=PSEN.idpuntoSensado limit 1),0) Mediciones
 public class PuntoDeSensado {
 	
-	//tabla
-	private Long idpuntoSensado;
+	private Long id;
 	private Integer habilitado;
-	private Long coordenadaX;
-	private Long coordenadaY;
-	private Long idplanta;
-	private String nombreregistro;
-	private String nombrecorto;
-	private String nombrelargo;
-	private Integer ordenimpresion;
-	private Integer ordengrilla;
+	private String nombre;		//alias nombreregistro
+	private Long coordX;
+	private Long coordY;
+	private String planta;
+	private String nombreCorto;
+	private String descripcion;	//alias nombrelargo
+	private Integer ordenImpresion;
+	private Integer ordenGrilla;
 	private Integer pagina;
-	
-	//select
 	private Long sensorAsociado;
 	private Integer mediciones;
 	
+	private Long idPlanta;
 	
-	public Long getIdpuntoSensado() {
-		return idpuntoSensado;
+	
+	public Long getId() {
+		return id;
 	}
-	public void setIdpuntoSensado(Long idpuntoSensado) {
-		this.idpuntoSensado = idpuntoSensado;
+	public void setId(Long idpuntoSensado) {
+		this.id = idpuntoSensado;
 	}
 	public Integer getHabilitado() {
 		return habilitado;
@@ -47,53 +46,59 @@ public class PuntoDeSensado {
 		habilitado = habilitado == 0 ? 0 : 1;
 		this.habilitado = habilitado;
 	}
-	public Long getCoordenadaX() {
-		return coordenadaX;
+	public Long getCoordX() {
+		return coordX;
 	}
-	public void setCoordenadaX(Long coordenadaX) {
-		this.coordenadaX = coordenadaX;
+	public void setCoordX(Long coordenadaX) {
+		this.coordX = coordenadaX;
 	}
-	public Long getCoordenadaY() {
-		return coordenadaY;
+	public Long getCoordY() {
+		return coordY;
 	}
-	public void setCoordenadaY(Long coordenadaY) {
-		this.coordenadaY = coordenadaY;
+	public void setCoordY(Long coordenadaY) {
+		this.coordY = coordenadaY;
 	}
-	public Long getIdplanta() {
-		return idplanta;
+	public String getPlanta() {
+		return planta;
 	}
-	public void setIdplanta(Long idplanta) {
-		this.idplanta = idplanta;
+	public void setPlanta(String planta) {
+		this.planta = planta;
 	}
-	public String getNombreregistro() {
-		return nombreregistro;
+	public Long getIdPlanta() {
+		return idPlanta;
 	}
-	public void setNombreregistro(String nombreregistro) {
-		this.nombreregistro = nombreregistro;
+	public void setIdPlanta(Long idplanta) {
+		this.idPlanta = idplanta;
 	}
-	public String getNombrecorto() {
-		return nombrecorto;
+	public String getNombre() {
+		return nombre;
 	}
-	public void setNombrecorto(String nombrecorto) {
-		this.nombrecorto = nombrecorto;
+	public void setNombre(String nombreregistro) {
+		this.nombre = nombreregistro;
 	}
-	public String getNombrelargo() {
-		return nombrelargo;
+	public String getNombreCorto() {
+		return nombreCorto;
 	}
-	public void setNombrelargo(String nombrelargo) {
-		this.nombrelargo = nombrelargo;
+	public void setNombreCorto(String nombrecorto) {
+		this.nombreCorto = nombrecorto;
 	}
-	public Integer getOrdenimpresion() {
-		return ordenimpresion;
+	public String getDescripcion() {
+		return descripcion;
 	}
-	public void setOrdenimpresion(Integer ordenimpresion) {
-		this.ordenimpresion = ordenimpresion;
+	public void setDescripcion(String nombrelargo) {
+		this.descripcion = nombrelargo;
 	}
-	public Integer getOrdengrilla() {
-		return ordengrilla;
+	public Integer getOrdenImpresion() {
+		return ordenImpresion;
 	}
-	public void setOrdengrilla(Integer ordengrilla) {
-		this.ordengrilla = ordengrilla;
+	public void setOrdenImpresion(Integer ordenimpresion) {
+		this.ordenImpresion = ordenimpresion;
+	}
+	public Integer getOrdenGrilla() {
+		return ordenGrilla;
+	}
+	public void setOrdenGrilla(Integer ordengrilla) {
+		this.ordenGrilla = ordengrilla;
 	}
 	public Integer getPagina() {
 		return pagina;

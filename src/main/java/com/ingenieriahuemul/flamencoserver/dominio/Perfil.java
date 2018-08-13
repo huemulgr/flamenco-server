@@ -9,22 +9,20 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 //,count(SEPE.idSensor) CantidadSensores
 public class Perfil {
 	
-	//tabla
-	private Long idperfil;
+	private Long id;
 	private String nombre;
-	private Long idempresa;
-	
-	//select
 	private String empresa;
 	private String usuariosAsignados;
 	private Integer cantidadSensores;
 	
+	private Long idEmpresa;
 	
-	public Long getIdperfil() {
-		return idperfil;
+	
+	public Long getId() {
+		return id;
 	}
-	public void setIdperfil(Long idperfil) {
-		this.idperfil = idperfil;
+	public void setId(Long idperfil) {
+		this.id = idperfil;
 	}
 	public String getNombre() {
 		return nombre;
@@ -32,11 +30,11 @@ public class Perfil {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public Long getIdempresa() {
-		return idempresa;
+	public Long getIdEmpresa() {
+		return idEmpresa;
 	}
-	public void setIdempresa(Long idempresa) {
-		this.idempresa = idempresa;
+	public void setIdEmpresa(Long idempresa) {
+		this.idEmpresa = idempresa;
 	}
 	public String getEmpresa() {
 		return empresa;

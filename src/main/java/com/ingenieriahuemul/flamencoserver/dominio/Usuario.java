@@ -9,8 +9,8 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 public class Usuario {
 
     private Long idusuario;
-    private String nombreusuario;
-    private String nombrecompleto;
+    private String nombreUsuario;
+    private String nombreCompleto;
     private String email;
     
     //este parametro se usa para insertar o modificar la password de un user, 
@@ -25,17 +25,17 @@ public class Usuario {
 	public void setIdusuario(Long idusuario) {
 		this.idusuario = idusuario;
 	}
-	public String getNombreusuario() {
-		return nombreusuario;
+	public String getNombreUsuario() {
+		return nombreUsuario;
 	}
-	public void setNombreusuario(String nombreusuario) {
-		this.nombreusuario = nombreusuario;
+	public void setNombreUsuario(String nombreusuario) {
+		this.nombreUsuario = nombreusuario;
 	}
-	public String getNombrecompleto() {
-		return nombrecompleto;
+	public String getNombreCompleto() {
+		return nombreCompleto;
 	}
-	public void setNombrecompleto(String nombrecompleto) {
-		this.nombrecompleto = nombrecompleto;
+	public void setNombreCompleto(String nombrecompleto) {
+		this.nombreCompleto = nombrecompleto;
 	}
 	public String getEmail() {
 		return email;

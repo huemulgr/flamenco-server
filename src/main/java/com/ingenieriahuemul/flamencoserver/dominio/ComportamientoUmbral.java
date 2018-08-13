@@ -13,45 +13,43 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 //,ifnull(PSENS.nombre,'No ubicado') 	PuntoSensado
 public class ComportamientoUmbral {
 	
-	//tabla
-	private Long idcsu;
+	private Long id;
 	private Integer habilitado;
-	private Double umbralsuperior;
-	private Double umbralinferior;
-	private Integer contactorentrada;
-	private Integer contactorsalida;
-	private Long idsensor;
-	private Integer umbralANDcontactor;
-	private Integer habilitarcontactorentrada;
-	
-	//select
+	private Double umbralSup;
+	private Double umbralInf;
+	private Integer contactorEntrada;
+	private Integer contactorSalida;
+	private Integer condicionY;
+	private Integer habilitarContEntrada;
 	private String sensor;
 	private String puntoSensado;
 	
+	private Long idSensor;
 	
-	public Long getIdcsu() {
-		return idcsu;
+	
+	public Long getId() {
+		return id;
 	}
-	public void setIdcsu(Long idcsu) {
-		this.idcsu = idcsu;
+	public void setId(Long idcsu) {
+		this.id = idcsu;
 	}
-	public Double getUmbralsuperior() {
-		return umbralsuperior;
+	public Double getUmbralSup() {
+		return umbralSup;
 	}
-	public void setUmbralsuperior(Double umbralsuperior) {
-		this.umbralsuperior = umbralsuperior;
+	public void setUmbralSup(Double umbralsuperior) {
+		this.umbralSup = umbralsuperior;
 	}
-	public Double getUmbralinferior() {
-		return umbralinferior;
+	public Double getUmbralInf() {
+		return umbralInf;
 	}
-	public void setUmbralinferior(Double umbralinferior) {
-		this.umbralinferior = umbralinferior;
+	public void setUmbralInf(Double umbralinferior) {
+		this.umbralInf = umbralinferior;
 	}
-	public Long getIdsensor() {
-		return idsensor;
+	public Long getIdSensor() {
+		return idSensor;
 	}
-	public void setIdsensor(Long idsensor) {
-		this.idsensor = idsensor;
+	public void setIdSensor(Long idsensor) {
+		this.idSensor = idsensor;
 	}
 	public String getSensor() {
 		return sensor;
@@ -65,33 +63,33 @@ public class ComportamientoUmbral {
 	public void setPuntoSensado(String puntoSensado) {
 		this.puntoSensado = puntoSensado;
 	}
-	public Integer getContactorentrada() {
-		return contactorentrada;
+	public Integer getContactorEntrada() {
+		return contactorEntrada;
 	}
-	public void setContactorentrada(Integer contactorentrada) {
+	public void setContactorEntrada(Integer contactorentrada) {
 		contactorentrada = contactorentrada == 0 ? 0 : 1;
-		this.contactorentrada = contactorentrada;
+		this.contactorEntrada = contactorentrada;
 	}
-	public Integer getContactorsalida() {
-		return contactorsalida;
+	public Integer getContactorSalida() {
+		return contactorSalida;
 	}
-	public void setContactorsalida(Integer contactorsalida) {
+	public void setContactorSalida(Integer contactorsalida) {
 		contactorsalida = contactorsalida == 0 ? 0 : 1;
-		this.contactorsalida = contactorsalida;
+		this.contactorSalida = contactorsalida;
 	}
-	public Integer getUmbralANDcontactor() {
-		return umbralANDcontactor;
+	public Integer getCondicionY() {
+		return condicionY;
 	}
-	public void setUmbralANDcontactor(Integer umbralANDcontactor) {
+	public void setCondicionY(Integer umbralANDcontactor) {
 		umbralANDcontactor = umbralANDcontactor == 0 ? 0 : 1;
-		this.umbralANDcontactor = umbralANDcontactor;
+		this.condicionY = umbralANDcontactor;
 	}
-	public Integer getHabilitarcontactorentrada() {
-		return habilitarcontactorentrada;
+	public Integer getHabilitarContEntrada() {
+		return habilitarContEntrada;
 	}
-	public void setHabilitarcontactorentrada(Integer habilitarcontactorentrada) {
+	public void setHabilitarContEntrada(Integer habilitarcontactorentrada) {
 		habilitarcontactorentrada = habilitarcontactorentrada == 0 ? 0 : 1;
-		this.habilitarcontactorentrada = habilitarcontactorentrada;
+		this.habilitarContEntrada = habilitarcontactorentrada;
 	}
 	public Integer getHabilitado() {
 		return habilitado;

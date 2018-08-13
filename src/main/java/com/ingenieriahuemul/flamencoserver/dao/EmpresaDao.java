@@ -47,16 +47,16 @@ public class EmpresaDao extends BaseDao{
 //  IN PperiodoImpresion tinyint unsigned
 	public Empresa save(Empresa empresa) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_EMPRESA, empresa.getIdempresa());
-		in.put(P_RAZON_SOCIAL, empresa.getRazonsocial());
-		in.put(P_ENCABEZADO_INFORME, empresa.getEncabezadoinforme());
-		in.put(P_PASSWORD_CONFIGURACION, empresa.getPasswordconfiguracion());
-		in.put(P_HORA_1ER_REGISTRO, empresa.getHoraprimerregistro());
-		in.put(P_PERIODO_IMPRESION, empresa.getPeriodoimpresion());
+		in.put(P_ID_EMPRESA, empresa.getId());
+		in.put(P_RAZON_SOCIAL, empresa.getRazonSocial());
+		in.put(P_ENCABEZADO_INFORME, empresa.getEncabezado());
+		in.put(P_PASSWORD_CONFIGURACION, empresa.getPasswordConfiguracion());
+		in.put(P_HORA_1ER_REGISTRO, empresa.getPrimerRegistro());
+		in.put(P_PERIODO_IMPRESION, empresa.getPeriodo());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
 		super.ejecutarStoredProcedure(ALTA, in, out, Empresa.class);
-		empresa.setIdempresa((Long) out.get(P_ID_EMPRESA.toLowerCase()));
+		empresa.setId((Long) out.get(P_ID_EMPRESA.toLowerCase()));
 		return empresa;
 	}
 	
@@ -75,12 +75,12 @@ public class EmpresaDao extends BaseDao{
 //  IN PperiodoImpresion tinyint unsigned
 	public Empresa update (Empresa empresa) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_EMPRESA, empresa.getIdempresa());
-		in.put(P_RAZON_SOCIAL, empresa.getRazonsocial());
-		in.put(P_ENCABEZADO_INFORME, empresa.getEncabezadoinforme());
-		in.put(P_PASSWORD_CONFIGURACION, empresa.getPasswordconfiguracion());
-		in.put(P_HORA_1ER_REGISTRO, empresa.getHoraprimerregistro());
-		in.put(P_PERIODO_IMPRESION, empresa.getPeriodoimpresion());
+		in.put(P_ID_EMPRESA, empresa.getId());
+		in.put(P_RAZON_SOCIAL, empresa.getRazonSocial());
+		in.put(P_ENCABEZADO_INFORME, empresa.getEncabezado());
+		in.put(P_PASSWORD_CONFIGURACION, empresa.getPasswordConfiguracion());
+		in.put(P_HORA_1ER_REGISTRO, empresa.getPrimerRegistro());
+		in.put(P_PERIODO_IMPRESION, empresa.getPeriodo());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, Empresa.class);
 		return empresa;

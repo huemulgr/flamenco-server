@@ -10,22 +10,20 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 //,ifnull(group_concat(SENS.idsensor),'Ninguno') SensoresID
 public class TipoSensor {
 	
-	//tablas
-	private Long idtiposensor;
+	private Long id;
 	private String nombre;
 	private Float minimo;
 	private Float maximo;
-	
-	//select
 	private String sensoresNombre;
 	private String sensoresID;
 	
 	
-	public Long getIdtiposensor() {
-		return idtiposensor;
+	
+	public Long getId() {
+		return id;
 	}
-	public void setIdtiposensor(Long idtiposensor) {
-		this.idtiposensor = idtiposensor;
+	public void setId(Long idtiposensor) {
+		this.id = idtiposensor;
 	}
 	public String getNombre() {
 		return nombre;

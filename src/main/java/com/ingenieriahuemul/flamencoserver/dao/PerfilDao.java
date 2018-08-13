@@ -48,13 +48,13 @@ public class PerfilDao extends BaseDao{
 //  IN PIdEmpresa mediumint unsigned
 	public Perfil save(Perfil usuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_EMPRESA, usuario.getIdperfil());
+		in.put(P_ID_EMPRESA, usuario.getId());
 		in.put(P_NOMBRE, usuario.getNombre());
-		in.put(P_ID_PERFIL, usuario.getIdempresa());
+		in.put(P_ID_PERFIL, usuario.getIdEmpresa());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
 		super.ejecutarStoredProcedure(ALTA, in, out, Perfil.class);
-		usuario.setIdperfil((Long) out.get(P_ID_PERFIL.toLowerCase()));
+		usuario.setId((Long) out.get(P_ID_PERFIL.toLowerCase()));
 		return usuario;
 	}
 	
@@ -69,7 +69,7 @@ public class PerfilDao extends BaseDao{
 //  IN Pnombre VARCHAR(100)
 	public Perfil update (Perfil usuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_PERFIL, usuario.getIdperfil());
+		in.put(P_ID_PERFIL, usuario.getId());
 		in.put(P_NOMBRE, usuario.getNombre());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, Perfil.class);
@@ -78,7 +78,7 @@ public class PerfilDao extends BaseDao{
 	
 //	IN PIdusuario mediumint unsigned,
 //	IN PIdperfil mediumint unsigned	
-	public void asignarUsuario (Long idUsuario, Long idPerfil) {
+	public void asignarUsuario (Long idPerfil, Long idUsuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_USUARIO, idUsuario);
 		in.put(P_ID_PERFIL, idPerfil);
@@ -86,7 +86,7 @@ public class PerfilDao extends BaseDao{
 		super.ejecutarStoredProcedure(ASIGNAR_USUARIO, in, null, Perfil.class);
 	}
 	
-	public void quitarUsuario (Long idUsuario, Long idPerfil) {
+	public void quitarUsuario (Long idPerfil, Long idUsuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_USUARIO, idUsuario);
 		in.put(P_ID_PERFIL, idPerfil);

@@ -35,14 +35,14 @@ public class AlarmaDao extends BaseDao{
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public Alarma findById(Integer idAlarma) {
+	public Alarma findById(Long idAlarma) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_ALARMA, idAlarma);
 		return ((List<Alarma>)super.ejecutarStoredProcedure(CONSULTA_1, in, null, Alarma.class)).get(0);
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public Alarma findByIdSensor(Integer idSensor) {
+	public Alarma findByIdSensor(Long idSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_SENSOR, idSensor);
 		return ((List<Alarma>)super.ejecutarStoredProcedure(CONSULTA_2, in, null, Alarma.class)).get(0);
@@ -57,7 +57,7 @@ public class AlarmaDao extends BaseDao{
 //	IN Pidsensor mediumint unsigned
 	public Alarma save(Alarma alarma) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_ALARMA, alarma.getIdAlarma());
+		in.put(P_ID_ALARMA, alarma.getId());
 		in.put(P_HABILITADO, alarma.getHabilitado());
 		in.put(P_UMBRAL_SUPERIOR, alarma.getUmbralSuperior());
 		in.put(P_UMBRAL_INFERIOR, alarma.getUmbralInferior());
@@ -66,14 +66,14 @@ public class AlarmaDao extends BaseDao{
 		in.put(P_ID_SENSOR, alarma.getIdSensor());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
-		out.put(P_ID_ALARMA, alarma.getIdAlarma());
+		out.put(P_ID_ALARMA, alarma.getId());
 		super.ejecutarStoredProcedure(ALTA, in, out, Alarma.class);
-		alarma.setIdAlarma((Long)out.get(P_ID_ALARMA.toLowerCase()));
+		alarma.setId((Long)out.get(P_ID_ALARMA.toLowerCase()));
 		return alarma;
 	}
 	
 //	IN PIdAlarma mediumint unsigned 
-	public void delete (Integer idAlarma) {
+	public void delete (Long idAlarma) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_ALARMA, idAlarma);
 		super.ejecutarStoredProcedure(BAJA, in, null, Alarma.class);
@@ -88,10 +88,11 @@ public class AlarmaDao extends BaseDao{
 //	IN Pidsensor mediumint unsigned
 	public Alarma update (Alarma alarma) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_ALARMA, alarma.getIdAlarma());
+		in.put(P_ID_ALARMA, alarma.getId());
 		in.put(P_HABILITADO, alarma.getHabilitado());
 		in.put(P_UMBRAL_SUPERIOR, alarma.getUmbralInferior());
 		in.put(P_UMBRAL_INFERIOR, alarma.getUmbralInferior());
+		in.put(P_NOMBRE, alarma.getNombre());
 		in.put(P_NOTIFICAR, alarma.getHabilitadoAvisoCelular());
 		in.put(P_ID_SENSOR, alarma.getIdSensor());
 		

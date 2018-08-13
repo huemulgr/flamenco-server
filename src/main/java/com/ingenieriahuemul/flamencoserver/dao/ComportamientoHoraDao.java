@@ -10,7 +10,8 @@ import com.ingenieriahuemul.flamencoserver.dominio.ComportamientoHora;
 
 @Component
 public class ComportamientoHoraDao extends BaseDao{
-	
+
+//los campos Time es mas sencillo guardarlos como un string con el formato "HH:MM:ss", falta decidir donde validar. Por ahora si estan mal los rebota el SP pero podria hacerse x aplicacion	
 	//parametros
 	private static final String P_ID_COMP_HORA = "Pidch";
 	private static final String P_HABILITADO = "Phabilitado";
@@ -22,8 +23,8 @@ public class ComportamientoHoraDao extends BaseDao{
 	
 	//stored procedures
 	private static final String CONSULTA = "flaCompHoraSele";
-	private static final String ALTA = "flaCompoHoraAlta";
-	private static final String BAJA = "flaCompoHoraBaja";	
+	private static final String ALTA = "flaCompHoraAlta";
+	private static final String BAJA = "flaCompHoraBaja";	
 	private static final String MODIFICACION = "flaCompHoraModif";
 		
 	
@@ -33,8 +34,8 @@ public class ComportamientoHoraDao extends BaseDao{
 		return (List<ComportamientoHora>) super.ejecutarStoredProcedure(CONSULTA, in, null, ComportamientoHora.class);
 	}
 	
-//	IN Pidalarma mediumint unsigned	
-	public ComportamientoHora findById(Integer idComportamientoHora) {
+//	IN Pidch mediumint unsigned	
+	public ComportamientoHora findById(Long idComportamientoHora) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_COMP_HORA, idComportamientoHora);
 		return ((List<ComportamientoHora>)super.ejecutarStoredProcedure(CONSULTA, in, null, ComportamientoHora.class)).get(0);
@@ -49,23 +50,23 @@ public class ComportamientoHoraDao extends BaseDao{
 //	IN Pidsensor mediumint unsigned
 	public ComportamientoHora save(ComportamientoHora compHora) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_COMP_HORA, compHora.getIdch());
+		in.put(P_ID_COMP_HORA, compHora.getId());
 		in.put(P_HABILITADO, compHora.getHabilitado());
 		in.put(P_HORA_INICIO, compHora.getHoraInicio());
 		in.put(P_HORA_FIN, compHora.getHoraFin());
 		in.put(P_PERIODO, compHora.getPeriodo());
 		in.put(P_CONTACTOR_SALIDA, compHora.getContactorSalida());
-		in.put(P_ID_SENSOR, compHora.getIdsensor());
+		in.put(P_ID_SENSOR, compHora.getIdSensor());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
-		out.put(P_ID_COMP_HORA, compHora.getIdch());
+		out.put(P_ID_COMP_HORA, compHora.getId());
 		super.ejecutarStoredProcedure(ALTA, in, out, ComportamientoHora.class);
-		compHora.setIdch((Long)out.get(P_ID_COMP_HORA.toLowerCase()));
+		compHora.setId((Long)out.get(P_ID_COMP_HORA.toLowerCase()));
 		return compHora;
 	}
 	
 //	IN PIdComportamientoHora mediumint unsigned 
-	public void delete (Integer idComportamientoHora) {
+	public void delete (Long idComportamientoHora) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_COMP_HORA, idComportamientoHora);
 		super.ejecutarStoredProcedure(BAJA, in, null, ComportamientoHora.class);
@@ -80,12 +81,13 @@ public class ComportamientoHoraDao extends BaseDao{
 //	IN Pidsensor mediumint unsigned
 	public ComportamientoHora update (ComportamientoHora compHora) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_COMP_HORA, compHora.getIdch());
+		in.put(P_ID_COMP_HORA, compHora.getId());
 		in.put(P_HABILITADO, compHora.getHabilitado());
 		in.put(P_HORA_INICIO, compHora.getHoraInicio());
 		in.put(P_HORA_FIN, compHora.getHoraFin());
 		in.put(P_PERIODO, compHora.getPeriodo());
-		in.put(P_ID_SENSOR, compHora.getIdsensor());
+		in.put(P_CONTACTOR_SALIDA, compHora.getContactorSalida());
+		in.put(P_ID_SENSOR, compHora.getIdSensor());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, ComportamientoHora.class);
 		return compHora;

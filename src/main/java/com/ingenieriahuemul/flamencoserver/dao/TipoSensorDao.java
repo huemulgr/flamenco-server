@@ -43,14 +43,14 @@ public class TipoSensorDao extends BaseDao{
 //  IN Pmaximo decimal(6,2)
 	public TipoSensor save(TipoSensor TipoSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_TIPO_SENSOR, TipoSensor.getIdtiposensor());
+		in.put(P_ID_TIPO_SENSOR, TipoSensor.getId());
 		in.put(P_NOMBRE, TipoSensor.getNombre());
 		in.put(P_MINIMO, TipoSensor.getMinimo());
 		in.put(P_MAXIMO, TipoSensor.getMaximo());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
 		super.ejecutarStoredProcedure(ALTA, in, out, TipoSensor.class);
-		TipoSensor.setIdtiposensor((Long) out.get(P_ID_TIPO_SENSOR.toLowerCase()));
+		TipoSensor.setId((Long) out.get(P_ID_TIPO_SENSOR.toLowerCase()));
 		return TipoSensor;
 	}
 	
@@ -67,7 +67,7 @@ public class TipoSensorDao extends BaseDao{
 //  IN Pmaximo decimal(6,2)
 	public TipoSensor update (TipoSensor TipoSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_TIPO_SENSOR, TipoSensor.getIdtiposensor());
+		in.put(P_ID_TIPO_SENSOR, TipoSensor.getId());
 		in.put(P_NOMBRE, TipoSensor.getNombre());
 		in.put(P_MINIMO, TipoSensor.getMinimo());
 		in.put(P_MAXIMO, TipoSensor.getMaximo());

@@ -25,10 +25,10 @@ public class PuntoDeSensadoDao extends BaseDao{
 	private static final String P_PAGINA_REPORTE = "PpaginaReporte";
 	
 	//stored procedures
-	private static final String CONSULTA = "flaPuntoDeSensadoSele";
-	private static final String ALTA = "flaPuntoDeSensadoAlta";
-	private static final String BAJA = "flaPuntoDeSensadoBaja";	
-	private static final String MODIFICACION = "flaPuntoDeSensadoModif";
+	private static final String CONSULTA = "flaPuntosensadoSele";
+	private static final String ALTA = "flaPuntosensadoAlta";
+	private static final String BAJA = "flaPuntosensadoBaja";	
+	private static final String MODIFICACION = "flaPuntosensadoModif";
 		
 	
 	public List<PuntoDeSensado> findAll() {
@@ -38,7 +38,7 @@ public class PuntoDeSensadoDao extends BaseDao{
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public PuntoDeSensado findById(Integer idPuntoDeSensado) {
+	public PuntoDeSensado findById(Long idPuntoDeSensado) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_PUNTO_DE_SENSADO, idPuntoDeSensado);
 		return ((List<PuntoDeSensado>)super.ejecutarStoredProcedure(CONSULTA, in, null, PuntoDeSensado.class)).get(0);
@@ -57,27 +57,27 @@ public class PuntoDeSensadoDao extends BaseDao{
 //  IN PpaginaReporte tinyint unsigned
 	public PuntoDeSensado save(PuntoDeSensado puntoDeSensado) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_PUNTO_DE_SENSADO, puntoDeSensado.getIdpuntoSensado());
+		in.put(P_ID_PUNTO_DE_SENSADO, puntoDeSensado.getId());
 		in.put(P_HABILITADO, puntoDeSensado.getHabilitado());
-		in.put(P_NOMBRE_REGISTRO, puntoDeSensado.getNombreregistro());
-		in.put(P_NOMBRE_CORTO, puntoDeSensado.getNombrecorto());
-		in.put(P_NOMBRE_LARGO, puntoDeSensado.getNombrelargo());
-		in.put(P_ORDEN_IMPRESION, puntoDeSensado.getOrdenimpresion());
-		in.put(P_ORDEN_GRILLA, puntoDeSensado.getOrdengrilla());
-		in.put(P_COORDENADA_X, puntoDeSensado.getCoordenadaY());
-		in.put(P_COORDENADA_Y, puntoDeSensado.getCoordenadaX());
-		in.put(P_ID_PLANTA, puntoDeSensado.getIdplanta());
+		in.put(P_NOMBRE_REGISTRO, puntoDeSensado.getNombre());
+		in.put(P_NOMBRE_CORTO, puntoDeSensado.getNombreCorto());
+		in.put(P_NOMBRE_LARGO, puntoDeSensado.getDescripcion());
+		in.put(P_ORDEN_IMPRESION, puntoDeSensado.getOrdenImpresion());
+		in.put(P_ORDEN_GRILLA, puntoDeSensado.getOrdenGrilla());
+		in.put(P_COORDENADA_X, puntoDeSensado.getCoordY());
+		in.put(P_COORDENADA_Y, puntoDeSensado.getCoordX());
+		in.put(P_ID_PLANTA, puntoDeSensado.getIdPlanta());
 		in.put(P_PAGINA_REPORTE, puntoDeSensado.getPagina());
 				
 		Map<String, Object> out = new HashMap<String, Object>();
-		out.put(P_ID_PUNTO_DE_SENSADO, puntoDeSensado.getIdpuntoSensado());
+		out.put(P_ID_PUNTO_DE_SENSADO, puntoDeSensado.getId());
 		super.ejecutarStoredProcedure(ALTA, in, out, PuntoDeSensado.class);
-		puntoDeSensado.setIdpuntoSensado((Long)out.get(P_ID_PUNTO_DE_SENSADO.toLowerCase()));
+		puntoDeSensado.setId((Long)out.get(P_ID_PUNTO_DE_SENSADO.toLowerCase()));
 		return puntoDeSensado;
 	}
 	
 //	IN PIdPuntoDeSensado mediumint unsigned 
-	public void delete (Integer idPuntoDeSensado) {
+	public void delete (Long idPuntoDeSensado) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_PUNTO_DE_SENSADO, idPuntoDeSensado);
 		super.ejecutarStoredProcedure(BAJA, in, null, PuntoDeSensado.class);
@@ -96,16 +96,16 @@ public class PuntoDeSensadoDao extends BaseDao{
 //	IN PpaginaReporte tinyint unsigned
 	public PuntoDeSensado update (PuntoDeSensado puntoDeSensado) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_PUNTO_DE_SENSADO, puntoDeSensado.getIdpuntoSensado());
+		in.put(P_ID_PUNTO_DE_SENSADO, puntoDeSensado.getId());
 		in.put(P_HABILITADO, puntoDeSensado.getHabilitado());
-		in.put(P_NOMBRE_REGISTRO, puntoDeSensado.getNombreregistro());
-		in.put(P_NOMBRE_CORTO, puntoDeSensado.getNombrecorto());
-		in.put(P_NOMBRE_LARGO, puntoDeSensado.getNombrelargo());
-		in.put(P_ORDEN_IMPRESION, puntoDeSensado.getOrdenimpresion());
-		in.put(P_ORDEN_GRILLA, puntoDeSensado.getOrdengrilla());
-		in.put(P_COORDENADA_X, puntoDeSensado.getCoordenadaY());
-		in.put(P_COORDENADA_Y, puntoDeSensado.getCoordenadaX());
-		in.put(P_ID_PLANTA, puntoDeSensado.getIdplanta());
+		in.put(P_NOMBRE_REGISTRO, puntoDeSensado.getNombre());
+		in.put(P_NOMBRE_CORTO, puntoDeSensado.getNombreCorto());
+		in.put(P_NOMBRE_LARGO, puntoDeSensado.getDescripcion());
+		in.put(P_ORDEN_IMPRESION, puntoDeSensado.getOrdenImpresion());
+		in.put(P_ORDEN_GRILLA, puntoDeSensado.getOrdenGrilla());
+		in.put(P_COORDENADA_X, puntoDeSensado.getCoordY());
+		in.put(P_COORDENADA_Y, puntoDeSensado.getCoordX());
+		in.put(P_ID_PLANTA, puntoDeSensado.getIdPlanta());
 		in.put(P_PAGINA_REPORTE, puntoDeSensado.getPagina());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, PuntoDeSensado.class);

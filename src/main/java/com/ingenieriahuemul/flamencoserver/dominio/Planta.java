@@ -1,20 +1,26 @@
 package com.ingenieriahuemul.flamencoserver.dominio;
 
+//SELECT 
+//PLAN.`idplanta` 	ID
+//,PLAN.`nombre`		Nombre
+//,PLAN.`habilitado` 	Habilitado
+//,ifnull(PLAN.`imagen`,'No definido')		RutaImagen
+//,EMP.razonsocial	RazonSocial
 public class Planta {
-	
-	//tabla
-	private Long idplanta;
+
+	private Long id;
 	private String nombre;
 	private Integer habilitado;
-	private String imagen;
-	private Long idempresa;
+	private String rutaImagen;
+	private String razonSocial;
 	
+	private Long idEmpresa;
 	
-	public Long getIdplanta() {
-		return idplanta;
+	public Long getId() {
+		return id;
 	}
-	public void setIdplanta(Long idplanta) {
-		this.idplanta = idplanta;
+	public void setId(Long idplanta) {
+		this.id = idplanta;
 	}
 	public String getNombre() {
 		return nombre;
@@ -29,17 +35,23 @@ public class Planta {
 		habilitado = habilitado == 0 ? 0 : 1;
 		this.habilitado = habilitado;
 	}
-	public String getImagen() {
-		return imagen;
+	public String getRutaImagen() {
+		return rutaImagen;
 	}
-	public void setImagen(String imagen) {
-		this.imagen = imagen;
+	public void setRutaImagen(String imagen) {
+		this.rutaImagen = imagen;
 	}
-	public Long getIdempresa() {
-		return idempresa;
+	public Long getIdEmpresa() {
+		return idEmpresa;
 	}
-	public void setIdempresa(Long idempresa) {
-		this.idempresa = idempresa;
+	public void setIdEmpresa(Long idempresa) {
+		this.idEmpresa = idempresa;
+	}
+	public String getRazonSocial() {
+		return razonSocial;
+	}
+	public void setRazonSocial(String empresa) {
+		this.razonSocial = empresa;
 	}
 		
 }

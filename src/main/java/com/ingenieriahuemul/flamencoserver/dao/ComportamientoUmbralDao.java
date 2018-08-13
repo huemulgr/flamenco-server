@@ -36,14 +36,14 @@ public class ComportamientoUmbralDao extends BaseDao{
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public ComportamientoUmbral findById(Integer idComportamientoUmbral) {
+	public ComportamientoUmbral findById(Long idComportamientoUmbral) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_COMP_UMBRAL, idComportamientoUmbral);
 		return ((List<ComportamientoUmbral>)super.ejecutarStoredProcedure(CONSULTA, in, null, ComportamientoUmbral.class)).get(0);
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public ComportamientoUmbral findByIdSensor(Integer idSensor) {
+	public ComportamientoUmbral findByIdSensor(Long idSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_SENSOR, idSensor);
 		return ((List<ComportamientoUmbral>)super.ejecutarStoredProcedure(CONSULTA_2, in, null, ComportamientoUmbral.class)).get(0);
@@ -61,18 +61,18 @@ public class ComportamientoUmbralDao extends BaseDao{
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_COMP_UMBRAL, 0);
 		in.put(P_HABILITADO, compUmbral.getHabilitado());
-		in.put(P_UMBRAL_SUP, compUmbral.getUmbralsuperior());
-		in.put(P_UMBRAL_INF, compUmbral.getUmbralinferior());
-		in.put(P_CONTACTOR_ENTRADA, compUmbral.getContactorentrada());
-		in.put(P_CONTACTOR_SALIDA, compUmbral.getContactorsalida());
-		in.put(P_ID_SENSOR, compUmbral.getIdsensor());
+		in.put(P_UMBRAL_SUP, compUmbral.getUmbralSup());
+		in.put(P_UMBRAL_INF, compUmbral.getUmbralInf());
+		in.put(P_CONTACTOR_ENTRADA, compUmbral.getContactorEntrada());
+		in.put(P_CONTACTOR_SALIDA, compUmbral.getContactorSalida());
+		in.put(P_ID_SENSOR, compUmbral.getIdSensor());
 		
 		super.ejecutarStoredProcedure(ALTA, in, null, ComportamientoUmbral.class);
 		return compUmbral;
 	}
 	
 //	IN PIdComportamientoUmbral mediumint unsigned 
-	public void delete (Integer idComportamientoUmbral) {
+	public void delete (Long idComportamientoUmbral) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_COMP_UMBRAL, idComportamientoUmbral);
 		super.ejecutarStoredProcedure(BAJA, in, null, ComportamientoUmbral.class);
@@ -87,13 +87,13 @@ public class ComportamientoUmbralDao extends BaseDao{
 //	IN Pidsensor mediumint unsigned
 	public ComportamientoUmbral update (ComportamientoUmbral compUmbral) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_COMP_UMBRAL, compUmbral.getIdcsu());
+		in.put(P_ID_COMP_UMBRAL, compUmbral.getId());
 		in.put(P_HABILITADO, compUmbral.getHabilitado());
-		in.put(P_UMBRAL_SUP, compUmbral.getUmbralsuperior());
-		in.put(P_UMBRAL_INF, compUmbral.getUmbralinferior());
-		in.put(P_CONTACTOR_ENTRADA, compUmbral.getContactorentrada());
-		in.put(P_CONTACTOR_SALIDA, compUmbral.getContactorsalida());
-		in.put(P_ID_SENSOR, compUmbral.getIdsensor());
+		in.put(P_UMBRAL_SUP, compUmbral.getUmbralSup());
+		in.put(P_UMBRAL_INF, compUmbral.getUmbralInf());
+		in.put(P_CONTACTOR_ENTRADA, compUmbral.getContactorEntrada());
+		in.put(P_CONTACTOR_SALIDA, compUmbral.getContactorSalida());
+		in.put(P_ID_SENSOR, compUmbral.getIdSensor());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, ComportamientoUmbral.class);
 		return compUmbral;

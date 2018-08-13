@@ -24,30 +24,29 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 //,ifnull((select 1 from sensorperfil where idsensor=SEN.idsensor limit 1),0) AsignadoPerfil
 public class Sensor {
 	
-	//tabla
+	private String planta;
+	private String puntoSensado;
 	private Long id;
-	private Integer minutosMuestreo;
-	private String descripcionUbicacion;
-	private Double deltaMuestreo;
-	private Integer habilitado;
-	private Long idtiposensor;
-	private String mac;
-	private String macDelCoordinador;
-	private Long idpuntodesensado;
-
-	//select
 	private String nombre;
 	private String nombreAbreviado;
 	private String descripcion;
 	private Integer ordenImpresion;
 	private Integer ordenGrilla;
-	private String planta;
-	private String puntoSensado;
+	private Integer minutosMuestreo;
+	private String descripcionUbicacion;
+	private Double deltaMuestreo;
+	private Integer habilitado;
 	private String tipo;
+	private String mac;
+	private String macDelCoordinador;
 	private Integer tieneAlarma;
 	private Integer tieneCompHora;
 	private Integer tieneCompUmbral;
+	private Integer tieneMedicion;
 	private Integer asignadoPerfil;
+
+	private Long idPuntoDeSensado;
+	private Long idTipoSensor;
 	
 	
 	public String getPlanta() {
@@ -131,20 +130,26 @@ public class Sensor {
 	public String getMacDelCoordinador() {
 		return macDelCoordinador;
 	}
-	public Long getIdtiposensor() {
-		return idtiposensor;
+	public Integer getTieneMedicion() {
+		return tieneMedicion;
 	}
-	public void setIdtiposensor(Long idtiposensor) {
-		this.idtiposensor = idtiposensor;
+	public void setTieneMedicion(Integer tieneMedicion) {
+		this.tieneMedicion = tieneMedicion;
 	}
 	public void setMacDelCoordinador(String macDelCoordinador) {
 		this.macDelCoordinador = macDelCoordinador;
 	}
-	public Long getIdpuntodesensado() {
-		return idpuntodesensado;
+	public Long getIdTipoSensor() {
+		return idTipoSensor;
 	}
-	public void setIdpuntodesensado(Long idpuntodesensado) {
-		this.idpuntodesensado = idpuntodesensado;
+	public void setIdTipoSensor(Long idtiposensor) {
+		this.idTipoSensor = idtiposensor;
+	}
+	public Long getIdPuntoDeSensado() {
+		return idPuntoDeSensado;
+	}
+	public void setIdPuntoDeSensado(Long idpuntodesensado) {
+		this.idPuntoDeSensado = idpuntodesensado;
 	}	
 	public Integer getTieneAlarma() {
 		return tieneAlarma;

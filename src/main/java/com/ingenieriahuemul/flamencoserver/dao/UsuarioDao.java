@@ -45,8 +45,8 @@ public class UsuarioDao extends BaseDao{
 	//  IN Pemail varchar(40)
 	public Usuario save(Usuario usuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_NOMBRE_USUARIO, usuario.getNombreusuario());
-		in.put(P_NOMBRE_COMPLETO, usuario.getNombrecompleto());
+		in.put(P_NOMBRE_USUARIO, usuario.getNombreUsuario());
+		in.put(P_NOMBRE_COMPLETO, usuario.getNombreCompleto());
 		in.put(P_PASSWORD, usuario.getPassword());
 		in.put(P_EMAIL, usuario.getEmail());
 		
@@ -71,8 +71,8 @@ public class UsuarioDao extends BaseDao{
 	public Usuario update (Usuario usuario) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_USUARIO, usuario.getIdusuario());
-		in.put(P_NOMBRE_USUARIO, usuario.getNombreusuario());
-		in.put(P_NOMBRE_COMPLETO, usuario.getNombrecompleto());
+		in.put(P_NOMBRE_USUARIO, usuario.getNombreUsuario());
+		in.put(P_NOMBRE_COMPLETO, usuario.getNombreCompleto());
 		in.put(P_PASSWORD, usuario.getPassword());
 		in.put(P_EMAIL, usuario.getEmail());
 		

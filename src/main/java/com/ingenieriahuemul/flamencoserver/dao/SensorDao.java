@@ -36,7 +36,7 @@ public class SensorDao extends BaseDao{
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public Sensor findById(Integer idSensor) {
+	public Sensor findById(Long idSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_SENSOR, idSensor);
 		return ((List<Sensor>)super.ejecutarStoredProcedure(CONSULTA, in, null, Sensor.class)).get(0);
@@ -58,10 +58,10 @@ public class SensorDao extends BaseDao{
 		in.put(P_UBICACION, sensor.getDescripcionUbicacion());
 		in.put(P_DELTA_MUESTREO_NUBE, sensor.getDeltaMuestreo());
 		in.put(P_HABILITADO, sensor.getHabilitado());
-		in.put(P_ID_TIPO_SENSOR, sensor.getIdtiposensor());
+		in.put(P_ID_TIPO_SENSOR, sensor.getIdTipoSensor());
 		in.put(P_MAC, sensor.getMac());
 		in.put(P_MAC_COORDINADOR, sensor.getMacDelCoordinador());
-		in.put(P_ID_PUNTO_SENSADO, sensor.getIdpuntodesensado());
+		in.put(P_ID_PUNTO_SENSADO, sensor.getIdPuntoDeSensado());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
 		out.put(P_ID_SENSOR, sensor.getId());
@@ -71,7 +71,7 @@ public class SensorDao extends BaseDao{
 	}
 	
 //	IN PIdSensor mediumint unsigned 
-	public void delete (Integer idSensor) {
+	public void delete (Long idSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_SENSOR, idSensor);
 		super.ejecutarStoredProcedure(BAJA, in, null, Sensor.class);
@@ -93,10 +93,10 @@ public class SensorDao extends BaseDao{
 		in.put(P_UBICACION, sensor.getDescripcionUbicacion());
 		in.put(P_DELTA_MUESTREO_NUBE, sensor.getDeltaMuestreo());
 		in.put(P_HABILITADO, sensor.getHabilitado());
-		in.put(P_ID_TIPO_SENSOR, sensor.getIdtiposensor());
+		in.put(P_ID_TIPO_SENSOR, sensor.getIdTipoSensor());
 		in.put(P_MAC, sensor.getMac());
 		in.put(P_MAC_COORDINADOR, sensor.getMacDelCoordinador());
-		in.put(P_ID_PUNTO_SENSADO, sensor.getIdpuntodesensado());
+		in.put(P_ID_PUNTO_SENSADO, sensor.getIdPuntoDeSensado());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, Sensor.class);
 		return sensor;

@@ -13,10 +13,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 //, idSensor IDSensor
 //, PSENS.nombreregistro Sensor
 //, ifnull(PSENS.nombrecorto,'No ubicado') PuntoSensado
-
 public class Alarma {
 	
-	private Long idAlarma;
+	private Long id;
 	private Integer habilitado;
 	private Double umbralSuperior;
 	private Double umbralInferior;
@@ -26,11 +25,11 @@ public class Alarma {
 	private String sensor;
 	private String puntoSensado;
 		
-	public Long getIdAlarma() {
-		return idAlarma;
+	public Long getId() {
+		return id;
 	}
-	public void setIdAlarma(Long idAlarma) {
-		this.idAlarma = idAlarma;
+	public void setId(Long idAlarma) {
+		this.id = idAlarma;
 	}
 	public Double getUmbralSuperior() {
 		return umbralSuperior;
@@ -62,6 +61,12 @@ public class Alarma {
 	public void setIdSensor(Long idSensor) {
 		this.idSensor = idSensor;
 	}
+	public String getSensor() {
+		return sensor;
+	}
+	public void setSensor(String sensor) {
+		this.sensor = sensor;
+	}
 	public Integer getHabilitado() {
 		return habilitado;
 	}
@@ -72,15 +77,9 @@ public class Alarma {
 	public Integer getHabilitadoAvisoCelular() {
 		return habilitadoAvisoCelular;
 	}
-	public void setHabilitadoAvisoCelular(Integer habilitadoAvisoCelular) {
-		habilitadoAvisoCelular = habilitadoAvisoCelular == 0 ? 0 : 1;
-		this.habilitadoAvisoCelular = habilitadoAvisoCelular;
-	}
-	public String getSensor() {
-		return sensor;
-	}
-	public void setSensor(String sensor) {
-		this.sensor = sensor;
+	protected void setHabilitadoAvisoCelular(Integer notificar) {
+		notificar = notificar == 0 ? 0 : 1;
+		this.habilitadoAvisoCelular = notificar;
 	}
 	
 }
