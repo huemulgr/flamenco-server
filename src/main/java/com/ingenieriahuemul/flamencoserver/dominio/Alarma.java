@@ -16,11 +16,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class Alarma {
 	
 	private Long id;
-	private Integer habilitado;
+	private Boolean habilitado;
 	private Double umbralSuperior;
 	private Double umbralInferior;
-	private String nombre;
-	private Integer habilitadoAvisoCelular;
+	private String nombre;	
+	private Boolean habilitadoAvisoCelular;
+	
 	private Long idSensor;
 	private String sensor;
 	private String puntoSensado;
@@ -67,19 +68,17 @@ public class Alarma {
 	public void setSensor(String sensor) {
 		this.sensor = sensor;
 	}
-	public Integer getHabilitado() {
-		return habilitado;
-	}
-	public void setHabilitado(Integer habilitado) {
-		habilitado = habilitado == 0 ? 0 : 1;
-		this.habilitado = habilitado;
-	}
-	public Integer getHabilitadoAvisoCelular() {
+	public Boolean getHabilitadoAvisoCelular() {
 		return habilitadoAvisoCelular;
 	}
-	protected void setHabilitadoAvisoCelular(Integer notificar) {
-		notificar = notificar == 0 ? 0 : 1;
-		this.habilitadoAvisoCelular = notificar;
+	public void setHabilitadoAvisoCelular(Boolean habilitadoAvisoCelular) {
+		this.habilitadoAvisoCelular = habilitadoAvisoCelular;
+	}
+	public Boolean getHabilitado() {
+		return habilitado;
+	}
+	public void setHabilitado(Boolean habilitado) {
+		this.habilitado = habilitado;
 	}
 	
 }

@@ -35,15 +35,15 @@ public class Sensor {
 	private Integer minutosMuestreo;
 	private String descripcionUbicacion;
 	private Double deltaMuestreo;
-	private Integer habilitado;
+	private Boolean habilitado;
 	private String tipo;
 	private String mac;
 	private String macDelCoordinador;
-	private Integer tieneAlarma;
-	private Integer tieneCompHora;
-	private Integer tieneCompUmbral;
-	private Integer tieneMedicion;
-	private Integer asignadoPerfil;
+	private Boolean tieneAlarma;
+	private Boolean tieneCompHora;
+	private Boolean tieneCompUmbral;
+//	private Boolean tieneMedicion;
+	private Boolean asignadoPerfil;
 
 	private Long idPuntoDeSensado;
 	private Long idTipoSensor;
@@ -130,12 +130,6 @@ public class Sensor {
 	public String getMacDelCoordinador() {
 		return macDelCoordinador;
 	}
-	public Integer getTieneMedicion() {
-		return tieneMedicion;
-	}
-	public void setTieneMedicion(Integer tieneMedicion) {
-		this.tieneMedicion = tieneMedicion;
-	}
 	public void setMacDelCoordinador(String macDelCoordinador) {
 		this.macDelCoordinador = macDelCoordinador;
 	}
@@ -150,40 +144,41 @@ public class Sensor {
 	}
 	public void setIdPuntoDeSensado(Long idpuntodesensado) {
 		this.idPuntoDeSensado = idpuntodesensado;
-	}	
-	public Integer getTieneAlarma() {
-		return tieneAlarma;
 	}
-	public void setTieneAlarma(Integer tieneAlarma) {
-		tieneAlarma = tieneAlarma == 0 ? 0 : 1;
-		this.tieneAlarma = tieneAlarma;
-	}
-	public Integer getTieneCompHora() {
-		return tieneCompHora;
-	}
-	public void setTieneCompHora(Integer tieneCompHora) {
-		tieneCompHora = tieneCompHora == 0 ? 0 : 1;
-		this.tieneCompHora = tieneCompHora;
-	}
-	public Integer getTieneCompUmbral() {
-		return tieneCompUmbral;
-	}
-	public void setTieneCompUmbral(Integer tieneCompUmbral) {
-		tieneCompUmbral = tieneCompUmbral == 0 ? 0 : 1;
-		this.tieneCompUmbral = tieneCompUmbral;
-	}
-	public Integer getAsignadoPerfil() {
-		return asignadoPerfil;
-	}
-	public void setAsignadoPerfil(Integer asignadoPerfil) {
-		asignadoPerfil = asignadoPerfil == 0 ? 0 : 1;
-		this.asignadoPerfil = asignadoPerfil;
-	}
-	public Integer getHabilitado() {
+	public Boolean getHabilitado() {
 		return habilitado;
 	}
-	public void setHabilitado(Integer habilitado) {
-		habilitado = habilitado == 0 ? 0 : 1;
+	public void setHabilitado(Boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+	public Boolean getTieneAlarma() {
+		return tieneAlarma;
+	}
+	public void setTieneAlarma(Boolean tieneAlarma) {
+		this.tieneAlarma = tieneAlarma;
+	}
+	public Boolean getTieneCompHora() {
+		return tieneCompHora;
+	}
+	public void setTieneCompHora(Boolean tieneCompHora) {
+		this.tieneCompHora = tieneCompHora;
+	}
+	public Boolean getTieneCompUmbral() {
+		return tieneCompUmbral;
+	}
+	public void setTieneCompUmbral(Boolean tieneCompUmbral) {
+		this.tieneCompUmbral = tieneCompUmbral;
+	}
+//	public Boolean getTieneMedicion() {
+//		return tieneMedicion;
+//	}
+//	public void setTieneMedicion(Boolean tieneMedicion) {
+//		this.tieneMedicion = tieneMedicion;
+//	}
+	public Boolean getAsignadoPerfil() {
+		return asignadoPerfil;
+	}
+	public void setAsignadoPerfil(Boolean asignadoPerfil) {
+		this.asignadoPerfil = asignadoPerfil;
 	}
 }

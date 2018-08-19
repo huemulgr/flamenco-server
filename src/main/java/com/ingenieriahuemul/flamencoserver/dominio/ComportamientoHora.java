@@ -17,8 +17,8 @@ public class ComportamientoHora {
 	private Time horaInicio;
 	private Time horaFin;
 	private Time periodo;
-	private Integer contactorSalida;
-	private Integer habilitado;
+	private Boolean contactorSalida;
+	private Boolean habilitado;
 	private Long idSensor;
 	private String sensor;
 	private String puntoSensado;
@@ -66,18 +66,16 @@ public class ComportamientoHora {
 	public void setPuntoSensado(String puntoSensado) {
 		this.puntoSensado = puntoSensado;
 	}
-	public Integer getContactorSalida() {
+	public Boolean getContactorSalida() {
 		return contactorSalida;
 	}
-	public void setContactorSalida(Integer contactorSalida) {
-		contactorSalida = contactorSalida == 0 ? 0 : 1;
+	public void setContactorSalida(Boolean contactorSalida) {
 		this.contactorSalida = contactorSalida;
 	}
-	public Integer getHabilitado() {
+	public Boolean getHabilitado() {
 		return habilitado;
 	}
-	public void setHabilitado(Integer habilitado) {
-		habilitado = habilitado == 0 ? 0 : 1;
+	public void setHabilitado(Boolean habilitado) {
 		this.habilitado = habilitado;
 	}
 }

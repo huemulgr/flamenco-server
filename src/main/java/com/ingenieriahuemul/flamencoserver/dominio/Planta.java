@@ -10,7 +10,7 @@ public class Planta {
 
 	private Long id;
 	private String nombre;
-	private Integer habilitado;
+	private Boolean habilitado;
 	private String rutaImagen;
 	private String razonSocial;
 	
@@ -27,13 +27,6 @@ public class Planta {
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-	public Integer getHabilitado() {
-		return habilitado;
-	}
-	public void setHabilitado(Integer habilitado) {
-		habilitado = habilitado == 0 ? 0 : 1;
-		this.habilitado = habilitado;
 	}
 	public String getRutaImagen() {
 		return rutaImagen;
@@ -52,6 +45,12 @@ public class Planta {
 	}
 	public void setRazonSocial(String empresa) {
 		this.razonSocial = empresa;
+	}
+	public Boolean getHabilitado() {
+		return habilitado;
+	}
+	public void setHabilitado(Boolean habilitado) {
+		this.habilitado = habilitado;
 	}
 		
 }

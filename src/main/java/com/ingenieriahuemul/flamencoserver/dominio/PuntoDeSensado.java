@@ -17,7 +17,7 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 public class PuntoDeSensado {
 	
 	private Long id;
-	private Integer habilitado;
+	private Boolean habilitado;
 	private String nombre;		//alias nombreregistro
 	private Long coordX;
 	private Long coordY;
@@ -28,7 +28,7 @@ public class PuntoDeSensado {
 	private Integer ordenGrilla;
 	private Integer pagina;
 	private Long sensorAsociado;
-	private Integer mediciones;
+	private Boolean mediciones;
 	
 	private Long idPlanta;
 	
@@ -38,13 +38,6 @@ public class PuntoDeSensado {
 	}
 	public void setId(Long idpuntoSensado) {
 		this.id = idpuntoSensado;
-	}
-	public Integer getHabilitado() {
-		return habilitado;
-	}
-	public void setHabilitado(Integer habilitado) {
-		habilitado = habilitado == 0 ? 0 : 1;
-		this.habilitado = habilitado;
 	}
 	public Long getCoordX() {
 		return coordX;
@@ -112,11 +105,16 @@ public class PuntoDeSensado {
 	public void setSensorAsociado(Long sensorAsociado) {
 		this.sensorAsociado = sensorAsociado;
 	}
-	public Integer getMediciones() {
+	public Boolean getHabilitado() {
+		return habilitado;
+	}
+	public void setHabilitado(Boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+	public Boolean getMediciones() {
 		return mediciones;
 	}
-	public void setMediciones(Integer mediciones) {
-		mediciones = mediciones == 0 ? 0 : 1;
+	public void setMediciones(Boolean mediciones) {
 		this.mediciones = mediciones;
 	}
 	

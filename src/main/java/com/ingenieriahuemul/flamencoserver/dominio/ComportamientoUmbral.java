@@ -14,13 +14,13 @@ package com.ingenieriahuemul.flamencoserver.dominio;
 public class ComportamientoUmbral {
 	
 	private Long id;
-	private Integer habilitado;
+	private Boolean habilitado;
 	private Double umbralSup;
 	private Double umbralInf;
-	private Integer contactorEntrada;
-	private Integer contactorSalida;
-	private Integer condicionY;
-	private Integer habilitarContEntrada;
+	private Boolean contactorEntrada;
+	private Boolean contactorSalida;
+	private Boolean condicionY;
+	private Boolean habilitarContEntrada;
 	private String sensor;
 	private String puntoSensado;
 	
@@ -63,40 +63,35 @@ public class ComportamientoUmbral {
 	public void setPuntoSensado(String puntoSensado) {
 		this.puntoSensado = puntoSensado;
 	}
-	public Integer getContactorEntrada() {
-		return contactorEntrada;
-	}
-	public void setContactorEntrada(Integer contactorentrada) {
-		contactorentrada = contactorentrada == 0 ? 0 : 1;
-		this.contactorEntrada = contactorentrada;
-	}
-	public Integer getContactorSalida() {
-		return contactorSalida;
-	}
-	public void setContactorSalida(Integer contactorsalida) {
-		contactorsalida = contactorsalida == 0 ? 0 : 1;
-		this.contactorSalida = contactorsalida;
-	}
-	public Integer getCondicionY() {
-		return condicionY;
-	}
-	public void setCondicionY(Integer umbralANDcontactor) {
-		umbralANDcontactor = umbralANDcontactor == 0 ? 0 : 1;
-		this.condicionY = umbralANDcontactor;
-	}
-	public Integer getHabilitarContEntrada() {
-		return habilitarContEntrada;
-	}
-	public void setHabilitarContEntrada(Integer habilitarcontactorentrada) {
-		habilitarcontactorentrada = habilitarcontactorentrada == 0 ? 0 : 1;
-		this.habilitarContEntrada = habilitarcontactorentrada;
-	}
-	public Integer getHabilitado() {
+	public Boolean getHabilitado() {
 		return habilitado;
 	}
-	public void setHabilitado(Integer habilitado) {
-		habilitado = habilitado == 0 ? 0 : 1;
+	public void setHabilitado(Boolean habilitado) {
 		this.habilitado = habilitado;
 	}
+	public Boolean getContactorEntrada() {
+		return contactorEntrada;
+	}
+	public void setContactorEntrada(Boolean contactorEntrada) {
+		this.contactorEntrada = contactorEntrada;
+	}
+	public Boolean getContactorSalida() {
+		return contactorSalida;
+	}
+	public void setContactorSalida(Boolean contactorSalida) {
+		this.contactorSalida = contactorSalida;
+	}
+	public Boolean getCondicionY() {
+		return condicionY;
+	}
+	public void setCondicionY(Boolean condicionY) {
+		this.condicionY = condicionY;
+	}
+	public Boolean getHabilitarContEntrada() {
+		return habilitarContEntrada;
+	}
+	public void setHabilitarContEntrada(Boolean habilitarContEntrada) {
+		this.habilitarContEntrada = habilitarContEntrada;
+	}	
 		
 }
