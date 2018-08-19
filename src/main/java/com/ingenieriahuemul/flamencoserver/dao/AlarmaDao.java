@@ -21,8 +21,8 @@ public class AlarmaDao extends BaseDao{
 	private static final String P_ID_SENSOR = "Pidsensor";
 	
 	//stored procedures
-	private static final String CONSULTA_1 = "flaAlarmaSele";
-	private static final String CONSULTA_2 = "flaAlarmaSensorSele";
+	private static final String CONSULTA = "flaAlarmaSele";
+	private static final String CONSULTA_SENSOR = "flaAlarmaSensorSele";
 	private static final String ALTA = "flaAlarmaAlta";
 	private static final String BAJA = "flaAlarmaBaja";	
 	private static final String MODIFICACION = "flaAlarmaModif";
@@ -31,21 +31,21 @@ public class AlarmaDao extends BaseDao{
 	public List<Alarma> findAll() {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_ALARMA, 0);
-		return (List<Alarma>) super.ejecutarStoredProcedure(CONSULTA_1, in, null, Alarma.class);
+		return (List<Alarma>) super.ejecutarStoredProcedure(CONSULTA, in, null, Alarma.class);
 	}
 	
 //	IN Pidalarma mediumint unsigned	
 	public Alarma findById(Long idAlarma) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_ALARMA, idAlarma);
-		return ((List<Alarma>)super.ejecutarStoredProcedure(CONSULTA_1, in, null, Alarma.class)).get(0);
+		return ((List<Alarma>)super.ejecutarStoredProcedure(CONSULTA, in, null, Alarma.class)).get(0);
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public Alarma findByIdSensor(Long idSensor) {
+	public List<Alarma> findByIdSensor(Long idSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_SENSOR, idSensor);
-		return ((List<Alarma>)super.ejecutarStoredProcedure(CONSULTA_2, in, null, Alarma.class)).get(0);
+		return (List<Alarma>)super.ejecutarStoredProcedure(CONSULTA_SENSOR, in, null, Alarma.class);
 	}
 	
 //	INOUT Pidalarma mediumint unsigned,

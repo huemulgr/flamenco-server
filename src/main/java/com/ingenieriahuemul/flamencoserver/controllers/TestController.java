@@ -128,7 +128,7 @@ public class TestController {
 	}
 	
 	@GetMapping(path = "/cumbral/a{a}")
-	public ComportamientoUmbral test31 (@PathVariable("a") Long a) {
+	public List<ComportamientoUmbral> test31 (@PathVariable("a") Long a) {
 		logger.info("ok");
 		
 		return cUmbralDao.findByIdSensor(Long.valueOf(a));

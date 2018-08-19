@@ -23,7 +23,7 @@ public class ComportamientoUmbralDao extends BaseDao{
 	
 	//stored procedures
 	private static final String CONSULTA = "flaCompUmbralSele";
-	private static final String CONSULTA_2 = "flaCompUmbralSensorSele";
+	private static final String CONSULTA_SENSOR = "flaCompUmbralSensorSele";
 	private static final String ALTA = "flaCSUAlta";
 	private static final String BAJA = "flaCSUBaja";	
 	private static final String MODIFICACION = "flaCSUModif";
@@ -43,10 +43,10 @@ public class ComportamientoUmbralDao extends BaseDao{
 	}
 	
 //	IN Pidalarma mediumint unsigned	
-	public ComportamientoUmbral findByIdSensor(Long idSensor) {
+	public List<ComportamientoUmbral> findByIdSensor(Long idSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_SENSOR, idSensor);
-		return ((List<ComportamientoUmbral>)super.ejecutarStoredProcedure(CONSULTA_2, in, null, ComportamientoUmbral.class)).get(0);
+		return (List<ComportamientoUmbral>)super.ejecutarStoredProcedure(CONSULTA_SENSOR, in, null, ComportamientoUmbral.class);
 	}
 	
 //	IN Pidcsu mediumint unsigned,

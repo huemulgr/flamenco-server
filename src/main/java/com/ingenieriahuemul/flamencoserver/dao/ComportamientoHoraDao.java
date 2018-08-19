@@ -23,6 +23,7 @@ public class ComportamientoHoraDao extends BaseDao{
 	
 	//stored procedures
 	private static final String CONSULTA = "flaCompHoraSele";
+	private static final String CONSULTA_SENSOR = "flaCompHoraSensorSele";
 	private static final String ALTA = "flaCompHoraAlta";
 	private static final String BAJA = "flaCompHoraBaja";	
 	private static final String MODIFICACION = "flaCompHoraModif";
@@ -39,6 +40,13 @@ public class ComportamientoHoraDao extends BaseDao{
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_COMP_HORA, idComportamientoHora);
 		return ((List<ComportamientoHora>)super.ejecutarStoredProcedure(CONSULTA, in, null, ComportamientoHora.class)).get(0);
+	}
+	
+//	IN Pidsensor mediumint unsigned	
+	public List<ComportamientoHora> findByIdSensor(Long idSensor) {
+		Map<String, Object> in = new HashMap<String, Object>();
+		in.put(P_ID_COMP_HORA, idSensor);
+		return (List<ComportamientoHora>)super.ejecutarStoredProcedure(CONSULTA_SENSOR, in, null, ComportamientoHora.class);
 	}
 	
 //	INOUT Pidch mediumint unsigned,
