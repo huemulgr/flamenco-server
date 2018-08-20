@@ -45,7 +45,7 @@ public class ComportamientoHoraDao extends BaseDao{
 //	IN Pidsensor mediumint unsigned	
 	public List<ComportamientoHora> findByIdSensor(Long idSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_COMP_HORA, idSensor);
+		in.put(P_ID_SENSOR, idSensor);
 		return (List<ComportamientoHora>)super.ejecutarStoredProcedure(CONSULTA_SENSOR, in, null, ComportamientoHora.class);
 	}
 	

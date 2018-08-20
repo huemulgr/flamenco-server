@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ingenieriahuemul.flamencoserver.Monitor;
 import com.ingenieriahuemul.flamencoserver.dao.AlarmaDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoHoraDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoUmbralDao;
@@ -38,7 +39,7 @@ import com.ingenieriahuemul.flamencoserver.dominio.Usuario;
 
 @RestController
 @RequestMapping("/test")
-public class TestController {
+public class TestController extends BaseController{
 	Logger logger = Logger.getLogger(TestController.class);
 	
 	@Autowired
@@ -186,6 +187,13 @@ public class TestController {
     	logger.info("actualizando...");
         return empresaDao.update(empresa);
     }
+	
+	@GetMapping(path = "/empresalocal")
+	public Empresa test4 () {
+		logger.info("empresa de este servidor local, obtenida con su id");
+		return empresaDao.findById(this.idEmpresa);
+	}
+	
 //-----------------------------------------------------------------------------------	
 //	perfil
 	@Autowired
@@ -321,6 +329,7 @@ public class TestController {
 	
 	@GetMapping(path = "/sensor")
 	public List Listar8() {
+		Monitor.setOutdated(true);
 		return sensorDao.findAll();
 	}
 	

@@ -1,5 +1,9 @@
 package com.ingenieriahuemul.flamencoserver.dominio;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 //SELECT 
 //
 //ifnull(PLAN.nombre,'No asignado')				Planta
@@ -48,6 +52,50 @@ public class Sensor {
 	private Long idPuntoDeSensado;
 	private Long idTipoSensor;
 	
+//entidades asociadas al sensor (solo lo necesario para monitorear sin tener que pegar constantemente a bd)
+//se marcan para no ser serializados	
+	@JsonIgnore 
+	private List<Alarma> listaAlarmas;
+	@JsonIgnore 
+	private List<ComportamientoUmbral> listaCompUmbral;
+	@JsonIgnore 
+	private List<ComportamientoHora> listaCompHora;
+	@JsonIgnore 
+	private PuntoDeSensado puntoDeSensadoAsignado;
+	@JsonIgnore 
+	private TipoSensor tipoSensor;
+	
+	public List<Alarma> getListaAlarmas() {
+		return listaAlarmas;
+	}
+	public void setListaAlarmas(List<Alarma> listaAlarmas) {
+		this.listaAlarmas = listaAlarmas;
+	}
+	public List<ComportamientoUmbral> getListaCompUmbral() {
+		return listaCompUmbral;
+	}
+	public void setListaCompUmbral(List<ComportamientoUmbral> listaCompUmbral) {
+		this.listaCompUmbral = listaCompUmbral;
+	}
+	public List<ComportamientoHora> getListaCompHora() {
+		return listaCompHora;
+	}
+	public void setListaCompHora(List<ComportamientoHora> listaCompHora) {
+		this.listaCompHora = listaCompHora;
+	}
+	public PuntoDeSensado getPuntoDeSensadoAsignado() {
+		return puntoDeSensadoAsignado;
+	}
+	public void setPuntoDeSensadoAsignado(PuntoDeSensado puntoDeSensadoAsignado) {
+		this.puntoDeSensadoAsignado = puntoDeSensadoAsignado;
+	}
+	public TipoSensor getTipoSensor() {
+		return tipoSensor;
+	}
+	public void setTipoSensor(TipoSensor tipoSensor) {
+		this.tipoSensor = tipoSensor;
+	}
+//fin entidades asociadas al sensor	
 	
 	public String getPlanta() {
 		return planta;
