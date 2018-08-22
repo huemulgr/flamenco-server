@@ -25,16 +25,16 @@ import com.ingenieriahuemul.flamencoserver.dao.PuntoDeSensadoDao;
 import com.ingenieriahuemul.flamencoserver.dao.SensorDao;
 import com.ingenieriahuemul.flamencoserver.dao.TipoSensorDao;
 import com.ingenieriahuemul.flamencoserver.dao.UsuarioDao;
-import com.ingenieriahuemul.flamencoserver.dominio.Alarma;
-import com.ingenieriahuemul.flamencoserver.dominio.ComportamientoHora;
-import com.ingenieriahuemul.flamencoserver.dominio.ComportamientoUmbral;
-import com.ingenieriahuemul.flamencoserver.dominio.Empresa;
-import com.ingenieriahuemul.flamencoserver.dominio.Perfil;
-import com.ingenieriahuemul.flamencoserver.dominio.Planta;
-import com.ingenieriahuemul.flamencoserver.dominio.PuntoDeSensado;
-import com.ingenieriahuemul.flamencoserver.dominio.Sensor;
-import com.ingenieriahuemul.flamencoserver.dominio.TipoSensor;
-import com.ingenieriahuemul.flamencoserver.dominio.Usuario;
+import com.ingenieriahuemul.flamencoserver.domain.Alarma;
+import com.ingenieriahuemul.flamencoserver.domain.ComportamientoHora;
+import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
+import com.ingenieriahuemul.flamencoserver.domain.Empresa;
+import com.ingenieriahuemul.flamencoserver.domain.Perfil;
+import com.ingenieriahuemul.flamencoserver.domain.Planta;
+import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
+import com.ingenieriahuemul.flamencoserver.domain.Sensor;
+import com.ingenieriahuemul.flamencoserver.domain.TipoSensor;
+import com.ingenieriahuemul.flamencoserver.domain.Usuario;
 
 
 @RestController
@@ -329,7 +329,6 @@ public class TestController extends BaseController{
 	
 	@GetMapping(path = "/sensor")
 	public List Listar8() {
-		Monitor.setOutdated(true);
 		return sensorDao.findAll();
 	}
 	
@@ -405,4 +404,5 @@ public class TestController extends BaseController{
     	logger.info("actualizando...");
         return usuarioDao.update(tipoSensor);
     }	
+	
 }
