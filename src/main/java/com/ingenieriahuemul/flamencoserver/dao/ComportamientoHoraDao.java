@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.dominio.ComportamientoHora;
+import com.ingenieriahuemul.flamencoserver.domain.ComportamientoHora;
 
 @Component
 public class ComportamientoHoraDao extends BaseDao{

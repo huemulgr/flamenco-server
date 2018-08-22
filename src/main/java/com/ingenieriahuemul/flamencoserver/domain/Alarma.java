@@ -1,7 +1,9 @@
-package com.ingenieriahuemul.flamencoserver.dominio;
+package com.ingenieriahuemul.flamencoserver.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //Select 
 //ALA.idalarma ID
@@ -26,6 +28,9 @@ public class Alarma {
 	private String sensor;
 	private String puntoSensado;
 		
+	//variable para comprobar si la alarma esta disparada o no
+	@JsonIgnore private Boolean alarmaOn;
+	
 	public Long getId() {
 		return id;
 	}
@@ -79,6 +84,12 @@ public class Alarma {
 	}
 	public void setHabilitado(Boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+	public Boolean getAlarmaOn() {
+		return alarmaOn;
+	}
+	public void setAlarmaOn(Boolean alarmaOn) {
+		this.alarmaOn = alarmaOn;
 	}
 	
 }

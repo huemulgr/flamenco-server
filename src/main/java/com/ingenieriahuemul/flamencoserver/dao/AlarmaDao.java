@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.dominio.Alarma;
+import com.ingenieriahuemul.flamencoserver.domain.Alarma;
 
 @Component
 public class AlarmaDao extends BaseDao{

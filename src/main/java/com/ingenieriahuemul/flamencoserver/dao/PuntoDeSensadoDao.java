@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.dominio.PuntoDeSensado;
+import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
 
 @Component
 public class PuntoDeSensadoDao extends BaseDao{

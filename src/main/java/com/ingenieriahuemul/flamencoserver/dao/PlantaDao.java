@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.dominio.Planta;
+import com.ingenieriahuemul.flamencoserver.domain.Planta;
 
 @Component
 public class PlantaDao extends BaseDao{

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.dominio.Perfil;
+import com.ingenieriahuemul.flamencoserver.domain.Perfil;
 
 @Component
 public class PerfilDao extends BaseDao{

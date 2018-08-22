@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.dominio.TipoSensor;
+import com.ingenieriahuemul.flamencoserver.domain.TipoSensor;
 
 @Component
 public class TipoSensorDao extends BaseDao{

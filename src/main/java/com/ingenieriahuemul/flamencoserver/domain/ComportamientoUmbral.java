@@ -1,4 +1,4 @@
-package com.ingenieriahuemul.flamencoserver.dominio;
+package com.ingenieriahuemul.flamencoserver.domain;
 
 //SELECT 
 //COMPU.`idcsu`			ID
@@ -26,6 +26,15 @@ public class ComportamientoUmbral {
 	
 	private Long idSensor;
 	
+	
+	public int getNroContactorEntrada() {
+		int numero = contactorEntrada == false ? 0 : 1;
+		return numero;
+	}
+	public int getNroContactorSalida() {
+		int numero = contactorSalida == false ? 0 : 1;
+		return numero;
+	}
 	
 	public Long getId() {
 		return id;

@@ -1,4 +1,4 @@
-package com.ingenieriahuemul.flamencoserver.dominio;
+package com.ingenieriahuemul.flamencoserver.domain;
 
 import java.sql.Time;
 

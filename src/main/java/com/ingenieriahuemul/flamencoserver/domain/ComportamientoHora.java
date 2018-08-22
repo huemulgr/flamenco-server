@@ -1,4 +1,4 @@
-package com.ingenieriahuemul.flamencoserver.dominio;
+package com.ingenieriahuemul.flamencoserver.domain;
 
 import java.sql.Time;
 
@@ -23,6 +23,11 @@ public class ComportamientoHora {
 	private String sensor;
 	private String puntoSensado;
 		
+	
+	public int getNroContactorSalida() {
+		int numero = contactorSalida == false ? 0 : 1;
+		return numero;
+	}
 	
 	public Long getId() {
 		return id;

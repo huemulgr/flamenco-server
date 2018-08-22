@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.dominio.ComportamientoUmbral;
+import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
 
 @Component
 public class ComportamientoUmbralDao extends BaseDao{

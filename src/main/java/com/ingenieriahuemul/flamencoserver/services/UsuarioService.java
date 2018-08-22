@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ingenieriahuemul.flamencoserver.dao.UsuarioDao;
-import com.ingenieriahuemul.flamencoserver.dominio.Usuario;
+import com.ingenieriahuemul.flamencoserver.domain.Usuario;
 
 @Service
 public class UsuarioService {

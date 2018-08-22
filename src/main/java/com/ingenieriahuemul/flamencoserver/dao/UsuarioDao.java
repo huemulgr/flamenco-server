@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.dominio.Usuario;
+import com.ingenieriahuemul.flamencoserver.domain.Usuario;
 
 @Component
 public class UsuarioDao extends BaseDao{
