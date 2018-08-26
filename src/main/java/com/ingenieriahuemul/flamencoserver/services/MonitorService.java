@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.ingenieriahuemul.flamencoserver.dominio.Sensor;
+import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 /*
  * Esta clase se uso como prueba para el manejo de funciones asincronicas en threads, 

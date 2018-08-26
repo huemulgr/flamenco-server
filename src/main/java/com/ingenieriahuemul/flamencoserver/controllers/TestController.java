@@ -19,6 +19,7 @@ import com.ingenieriahuemul.flamencoserver.dao.AlarmaDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoHoraDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoUmbralDao;
 import com.ingenieriahuemul.flamencoserver.dao.EmpresaDao;
+import com.ingenieriahuemul.flamencoserver.dao.EstadoMasDao;
 import com.ingenieriahuemul.flamencoserver.dao.PerfilDao;
 import com.ingenieriahuemul.flamencoserver.dao.PlantaDao;
 import com.ingenieriahuemul.flamencoserver.dao.PuntoDeSensadoDao;
@@ -35,6 +36,7 @@ import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 import com.ingenieriahuemul.flamencoserver.domain.TipoSensor;
 import com.ingenieriahuemul.flamencoserver.domain.Usuario;
+import com.ingenieriahuemul.flamencoserver.services.FirebaseSdkService;
 
 
 @RestController
@@ -192,6 +194,16 @@ public class TestController extends BaseController{
 	public Empresa test4 () {
 		logger.info("empresa de este servidor local, obtenida con su id");
 		return empresaDao.findById(this.idEmpresa);
+	}
+	
+//-----------------------------------------------------------------------------------
+//	estadoactual
+	@Autowired
+	private EstadoMasDao estadoActualDao;
+	
+	@GetMapping(path = "/estadoactual")
+	public List estadoActual() {
+		return estadoActualDao.obtenerEstadoActual();
 	}
 	
 //-----------------------------------------------------------------------------------	
@@ -379,9 +391,10 @@ public class TestController extends BaseController{
 	private UsuarioDao usuarioDao;
 	
 	@PostMapping("/usuario")
-    public Usuario create(@RequestBody Usuario tipoSensor){
+    public Usuario create(@RequestBody Usuario usuario){
     	logger.info("creando...");
-        return usuarioDao.save(tipoSensor);
+    	FirebaseSdkService.c(usuario);
+        return usuarioDao.save(usuario);
     }
 	
 	@GetMapping(path = "/usuario/{a}")
@@ -400,9 +413,9 @@ public class TestController extends BaseController{
 	}
 	
 	@PutMapping(path = "/usuario")
-    public Usuario update(@RequestBody Usuario tipoSensor){
+    public Usuario update(@RequestBody Usuario usuario){
     	logger.info("actualizando...");
-        return usuarioDao.update(tipoSensor);
+        return usuarioDao.update(usuario);
     }	
 	
 }

@@ -2,17 +2,16 @@ package com.ingenieriahuemul.flamencoserver;
 
 import java.util.List;
 
-import org.apache.tomcat.util.http.fileupload.ThresholdingOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.domain.Alarma;
+import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
 import com.ingenieriahuemul.flamencoserver.domain.Mas;
+import com.ingenieriahuemul.flamencoserver.services.EstadoMasService;
 import com.ingenieriahuemul.flamencoserver.services.MasService;
-import com.ingenieriahuemul.flamencoserver.services.SensorService;
 
 /* Servicio de monitoreo
  * 
@@ -20,10 +19,18 @@ import com.ingenieriahuemul.flamencoserver.services.SensorService;
 @Component
 public class Monitor {
 	private static final Logger logger = LoggerFactory.getLogger(Monitor.class);
-
-    //uso esta variable de clase para indicar que el listado de mas se modifico y debe actualizarse en el proximo ciclo
-    //cada vez que se altere esta lista (alarmas, comportamientos, punto sensado, etc.) setear en true
+	
+    //uso esta variables de clase para indicar que el listado de mas se modifico y debe actualizarse en el proximo ciclo
+    //cada vez que se altere esta lista (alarmas, punto sensado, etc.) setear en true. Me parece una alternativa potable a usar memoria compartida y semaforos
     public static boolean outdated = true;
+    
+    @Autowired
+    private MasService masService;
+    @Autowired
+    private EstadoMasService estadoMasService;
+    
+    private List<Mas> listaMas;
+    private List<EstadoMas> estadoActual;
     
 	public Monitor() { }
 	
@@ -35,17 +42,32 @@ public class Monitor {
 		
 		//si hubo cambios actualiza listado, cada vez que se modifique hay que setear en true outdated
     	if(isOutdated()) {
-    		//actualizar lista alarmas
+    		listaMas = masService.refrescarListaMAS();
     		outdated = false;
     	}
-    	logger.info("duracion update: " + (System.currentTimeMillis() - start));
-    	logger.info("monitorear..." + start);
- 
+//    	logger.info("duracion update: " + (System.currentTimeMillis() - start));
+    	    	
+    	refrescarEstadoActual();
     	
+    	for(Mas mas : listaMas) {
+    		mas.evaluarAlarmas();
+    	}
+    	
+//    	logger.info("monitorear..." + start); 
 	}
 	
+	private void refrescarEstadoActual() {
+		estadoActual = estadoMasService.obtenerEstadoActual();
+		
+		for(EstadoMas estadoMas : estadoActual) {
+			for(Mas mas : listaMas) {
+				if(mas.getPuntoDeSensado().getId().equals(estadoMas.getIdPuntoSensado())) {
+					mas.actualizarEstado(estadoMas);
+				}
+			}
+		}
+	}
 	
-	//TODO:crear scheduled para persistir estado actual, va a requerir una variable tiempo para ir comparando contra el ultimo muestreo
 	
 	public static boolean isOutdated() {
 		return outdated;
@@ -53,36 +75,6 @@ public class Monitor {
 	public static void setOutdated(boolean outdated) {
 		Monitor.outdated = outdated;
 	}    	
-    	
-    	
-//TODO: lo dejo comentado para tenerlo a mano si usamos threads, si no se usa borrarlo    	
-//    	CompletableFuture[] threads = new CompletableFuture[15];
-//  	
-//	  	try {
-//	  		//recorro para 1 thread x MAS suponiendo que el mensaje de status es bloqueante, 
-//	  		//si no es asi no serian necesarios threads adicionales
-//			for(int i=0; i<15; i++) {
-//				//se inicia thread, lo unico que hace es esperar y escribir
-//				CompletableFuture<String> thread = pruebaService.prueba(" " + i);
-//			    threads[i] = thread;
-//			}
-//			          	
-//			//join de los thread creados, tener en cuenta que joinear bloquea al padre (no usar en monitor)
-//			CompletableFuture.allOf(threads).join();
-//
-//			// resultado y tiempo total, el resultado solo tiene sentido si es una tarea que queria hacer en paralelo y
-    		// recuperar resultado mas tarde, si no es el caso se supone es seguro abrir thread y no joinearlos
-//			logger.info("Elapsed time: " + (System.currentTimeMillis() - start));
-//			for(int i=0; i<15; i++) {
-//			// 	logger.info("--> " + threads[i].get());
-//			}
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	
+   
 }
 
