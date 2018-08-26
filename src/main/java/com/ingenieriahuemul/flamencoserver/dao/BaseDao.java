@@ -82,6 +82,6 @@ public class BaseDao {
 	  		logger.error("Hubo un error al ejecutar el SP <" + storedProcedure + ">: " + e.getMessage() + "\n");
 	  		e.printStackTrace();
 	  	}
-	  	return null;
+	  	return new ArrayList<Object>();
 	}
 }

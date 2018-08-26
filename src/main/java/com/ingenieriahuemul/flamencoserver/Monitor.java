@@ -1,6 +1,10 @@
 package com.ingenieriahuemul.flamencoserver;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +16,8 @@ import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
 import com.ingenieriahuemul.flamencoserver.domain.Mas;
 import com.ingenieriahuemul.flamencoserver.services.EstadoMasService;
 import com.ingenieriahuemul.flamencoserver.services.MasService;
+import com.ingenieriahuemul.flamencoserver.services.MonitorService;
+import com.ingenieriahuemul.flamencoserver.services.comunicacion.ComunicacionService;
 
 /* Servicio de monitoreo
  * 
@@ -32,6 +38,10 @@ public class Monitor {
     private List<Mas> listaMas;
     private List<EstadoMas> estadoActual;
     
+    @Autowired
+    private ComunicacionService comunicacionService;
+    @Autowired MonitorService monitorService;
+    
 	public Monitor() { }
 	
 	//monitorear es una tarea programada que cada x milisegundos se dispara
@@ -50,10 +60,15 @@ public class Monitor {
     	refrescarEstadoActual();
     	
     	for(Mas mas : listaMas) {
+    		//TODO: este bloque tambien deberia hacerse dentro de un thread, para no bloquearse al enviar mensajes.
     		mas.evaluarAlarmas();
+    		
+    		//metodo de prueba para comunicacion con coordinador
+    		comunicacionService.prueba2("msj");
+    			
     	}
     	
-//    	logger.info("monitorear..." + start); 
+    	logger.info("fin monitoreo, duracion: " + (System.currentTimeMillis() - start)); 
 	}
 	
 	private void refrescarEstadoActual() {
