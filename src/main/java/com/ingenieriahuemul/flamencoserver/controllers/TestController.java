@@ -36,7 +36,6 @@ import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 import com.ingenieriahuemul.flamencoserver.domain.TipoSensor;
 import com.ingenieriahuemul.flamencoserver.domain.Usuario;
-import com.ingenieriahuemul.flamencoserver.services.FirebaseSdkService;
 
 
 @RestController
@@ -393,9 +392,8 @@ public class TestController extends BaseController{
 	@PostMapping("/usuario")
     public Usuario create(@RequestBody Usuario usuario){
     	logger.info("creando...");
-    	FirebaseSdkService.c(usuario);
         return usuarioDao.save(usuario);
-    }
+	}	
 	
 	@GetMapping(path = "/usuario/{a}")
 	public Usuario test10 (@PathVariable("a") Long a) {
