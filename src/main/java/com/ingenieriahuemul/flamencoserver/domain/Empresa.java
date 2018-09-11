@@ -2,6 +2,9 @@ package com.ingenieriahuemul.flamencoserver.domain;
 
 import java.sql.Time;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 //SELECT 
 //EMP.`idempresa`				ID
@@ -22,6 +25,17 @@ public class Empresa {
 	
 	private Integer columnasImpresion;
 	
+	//campo para facilitar la comparacion del pass
+	private String passwordActual;
+
+	@JsonIgnore
+	public String getPasswordActual() {
+		return passwordActual;
+	}
+	@JsonProperty
+	public void setPasswordActual(String passwordActual) {
+		this.passwordActual = passwordActual;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -40,9 +54,11 @@ public class Empresa {
 	public void setEncabezado(String encabezadoinforme) {
 		this.encabezado = encabezadoinforme;
 	}
+	@JsonIgnore
 	public String getPasswordConfiguracion() {
 		return passwordConfiguracion;
 	}
+	@JsonProperty
 	public void setPasswordConfiguracion(String passwordconfiguracion) {
 		this.passwordConfiguracion = passwordconfiguracion;
 	}

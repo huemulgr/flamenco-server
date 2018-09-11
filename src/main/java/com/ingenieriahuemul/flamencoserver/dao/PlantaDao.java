@@ -78,15 +78,15 @@ public class PlantaDao extends BaseDao{
 //  IN Phabilitado boolean,
 //  IN Pimagen VARCHAR(300),
 //  IN Pidempresa mediumint unsigned
-	public Planta update (Planta alarma) {
+	public Planta update (Planta planta) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_PLANTA, alarma.getId());
-		in.put(P_NOMBRE, alarma.getNombre());
-		in.put(P_HABILITADO, alarma.getHabilitado());
-		in.put(P_IMAGEN, alarma.getRutaImagen());
-		in.put(P_ID_EMPRESA, alarma.getIdEmpresa());
+		in.put(P_ID_PLANTA, planta.getId());
+		in.put(P_NOMBRE, planta.getNombre());
+		in.put(P_HABILITADO, planta.getHabilitado());
+		in.put(P_IMAGEN, planta.getRutaImagen());
+		in.put(P_ID_EMPRESA, planta.getIdEmpresa());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, Planta.class);
-		return alarma;
+		return planta;
 	}
 }

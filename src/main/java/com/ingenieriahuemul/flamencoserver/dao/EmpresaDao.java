@@ -13,11 +13,11 @@ public class EmpresaDao extends BaseDao{
 	
 	//parametros
 	private static final String P_ID_EMPRESA = "PidEmpresa";
-	private static final String P_RAZON_SOCIAL = "PnombreEmpresa";
-	private static final String P_ENCABEZADO_INFORME = "PnombreCompleto";
-	private static final String P_PASSWORD_CONFIGURACION = "Pemail";
-	private static final String P_HORA_1ER_REGISTRO = "Ppassword";
-	private static final String P_PERIODO_IMPRESION = "PidPerfil";
+	private static final String P_RAZON_SOCIAL = "PrazonSocial";
+	private static final String P_ENCABEZADO_INFORME = "Pencabezadoinforme";
+	private static final String P_PASSWORD_CONFIGURACION = "PpasswordConfiguracion";
+	private static final String P_HORA_1ER_REGISTRO = "PhoraPrimerRegistro";
+	private static final String P_PERIODO_IMPRESION = "PperiodoImpresion";
 	
 	//stored procedures
 	private static final String CONSULTA = "flaEmpresaSele";
