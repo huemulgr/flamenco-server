@@ -19,11 +19,11 @@ public class NotificationCloud {
 
 		try {
 
-			FileInputStream serviceAccount = new FileInputStream("/clave/serviceAccountKey.json");
+			FileInputStream serviceAccount = new FileInputStream("/clave/serviceAccountKey-prod.json");
 
 			FirebaseOptions options = new FirebaseOptions.Builder()
 					.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-					.setDatabaseUrl("https://flamengo-c9e97.firebaseio.com/").build();
+					.setDatabaseUrl("https://flamenco-1410a.firebaseio.com/").build();
 			FirebaseApp.initializeApp(options);
 
 			// As an admin, the app has access to read and write all data, regardless of Security Rules
@@ -31,18 +31,19 @@ public class NotificationCloud {
 
 			DatabaseReference usersRef = ref.child("QueueMAS");
 
-			Map<String, EstadoMasDTO> listMas = new HashMap<String, EstadoMasDTO>();
+			Map<String, Object> listMas = new HashMap<String, Object>();
 			
 			EstadoMasDTO estadoMasDto = new EstadoMasDTO();
 			
-			estadoMasDto.setId("Id-000013");
+			estadoMasDto.setId("Id-00001");
 			estadoMasDto.setLongName("Nombre largo del MAS");
 			estadoMasDto.setShortName("Nombre corto del MAS");
 			estadoMasDto.setValue("-2.17");
 			
 			listMas.put(estadoMasDto.getId(), estadoMasDto);
 
-			usersRef.setValueAsync(listMas);
+			//usersRef.setValueAsync(listMas);
+			usersRef.updateChildrenAsync(listMas);
 		
 			Thread.sleep(70000L);
 			
