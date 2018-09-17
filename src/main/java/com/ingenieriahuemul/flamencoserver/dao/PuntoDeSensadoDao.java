@@ -64,8 +64,8 @@ public class PuntoDeSensadoDao extends BaseDao{
 		in.put(P_NOMBRE_LARGO, puntoDeSensado.getDescripcion());
 		in.put(P_ORDEN_IMPRESION, puntoDeSensado.getOrdenImpresion());
 		in.put(P_ORDEN_GRILLA, puntoDeSensado.getOrdenGrilla());
-		in.put(P_COORDENADA_X, puntoDeSensado.getCoordY());
-		in.put(P_COORDENADA_Y, puntoDeSensado.getCoordX());
+		in.put(P_COORDENADA_X, puntoDeSensado.getCoordX());
+		in.put(P_COORDENADA_Y, puntoDeSensado.getCoordY());
 		in.put(P_ID_PLANTA, puntoDeSensado.getIdPlanta());
 		in.put(P_PAGINA_REPORTE, puntoDeSensado.getPagina());
 				
@@ -103,8 +103,8 @@ public class PuntoDeSensadoDao extends BaseDao{
 		in.put(P_NOMBRE_LARGO, puntoDeSensado.getDescripcion());
 		in.put(P_ORDEN_IMPRESION, puntoDeSensado.getOrdenImpresion());
 		in.put(P_ORDEN_GRILLA, puntoDeSensado.getOrdenGrilla());
-		in.put(P_COORDENADA_X, puntoDeSensado.getCoordY());
-		in.put(P_COORDENADA_Y, puntoDeSensado.getCoordX());
+		in.put(P_COORDENADA_X, puntoDeSensado.getCoordX());
+		in.put(P_COORDENADA_Y, puntoDeSensado.getCoordY());
 		in.put(P_ID_PLANTA, puntoDeSensado.getIdPlanta());
 		in.put(P_PAGINA_REPORTE, puntoDeSensado.getPagina());
 		

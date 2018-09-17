@@ -76,7 +76,8 @@ public class Monitor {
 		
 		for(EstadoMas estadoMas : estadoActual) {
 			for(Mas mas : listaMas) {
-				if(mas.getPuntoDeSensado().getId().equals(estadoMas.getIdPuntoSensado())) {
+				if(mas.getPuntoDeSensado() != null && 
+						estadoMas.getIdPuntoSensado().equals(mas.getPuntoDeSensado().getId())) {
 					mas.actualizarEstado(estadoMas);
 				}
 			}

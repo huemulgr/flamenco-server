@@ -64,6 +64,11 @@ public class TestController extends BaseController{
 		return alarmaDao.findAll();
 	}
 	
+	@GetMapping(path = "/alarma/sensor/{idSensor}")
+	public List ListarPorSensor(@PathVariable("idSensor") Long idSensor) {
+		return alarmaDao.findByIdSensor(idSensor);
+	}
+	
 	@DeleteMapping(path = "/alarma/{a}")
 	public void test1 (@PathVariable("a") int a) {
 		logger.info("ok1");
@@ -94,8 +99,13 @@ public class TestController extends BaseController{
 		return cHoraDao.findById(Long.valueOf(a));
 	}
 	
+	@GetMapping(path = "/chora/sensor/{idSensor}")
+	public List<ComportamientoHora> listarChoraPorSensor (@PathVariable("idSensor") Long idSensor) {
+		return cHoraDao.findByIdSensor(Long.valueOf(idSensor));
+	}
+	
 	@GetMapping(path = "/chora")
-	public List Listar2() {
+	public List listar2() {
 		return cHoraDao.findAll();
 	}
 	
@@ -129,11 +139,9 @@ public class TestController extends BaseController{
 		return cUmbralDao.findById(Long.valueOf(a));
 	}
 	
-	@GetMapping(path = "/cumbral/a{a}")
-	public List<ComportamientoUmbral> test31 (@PathVariable("a") Long a) {
-		logger.info("ok");
-		
-		return cUmbralDao.findByIdSensor(Long.valueOf(a));
+	@GetMapping(path = "/cumbral/sensor/{idSensor}")
+	public List<ComportamientoUmbral> listarCumbralPorSensor (@PathVariable("idSensor") Long idSensor) {
+		return cUmbralDao.findByIdSensor(Long.valueOf(idSensor));
 	}
 	
 	@GetMapping(path = "/cumbral")

@@ -21,6 +21,7 @@ public class SensorDao extends BaseDao{
 	private static final String P_MAC = "Pmac";
 	private static final String P_MAC_COORDINADOR = "Pmaccoordinador";
 	private static final String P_ID_PUNTO_SENSADO = "Pidpuntosensado";	
+	private static final String P_OVERRIDE = "Poverride";
 	
 	//stored procedures
 	private static final String CONSULTA = "flaSensorSele";
@@ -66,7 +67,8 @@ public class SensorDao extends BaseDao{
 		Map<String, Object> out = new HashMap<String, Object>();
 		out.put(P_ID_SENSOR, sensor.getId());
 		super.ejecutarStoredProcedure(ALTA, in, out, Sensor.class);
-		sensor.setId((Long)out.get(P_ID_SENSOR.toLowerCase()));
+		Integer aux = (Integer) out.get(P_ID_SENSOR.toLowerCase());
+		sensor.setId(Long.valueOf(aux.longValue()) );
 		return sensor;
 	}
 	
@@ -74,6 +76,7 @@ public class SensorDao extends BaseDao{
 	public void delete (Long idSensor) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_SENSOR, idSensor);
+		in.put(P_OVERRIDE, false);
 		super.ejecutarStoredProcedure(BAJA, in, null, Sensor.class);
 	}
 	
