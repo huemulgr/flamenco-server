@@ -17,6 +17,7 @@ public class PerfilDao extends BaseDao{
 	private static final String P_ID_EMPRESA = "PIdEmpresa";
 	private static final String P_ID_SENSOR = "PIdSensor";
 	private static final String P_ID_USUARIO = "PIdUsuario";
+	private static final String P_CASCADA = "Pcascada";
 	
 	//stored procedures
 	private static final String CONSULTA = "flaPerfilSele";
@@ -46,22 +47,23 @@ public class PerfilDao extends BaseDao{
 //	INOUT PidPerfil mediumint unsigned,
 //	IN Pnombre VARCHAR(100),
 //  IN PIdEmpresa mediumint unsigned
-	public Perfil save(Perfil usuario) {
+	public Perfil save(Perfil perfil) {
 		Map<String, Object> in = new HashMap<String, Object>();
-		in.put(P_ID_EMPRESA, usuario.getId());
-		in.put(P_NOMBRE, usuario.getNombre());
-		in.put(P_ID_PERFIL, usuario.getIdEmpresa());
+		in.put(P_ID_EMPRESA, perfil.getIdEmpresa());
+		in.put(P_NOMBRE, perfil.getNombre());
+		in.put(P_ID_PERFIL, perfil.getId());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
 		super.ejecutarStoredProcedure(ALTA, in, out, Perfil.class);
-		usuario.setId((Long) out.get(P_ID_PERFIL.toLowerCase()));
-		return usuario;
+		perfil.setId((Long) out.get(P_ID_PERFIL.toLowerCase()));
+		return perfil;
 	}
 	
 //	IN PIdPerfil mediumint unsigned 
 	public void delete (Long idPerfil) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_PERFIL, idPerfil);
+		in.put(P_CASCADA, false);
 		super.ejecutarStoredProcedure(BAJA, in, null, Perfil.class);
 	}
 	

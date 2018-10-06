@@ -62,7 +62,7 @@ public class SensorDao extends BaseDao{
 		in.put(P_ID_TIPO_SENSOR, sensor.getIdTipoSensor());
 		in.put(P_MAC, sensor.getMac());
 		in.put(P_MAC_COORDINADOR, sensor.getMacDelCoordinador());
-		in.put(P_ID_PUNTO_SENSADO, sensor.getIdPuntoDeSensado());
+		in.put(P_ID_PUNTO_SENSADO, sensor.getIdPuntoSensado());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
 		out.put(P_ID_SENSOR, sensor.getId());
@@ -99,7 +99,7 @@ public class SensorDao extends BaseDao{
 		in.put(P_ID_TIPO_SENSOR, sensor.getIdTipoSensor());
 		in.put(P_MAC, sensor.getMac());
 		in.put(P_MAC_COORDINADOR, sensor.getMacDelCoordinador());
-		in.put(P_ID_PUNTO_SENSADO, sensor.getIdPuntoDeSensado());
+		in.put(P_ID_PUNTO_SENSADO, sensor.getIdPuntoSensado());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, Sensor.class);
 		return sensor;

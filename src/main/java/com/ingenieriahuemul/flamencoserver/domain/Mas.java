@@ -29,7 +29,8 @@ public class Mas {
 	public void evaluarAlarmas() {
 		for(Alarma alarma : this.alarmas) {
 			
-			if(!alarma.getHabilitado() || !sensor.getHabilitado() || !puntoDeSensado.getHabilitado()
+			if(!alarma.getHabilitado() || !sensor.getHabilitado() || puntoDeSensado == null 
+					|| (puntoDeSensado != null && !puntoDeSensado.getHabilitado()) 
 					|| this.estadoMas == null) {	//en caso que recien levante el server y no hayan mediciones esto puede ocurrir
 				alarma.setAlarmaOn(false);
 				continue;

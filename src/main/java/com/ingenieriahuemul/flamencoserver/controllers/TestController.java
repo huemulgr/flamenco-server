@@ -1,5 +1,9 @@
 package com.ingenieriahuemul.flamencoserver.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,6 +24,7 @@ import com.ingenieriahuemul.flamencoserver.dao.ComportamientoHoraDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoUmbralDao;
 import com.ingenieriahuemul.flamencoserver.dao.EmpresaDao;
 import com.ingenieriahuemul.flamencoserver.dao.EstadoMasDao;
+import com.ingenieriahuemul.flamencoserver.dao.LecturaDao;
 import com.ingenieriahuemul.flamencoserver.dao.PerfilDao;
 import com.ingenieriahuemul.flamencoserver.dao.PlantaDao;
 import com.ingenieriahuemul.flamencoserver.dao.PuntoDeSensadoDao;
@@ -30,6 +35,7 @@ import com.ingenieriahuemul.flamencoserver.domain.Alarma;
 import com.ingenieriahuemul.flamencoserver.domain.ComportamientoHora;
 import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
 import com.ingenieriahuemul.flamencoserver.domain.Empresa;
+import com.ingenieriahuemul.flamencoserver.domain.Lectura;
 import com.ingenieriahuemul.flamencoserver.domain.Perfil;
 import com.ingenieriahuemul.flamencoserver.domain.Planta;
 import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
@@ -212,6 +218,26 @@ public class TestController extends BaseController{
 	public List estadoActual() {
 		return estadoActualDao.obtenerEstadoActual();
 	}
+
+//-----------------------------------------------------------------------------------	
+//	lectura
+	@Autowired
+	private LecturaDao lecturaDao;
+	
+	@GetMapping("/lectura")
+    public List<Lectura> create(@RequestParam Long idPuntoDeSensado, @RequestParam String fechaDesde, @RequestParam String fechaHasta) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date desde = null;
+		Date hasta = null;
+		try {
+			desde = new Date(sdf.parse(fechaDesde).getTime());
+			hasta = new Date(sdf.parse(fechaHasta).getTime());
+		} catch (ParseException e) {
+			logger.error("Error en el formato de las fechas ingresadas debe ser AAAA-MM-DD");
+			throw e;
+		}
+		return lecturaDao.obtenerLecturas(idPuntoDeSensado, desde, hasta);
+    }	
 	
 //-----------------------------------------------------------------------------------	
 //	perfil
@@ -229,12 +255,12 @@ public class TestController extends BaseController{
 		return perfilDao.findById(Long.valueOf(a));
 	}
 	
-	@GetMapping(path = "/perfil/")
+	@GetMapping(path = "/perfil/usuario")
 	public void asignarUsuario (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idUsuario") Long idUsuario) {
 		perfilDao.asignarUsuario(idPerfil, idUsuario);
 	}
 	
-	@GetMapping(path = "/perfil/a")
+	@GetMapping(path = "/perfil/sensor")
 	public void asignarSensor (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idSensor") Long idSensor) {
 		perfilDao.asignarSensor(idPerfil, idSensor);
 	}
@@ -249,12 +275,12 @@ public class TestController extends BaseController{
 		perfilDao.delete(Long.valueOf(a));
 	}
 	
-	@DeleteMapping(path = "/perfil/")
+	@DeleteMapping(path = "/perfil/usuario")
 	public void quitarUsuario (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idUsuario") Long idUsuario) {
 		perfilDao.quitarUsuario(idPerfil, idUsuario);
 	}
 	
-	@DeleteMapping(path = "/perfil/a")
+	@DeleteMapping(path = "/perfil/sensor")
 	public void quitarSensor (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idSensor") Long idSensor) {
 		perfilDao.quitarSensor(idPerfil, idSensor);
 	}

@@ -36,9 +36,9 @@ public class MasService {
 			if(sensor.getTieneAlarma()) {
 				mas.setAlarmas(alarmaDao.findByIdSensor(sensor.getId()));
 			}
-			//TODO: esto es feo, ver posibilidad de pasar id directo en el select
-			if (!"No asignado".equals(sensor.getPuntoSensado())) {
-				mas.setPuntoDeSensado(puntoDeSensadoDao.findById(Long.valueOf(sensor.getPuntoSensado())));
+			//si no esta asignado viene un string
+			if (sensor.getIdPuntoSensado() instanceof Long) {
+				mas.setPuntoDeSensado(puntoDeSensadoDao.findById((Long)sensor.getIdPuntoSensado()));
 			}
 			listaMas.add(mas);
 		}

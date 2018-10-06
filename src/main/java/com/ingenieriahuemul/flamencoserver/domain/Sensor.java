@@ -25,7 +25,7 @@ package com.ingenieriahuemul.flamencoserver.domain;
 public class Sensor {
 	
 	private String planta;
-	private String puntoSensado;
+	private Object idPuntoSensado;
 	private Long id;
 	private String nombre;
 	private String nombreAbreviado;
@@ -45,7 +45,7 @@ public class Sensor {
 //	private Boolean tieneMedicion;
 	private Boolean asignadoPerfil;
 
-	private Long idPuntoDeSensado;
+//	private Long idPuntoDeSensado;
 	private Long idTipoSensor;
 
 	
@@ -55,11 +55,11 @@ public class Sensor {
 	public void setPlanta(String planta) {
 		this.planta = planta;
 	}
-	public String getPuntoSensado() {
-		return puntoSensado;
+	public Object getIdPuntoSensado() {
+		return idPuntoSensado;
 	}
-	public void setPuntoSensado(String puntoSensado) {
-		this.puntoSensado = puntoSensado;
+	public void setIdPuntoSensado(Object puntoSensado) {
+		this.idPuntoSensado = puntoSensado;
 	}
 	public Long getId() {
 		return id;
@@ -139,12 +139,12 @@ public class Sensor {
 	public void setIdTipoSensor(Long idtiposensor) {
 		this.idTipoSensor = idtiposensor;
 	}
-	public Long getIdPuntoDeSensado() {
-		return idPuntoDeSensado;
-	}
-	public void setIdPuntoDeSensado(Long idpuntodesensado) {
-		this.idPuntoDeSensado = idpuntodesensado;
-	}
+//	public Long getIdPuntoDeSensado() {
+//		return idPuntoDeSensado;
+//	}
+//	public void setIdPuntoDeSensado(Long idpuntodesensado) {
+//		this.idPuntoDeSensado = idpuntodesensado;
+//	}
 	public Boolean getHabilitado() {
 		return habilitado;
 	}

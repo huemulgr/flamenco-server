@@ -55,7 +55,7 @@ public class ComunicacionService {
 			e.printStackTrace();
 		}
     	
-    	logger.info("resultado: " + resultado);
+    	logger.info("resultado: " + (resultado == null ? "|sin exito" : "|exito en " + resultado));
     	return resultado;
     }
 }

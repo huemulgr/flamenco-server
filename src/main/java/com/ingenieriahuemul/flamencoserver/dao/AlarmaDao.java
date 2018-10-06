@@ -90,7 +90,7 @@ public class AlarmaDao extends BaseDao{
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_ALARMA, alarma.getId());
 		in.put(P_HABILITADO, alarma.getHabilitado());
-		in.put(P_UMBRAL_SUPERIOR, alarma.getUmbralInferior());
+		in.put(P_UMBRAL_SUPERIOR, alarma.getUmbralSuperior());
 		in.put(P_UMBRAL_INFERIOR, alarma.getUmbralInferior());
 		in.put(P_NOMBRE, alarma.getNombre());
 		in.put(P_NOTIFICAR, alarma.getHabilitadoAvisoCelular());
