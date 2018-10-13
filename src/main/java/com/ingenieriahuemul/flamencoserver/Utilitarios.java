@@ -1,6 +1,7 @@
 package com.ingenieriahuemul.flamencoserver;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,5 +27,10 @@ public abstract class Utilitarios {
 		calendar.add(Calendar.DATE, 1);
 		
 		return calendar.getTime();
+	}
+	
+	private static SimpleDateFormat sdf = new SimpleDateFormat("DDMMYYYYHHmmSS");
+	public static String formatofechaStatus(Date fecha) {
+		return sdf.format(fecha);
 	}
 }

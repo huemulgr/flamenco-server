@@ -22,4 +22,8 @@ public class EstadoMasService {
 		return estadoMasDao.obtenerEstadoActual();
 	}
 	
+	public void actualizarEstadoMas(String mac, EstadoMas estado) {
+		estadoMasDao.guardarEstado(mac, estado);
+	}
+	
 }

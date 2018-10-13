@@ -58,4 +58,9 @@ public class ComunicacionService {
     	logger.info("resultado: " + (resultado == null ? "|sin exito" : "|exito en " + resultado));
     	return resultado;
     }
+    
+    
+    
+    
+    
 }

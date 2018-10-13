@@ -33,10 +33,8 @@ public class Monitor {
     @Autowired
     private MasService masService;
     @Autowired
-    private EstadoMasService estadoMasService;
+    public static EstadoMasService estadoMasService;
     
-    private List<Mas> listaMas;
-    private List<EstadoMas> estadoActual;
     
     @Autowired
     private ComunicacionService comunicacionService;
@@ -44,46 +42,48 @@ public class Monitor {
     
 	public Monitor() { }
 	
-	//monitorear es una tarea programada que cada x milisegundos se dispara
-	//TODO: pasar el monitoreo a un 2do log para no inundar de mensajes la consola
-	@Scheduled(fixedRateString = "${periodoMonitoreo}")
+	@Scheduled(fixedRateString = "1000")
     public void monitorear() {
 		long start = System.currentTimeMillis();
 		
 		//si hubo cambios actualiza listado, cada vez que se modifique hay que setear en true outdated
+		//esto quedaria para sensores y alarmas, ver si es necesario cambiar a un semaforo para dar prioridad
+		//o si me ilumino esto se borraria por completo
     	if(isOutdated()) {
-    		listaMas = masService.refrescarListaMAS();
+    		masService.refrescarListaMAS();
     		outdated = false;
+    		logger.info("duracion update: " + (System.currentTimeMillis() - start));
     	}
-//    	logger.info("duracion update: " + (System.currentTimeMillis() - start));
     	    	
-    	refrescarEstadoActual();
+    	//actualizar el estado desde la base de datos en memoria
+    	logger.info("refrescando estado de los mas...");
+    	masService.refrescarEstadoActual();
     	
-    	for(Mas mas : listaMas) {
-    		//TODO: este bloque tambien deberia hacerse dentro de un thread, para no bloquearse al enviar mensajes.
-    		mas.evaluarAlarmas();
-    		
-    		//metodo de prueba para comunicacion con coordinador
-    		comunicacionService.prueba2("msj");
-    			
-    	}
+//    	try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+    	
+    	//evaluar alarmas para cada mas
+    	masService.evaluarAlarmas();
     	
     	logger.info("fin monitoreo, duracion: " + (System.currentTimeMillis() - start)); 
 	}
 	
-	private void refrescarEstadoActual() {
-		estadoActual = estadoMasService.obtenerEstadoActual();
-		
-		for(EstadoMas estadoMas : estadoActual) {
-			for(Mas mas : listaMas) {
-				if(mas.getPuntoDeSensado() != null && 
-						estadoMas.getIdPuntoSensado().equals(mas.getPuntoDeSensado().getId())) {
-					mas.actualizarEstado(estadoMas);
-				}
-			}
-		}
-	}
-	
+//	private void refrescarEstadoActual() {
+//		estadoActual = estadoMasService.obtenerEstadoActual();
+//		
+//		for(EstadoMas estadoMas : estadoActual) {
+//			for(Mas mas : listaMas) {
+//				if(mas.getPuntoDeSensado() != null && 
+//						estadoMas.getIdPuntoSensado().equals(mas.getPuntoDeSensado().getId())) {
+//					mas.actualizarEstado(estadoMas);
+//				}
+//			}
+//		}
+//	}	
 	
 	public static boolean isOutdated() {
 		return outdated;

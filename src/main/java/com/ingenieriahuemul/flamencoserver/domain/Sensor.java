@@ -25,7 +25,7 @@ package com.ingenieriahuemul.flamencoserver.domain;
 public class Sensor {
 	
 	private String planta;
-	private Object idPuntoSensado;
+	private String idPuntoSensado;
 	private Long id;
 	private String nombre;
 	private String nombreAbreviado;
@@ -55,10 +55,10 @@ public class Sensor {
 	public void setPlanta(String planta) {
 		this.planta = planta;
 	}
-	public Object getIdPuntoSensado() {
+	public String getIdPuntoSensado() {
 		return idPuntoSensado;
 	}
-	public void setIdPuntoSensado(Object puntoSensado) {
+	public void setIdPuntoSensado(String puntoSensado) {
 		this.idPuntoSensado = puntoSensado;
 	}
 	public Long getId() {
