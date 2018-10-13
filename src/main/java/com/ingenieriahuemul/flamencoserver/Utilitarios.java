@@ -29,7 +29,7 @@ public abstract class Utilitarios {
 		return calendar.getTime();
 	}
 	
-	private static SimpleDateFormat sdf = new SimpleDateFormat("DDMMYYYYHHmmSS");
+	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss");
 	public static String formatofechaStatus(Date fecha) {
 		return sdf.format(fecha);
 	}

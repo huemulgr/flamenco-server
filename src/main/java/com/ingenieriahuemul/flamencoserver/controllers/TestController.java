@@ -1,9 +1,8 @@
 package com.ingenieriahuemul.flamencoserver.controllers;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ingenieriahuemul.flamencoserver.Monitor;
 import com.ingenieriahuemul.flamencoserver.dao.AlarmaDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoHoraDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoUmbralDao;
@@ -42,6 +40,7 @@ import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 import com.ingenieriahuemul.flamencoserver.domain.TipoSensor;
 import com.ingenieriahuemul.flamencoserver.domain.Usuario;
+import com.ingenieriahuemul.flamencoserver.services.MasService;
 
 
 @RestController
@@ -49,6 +48,9 @@ import com.ingenieriahuemul.flamencoserver.domain.Usuario;
 public class TestController extends BaseController{
 	Logger logger = Logger.getLogger(TestController.class);
 	
+	@Autowired
+	private MasService masService;
+		
 	@Autowired
 	private AlarmaDao alarmaDao;
 	
@@ -134,6 +136,7 @@ public class TestController extends BaseController{
 	
 	@PostMapping("/cumbral")
     public ComportamientoUmbral create(@RequestBody ComportamientoUmbral cumbral){
+		masService.configurarReleXUmbral(1L, cumbral);
     	logger.info("creando...");
         return cUmbralDao.save(cumbral);
     }
@@ -393,18 +396,20 @@ public class TestController extends BaseController{
 	private TipoSensorDao tipoSensorDao;
 	
 	@PostMapping("/tiposensor")
-    public TipoSensor create(@RequestBody TipoSensor tipoSensor){
+    public TipoSensor create(@RequestBody TipoSensor tipoSensor){		
     	logger.info("creando...");
         return tipoSensorDao.save(tipoSensor);
     }
 	
 	@GetMapping(path = "/tiposensor/{a}")
 	public TipoSensor test9 (@PathVariable("a") Long a) {
+		masService.desactivarReleManual(1L, 0);
 		return tipoSensorDao.findById(Long.valueOf(a));
 	}
 	
 	@GetMapping(path = "/tiposensor")
 	public List Listar9() {
+		masService.activarReleManual(1L, 0);
 		return tipoSensorDao.findAll();
 	}
 	

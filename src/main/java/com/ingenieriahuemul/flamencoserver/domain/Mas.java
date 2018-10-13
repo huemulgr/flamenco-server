@@ -35,7 +35,7 @@ public class Mas {
 	
 	//para conexion con mesh y comunicacion. 
 	//TODO: estos parametros es posible que los queramos configurables en algun momento
-	private static final int PORT=9090;
+	private static final int PORT=23;
 	private static final int TIMEOUT_READ_MS = 3000;
 	private static final int REINTENTOS = 3;
 	Socket socket;
@@ -98,11 +98,11 @@ public class Mas {
 				
 				datosObtenidos.putAll(parseRespuestaMsj(respuesta));
 				
+				datosObtenidos.put("respuesta", respuesta);
+				logger.info(msjLogMesh("recibido " + respuesta));
 				if(datosObtenidos == null || (datosObtenidos != null && datosObtenidos.isEmpty())) {
 					continue;
 				}
-				
-				datosObtenidos.put("respuesta", respuesta);
 				
 				break;
 			} catch (SocketTimeoutException e) {
@@ -164,7 +164,7 @@ public class Mas {
 		//{mac}|{codigo}|payload\n
 		char cod_respuesta = campos[1].charAt(0);
 		switch (cod_respuesta) {
-		case 'R':
+		case 'R':	{
 			Double valor = Double.valueOf(campos[2]);
 			boolean[] reles = parseEstadoReles(campos[3]);
 			
@@ -175,9 +175,8 @@ public class Mas {
 			estadoMas.setEstadoR2E(reles[3]);
 			
 			datosObtenidos.put("estado", estadoMas);
-			
-			break;
-		case 'P': 
+		}	break;
+		case 'P': {
 			String estaConfigurado = campos[2];
 			Double valor2 = Double.valueOf(campos[3]);
 			
@@ -190,7 +189,37 @@ public class Mas {
 			}
 			datosObtenidos.put("estado", estadoMas);
 			
-			break;
+		}	break;
+		case 'B': {
+			Double valor = Double.valueOf(campos[2]);
+			boolean[] reles = parseEstadoReles(campos[3]);
+			
+			estadoMas.setValor(valor);
+			estadoMas.setEstadoR1S(reles[0]);
+			estadoMas.setEstadoR2S(reles[1]);
+			estadoMas.setEstadoR1E(reles[2]);
+			estadoMas.setEstadoR2E(reles[3]);
+			
+			datosObtenidos.put("estado", estadoMas);
+		}	break;
+		case 'C': {
+			Double valor = Double.valueOf(campos[2]);
+			
+			estadoMas.setValor(valor);
+			datosObtenidos.put("estado", estadoMas);
+		}	break;
+		case 'N': {
+//			Double valor = Double.valueOf(campos[2]);
+//			boolean[] reles = parseEstadoReles(campos[3]);
+//			
+//			estadoMas.setValor(valor);
+//			estadoMas.setEstadoR1S(reles[0]);
+//			estadoMas.setEstadoR2S(reles[1]);
+//			estadoMas.setEstadoR1E(reles[2]);
+//			estadoMas.setEstadoR2E(reles[3]);
+//			
+//			datosObtenidos.put("estado", estadoMas);
+		}	break;
 		default:
 			break;
 		}

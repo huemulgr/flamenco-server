@@ -12,15 +12,15 @@ public final class MensajesMesh {
 	
 	/** formato base <strong>|R|N|Tmin|Tmax|CE</strong> donde <br>N es salida 0/1, <br>T es temperatura, <br>C es condicion O/Y/N y <br>E es entrada 0/1/N. 
 	 * <br><strong>Ej: "{mac}|R|1|-5.00|10.00|Y0\n"</strong> */
-	public static final String MESH_C_UMBRAL	= "|R|%d|%.2f|%.2f|%s%s\n";
+	public static final String MESH_C_UMBRAL	= "|R|%d|T|%+2.1f|%+2.1f|%s%s\n";
 	
 	/** formato base <strong>|R|N|H|Hi|Hf|CE</strong> <br>N es salida, <br>Hi, hf son horas formato HHmm, <br>C es condicion Y/O/N, <br>E es entrada 0/1/N. 
 	 *  <br><strong>Ej: {mac}|R|H|1730|1731|O1</strong>*/
 	public static final String MESH_C_HORA 	= "|R|%d|H|%s|%s|%s%s\n";
 	
 	/** formato bae <strong>|R|N|+</strong><br>N es salida 0/1 <br>Ej: {mac}|R|1|+*/		
-	static final String MESH_C_MANUAL_ON	= "|R|%s|+\n";
+	public static final String MESH_C_MANUAL_ON	= "|R|%s|+\n";
 	/** formato bae <strong>|R|N|-</strong><br>N es salida 0/1 <br>Ej: {mac}|R|1|-*/
-	static final String MESH_C_MANUAL_OFF	= "|R|%s|-\n";
+	public static final String MESH_C_MANUAL_OFF	= "|R|%s|-\n";
 	
 }

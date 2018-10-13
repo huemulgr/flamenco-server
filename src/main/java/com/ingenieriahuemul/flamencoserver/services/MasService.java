@@ -1,7 +1,5 @@
 package com.ingenieriahuemul.flamencoserver.services;
 
-import java.awt.Stroke;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +15,7 @@ import com.ingenieriahuemul.flamencoserver.constants.MensajesMesh;
 import com.ingenieriahuemul.flamencoserver.dao.AlarmaDao;
 import com.ingenieriahuemul.flamencoserver.dao.PuntoDeSensadoDao;
 import com.ingenieriahuemul.flamencoserver.dao.SensorDao;
+import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
 import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
 import com.ingenieriahuemul.flamencoserver.domain.Mas;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
@@ -81,9 +80,9 @@ public class MasService {
 	
 	public void refrescarEstadoActual() {
 		for(Mas mas: listadoMas.values()) {
-			String status = obtenerStatus(mas);
+//			String status = obtenerStatus(mas);
 			
-			logger.info("status recibido: " + status);
+//			logger.info("status recibido: " + status);
 		} 
 		
 		estadoActual = estadoMasService.obtenerEstadoActual();
@@ -111,13 +110,97 @@ public class MasService {
 			semaforoMesh.release();
 			
 			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
-			estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+			if(estado != null) {
+				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+			}
 			
 			respuesta = (String)datosObtenidos.get("respuesta");
-		} catch (InterruptedException e) {
+			logger.info(respuesta);
+		} catch (Exception e) {
 			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
 		}
 		return respuesta;
+	}
+	
+	public boolean activarReleManual(Long idSensor, int nroRele) {
+		Map<String, Object> datosObtenidos = null;
+		String respuesta="";
+		try {
+			semaforoMesh.acquire();
+			Mas mas = this.listadoMas.get(idSensor);
+			datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
+				String.format(MensajesMesh.MESH_C_MANUAL_ON, nroRele)
+			);
+			semaforoMesh.release();
+
+			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
+			if(estado != null) {
+				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+			}
+			
+			respuesta = (String)datosObtenidos.get("respuesta");
+			logger.info(respuesta);
+		} catch (Exception e) {
+			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
+		}
+		
+		return false;
+	}
+	
+	public boolean desactivarReleManual(Long idSensor, int nroRele) {
+		Map<String, Object> datosObtenidos = null;
+		String respuesta="";
+		try {
+			semaforoMesh.acquire();
+			Mas mas = this.listadoMas.get(idSensor);
+			datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
+				String.format(MensajesMesh.MESH_C_MANUAL_OFF, nroRele)
+			);
+
+			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
+			if(estado != null) {
+				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+			}
+			semaforoMesh.release();
+			
+			respuesta = (String)datosObtenidos.get("respuesta");
+			logger.info(respuesta);
+		} catch (Exception e) {
+			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
+		}
+		
+		return false;
+	}
+	
+	public boolean configurarReleXUmbral(Long idSensor, ComportamientoUmbral cUmbral) {
+		Map<String, Object> datosObtenidos = null;
+		String respuesta="";
+		try {
+			semaforoMesh.acquire();
+			Mas mas = this.listadoMas.get(idSensor);
+			datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
+				String.format(MensajesMesh.MESH_C_UMBRAL, 
+						cUmbral.getNroContactorSalida()-1,
+						cUmbral.getUmbralInf(),
+						cUmbral.getUmbralSup(),
+						cUmbral.getHabilitarContEntrada() ? (cUmbral.getCondicionY() ? "Y" : "O") : "N",
+						cUmbral.getHabilitarContEntrada() ? (cUmbral.getContactorEntrada() ? "1" : "0") : "N"
+					)
+			);
+			semaforoMesh.release();
+
+			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
+			if(estado != null) {
+				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+			}
+			
+			respuesta = (String)datosObtenidos.get("respuesta");
+			logger.info(respuesta);
+		} catch (Exception e) {
+			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
+		}
+		
+		return false;
 	}
 	
 	public void evaluarAlarmas() {
