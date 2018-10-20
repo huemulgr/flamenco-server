@@ -19,7 +19,8 @@ public class ComportamientoUmbralDao extends BaseDao{
 	private static final String P_CONTACTOR_ENTRADA = "Pcontactorentrada";
 	private static final String P_CONTACTOR_SALIDA = "Pcontactorsalida";
 	private static final String P_ID_SENSOR = "Pidsensor";
-	
+	private static final String P_CONDICION_Y = "Pcondiciony";
+	private static final String P_HABILITAR_CE = "Phabilitarcontentrada";
 	
 	//stored procedures
 	private static final String CONSULTA = "flaCompUmbralSele";
@@ -66,6 +67,8 @@ public class ComportamientoUmbralDao extends BaseDao{
 		in.put(P_CONTACTOR_ENTRADA, compUmbral.getContactorEntrada());
 		in.put(P_CONTACTOR_SALIDA, compUmbral.getContactorSalida());
 		in.put(P_ID_SENSOR, compUmbral.getIdSensor());
+		in.put(P_CONDICION_Y, compUmbral.getCondicionY());
+		in.put(P_HABILITAR_CE, compUmbral.getHabilitarContEntrada());
 		
 		super.ejecutarStoredProcedure(ALTA, in, null, ComportamientoUmbral.class);
 		return compUmbral;
@@ -94,6 +97,8 @@ public class ComportamientoUmbralDao extends BaseDao{
 		in.put(P_CONTACTOR_ENTRADA, compUmbral.getContactorEntrada());
 		in.put(P_CONTACTOR_SALIDA, compUmbral.getContactorSalida());
 		in.put(P_ID_SENSOR, compUmbral.getIdSensor());
+		in.put(P_CONDICION_Y, compUmbral.getCondicionY());
+		in.put(P_HABILITAR_CE, compUmbral.getHabilitarContEntrada());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, ComportamientoUmbral.class);
 		return compUmbral;

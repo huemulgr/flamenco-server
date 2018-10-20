@@ -50,7 +50,17 @@ public class TestController extends BaseController{
 	
 	@Autowired
 	private MasService masService;
-		
+	
+	@GetMapping(path = "/manual/on/")
+	public boolean onManual(@RequestParam("idPs") Long idPs, @RequestParam("nroRele") int nroRele ) {
+		return masService.activarReleManual(idPs, nroRele);
+	}
+	
+	@GetMapping(path = "/manual/off/")
+	public boolean offManual(@RequestParam("idPs") Long idPs, @RequestParam("nroRele") int nroRele ) {
+		return masService.desactivarReleManual(idPs, nroRele);
+	}
+	
 	@Autowired
 	private AlarmaDao alarmaDao;
 	
@@ -94,6 +104,11 @@ public class TestController extends BaseController{
 	@Autowired
 	private ComportamientoHoraDao cHoraDao;
 	
+	@PostMapping(path = "/chora/configurar")
+	public boolean configurarRele(@RequestBody ComportamientoHora cHora) {
+		return masService.configurarReleXHora(cHora);
+	}
+	
 	@PostMapping("/chora")
     public ComportamientoHora create(@RequestBody ComportamientoHora cHora){
     	logger.info("creando comp hora " + cHora + "...");
@@ -134,9 +149,13 @@ public class TestController extends BaseController{
 	@Autowired
 	private ComportamientoUmbralDao cUmbralDao;
 	
+	@PostMapping(path = "/cumbral/configurar")
+	public boolean configurarRele(@RequestBody ComportamientoUmbral cUmbral) throws Exception {
+		return masService.configurarReleXUmbral(cUmbral);
+	}
+	
 	@PostMapping("/cumbral")
     public ComportamientoUmbral create(@RequestBody ComportamientoUmbral cumbral){
-		masService.configurarReleXUmbral(1L, cumbral);
     	logger.info("creando...");
         return cUmbralDao.save(cumbral);
     }

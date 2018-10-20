@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
@@ -15,10 +16,13 @@ import com.ingenieriahuemul.flamencoserver.constants.MensajesMesh;
 import com.ingenieriahuemul.flamencoserver.dao.AlarmaDao;
 import com.ingenieriahuemul.flamencoserver.dao.PuntoDeSensadoDao;
 import com.ingenieriahuemul.flamencoserver.dao.SensorDao;
+import com.ingenieriahuemul.flamencoserver.domain.ComportamientoHora;
 import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
 import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
 import com.ingenieriahuemul.flamencoserver.domain.Mas;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
+
+
 
 /** servicio responsable de mantener listado de mas y regular acceso al mesh */
 @Service
@@ -36,7 +40,7 @@ public class MasService {
 
     private List<EstadoMas> estadoActual;
     
-    //lista unica para el servicio, uso un map para facilitar el acceso por un id de sensor
+    //lista unica para el servicio, uso un map para facilitar el acceso por un id de punto de sensado
 	private static HashMap<Long, Mas> listadoMas = new HashMap();
 	
 	//semaforo para asegurar que hay un unico mensaje en transito a la vez
@@ -80,7 +84,7 @@ public class MasService {
 	
 	public void refrescarEstadoActual() {
 		for(Mas mas: listadoMas.values()) {
-//			String status = obtenerStatus(mas);
+			String status = obtenerStatus(mas);
 			
 //			logger.info("status recibido: " + status);
 		} 
@@ -102,12 +106,20 @@ public class MasService {
 		String respuesta=null;
 		try {
 			semaforoMesh.acquire();
+			logger.info("------------------------------Semaforo ABIERTO");
 				datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
-					String.format(MensajesMesh.MESH_STATUS, 
-						Utilitarios.formatofechaStatus(new Date())
+					String.format(
+						(mas.isEnRecuperacion() ? MensajesMesh.MESH_STATUS : MensajesMesh.MESH_STATUS_O), 
+						Utilitarios.formatoFechaStatus(new Date())
 					)
 				);
-			semaforoMesh.release();
+			} catch (Exception e) {
+				logger.error("Error inesperado en el semaforo de la red mesh: ", e);
+			} finally {
+				logger.info("------------------------------Semaforo CERRADO");	
+				semaforoMesh.release();
+			}
+			
 			
 			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
 			if(estado != null) {
@@ -115,98 +127,150 @@ public class MasService {
 			}
 			
 			respuesta = (String)datosObtenidos.get("respuesta");
-			logger.info(respuesta);
-		} catch (Exception e) {
-			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
-		}
+		
 		return respuesta;
 	}
 	
-	public boolean activarReleManual(Long idSensor, int nroRele) {
+	/** activa manualmente un rele, al hacerlo se pierde la configuracion previa del mismo
+	 * @return	true o false segun si pudo activar o no */
+	public boolean activarReleManual(Long idPuntoSensado, int nroRele) {
+		return activacionManual(true, idPuntoSensado, nroRele);
+	}
+	
+	/** desactiva manualmente un rele, al hacerlo se pierde la configuracion previa del mismo
+	 * @return	true o false segun si pudo desactivar o no */
+	public boolean desactivarReleManual(Long idPuntoSensado, int nroRele) {
+		return activacionManual(false, idPuntoSensado, nroRele);
+	}
+	
+	private boolean activacionManual(boolean activar, Long idPuntoSensado, int nroRele) {
 		Map<String, Object> datosObtenidos = null;
 		String respuesta="";
+		Mas mas = this.listadoMas.get(idPuntoSensado);
 		try {
 			semaforoMesh.acquire();
-			Mas mas = this.listadoMas.get(idSensor);
+			logger.info("------------------------------Semaforo ABIERTO");
 			datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
-				String.format(MensajesMesh.MESH_C_MANUAL_ON, nroRele)
+				String.format(
+						(activar ? MensajesMesh.MESH_C_MANUAL_ON : MensajesMesh.MESH_C_MANUAL_OFF),
+						nroRele)
 			);
-			semaforoMesh.release();
+		} catch (Exception e) {
+			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
+		} finally {
+			logger.info("------------------------------Semaforo CERRADO");	
+			semaforoMesh.release();			
+		}
 
 			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
 			if(estado != null) {
 				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+			} else {
+				return false;
 			}
 			
 			respuesta = (String)datosObtenidos.get("respuesta");
-			logger.info(respuesta);
-		} catch (Exception e) {
-			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
-		}
 		
-		return false;
+		return true;
 	}
 	
-	public boolean desactivarReleManual(Long idSensor, int nroRele) {
-		Map<String, Object> datosObtenidos = null;
-		String respuesta="";
-		try {
-			semaforoMesh.acquire();
-			Mas mas = this.listadoMas.get(idSensor);
-			datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
-				String.format(MensajesMesh.MESH_C_MANUAL_OFF, nroRele)
-			);
-
-			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
-			if(estado != null) {
-				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
-			}
-			semaforoMesh.release();
-			
-			respuesta = (String)datosObtenidos.get("respuesta");
-			logger.info(respuesta);
-		} catch (Exception e) {
-			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
-		}
+	public boolean configurarReleXUmbral(ComportamientoUmbral cUmbral) {
+		//vemos si el sensor esta asignado y de paso obtenemos el id de ps
+		Long idPs = buscarIdPuntoSensadoXIdSensor(cUmbral.getIdSensor());
+		if(idPs < 0)
+			return false;
 		
-		return false;
-	}
-	
-	public boolean configurarReleXUmbral(Long idSensor, ComportamientoUmbral cUmbral) {
 		Map<String, Object> datosObtenidos = null;
 		String respuesta="";
+		Mas mas = this.listadoMas.get(idPs);
 		try {
 			semaforoMesh.acquire();
-			Mas mas = this.listadoMas.get(idSensor);
+			logger.info("------------------------------Semaforo ABIERTO");
 			datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
 				String.format(MensajesMesh.MESH_C_UMBRAL, 
-						cUmbral.getNroContactorSalida()-1,
+						cUmbral.getNroContactorSalida(),
 						cUmbral.getUmbralInf(),
 						cUmbral.getUmbralSup(),
 						cUmbral.getHabilitarContEntrada() ? (cUmbral.getCondicionY() ? "Y" : "O") : "N",
 						cUmbral.getHabilitarContEntrada() ? (cUmbral.getContactorEntrada() ? "1" : "0") : "N"
 					)
 			);
-			semaforoMesh.release();
-
-			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
-			if(estado != null) {
-				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
-			}
-			
-			respuesta = (String)datosObtenidos.get("respuesta");
-			logger.info(respuesta);
 		} catch (Exception e) {
 			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
+		} finally {
+			semaforoMesh.release();
+			logger.info("------------------------------Semaforo CERRADO");			
 		}
+
+		EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
+		if(estado != null) {
+			estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+		} else {
+			return false;
+		}
+			
+		respuesta = (String)datosObtenidos.get("respuesta");
+//		logger.info(respuesta);
 		
-		return false;
+		return true;
+	}
+	
+	public boolean configurarReleXHora(ComportamientoHora cHora) {
+		//vemos si el sensor esta asignado y de paso obtenemos el id de ps
+		Long idPs = buscarIdPuntoSensadoXIdSensor(cHora.getIdSensor());
+		if(idPs < 0)
+			return false;
+		
+		Map<String, Object> datosObtenidos = null;
+		String respuesta="";
+		Mas mas = this.listadoMas.get(idPs);
+		try {
+			semaforoMesh.acquire();
+			logger.info("------------------------------Semaforo ABIERTO");
+			datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
+				String.format(MensajesMesh.MESH_C_HORA, 
+						cHora.getNroContactorSalida(),
+						Utilitarios.formatoHora(cHora.getHoraInicio()),
+						Utilitarios.formatoHora(cHora.getHoraFin()),
+						cHora.getHabilitarContEntrada() ? (cHora.getCondicionY() ? "Y" : "O") : "N",
+						cHora.getHabilitarContEntrada() ? (cHora.getContactorEntrada() ? "1" : "0") : "N"
+					)
+			);
+		} catch (Exception e) {
+			logger.error("Error inesperado en el semaforo de la red mesh: ", e);
+//			throw e;
+			return false;
+		} finally {
+			logger.info("------------------------------Semaforo CERRADO");
+			semaforoMesh.release();			
+		}
+
+		EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
+		if(estado != null) {
+			estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+		} else {
+			return false;
+		}
+			
+		respuesta = (String)datosObtenidos.get("respuesta");
+		
+		return true;
 	}
 	
 	public void evaluarAlarmas() {
 		for(Mas mas : listadoMas.values()) {
     		mas.evaluarAlarmas();   			
     	}
+	}
+	
+	/** encuentra si en el listado mas esta el idSensor de entrada, devuelve menos 1 en el caso que no exista como se da cuando no esta asignado el sensor */
+	private Long buscarIdPuntoSensadoXIdSensor(Long idSensor) {
+		for(Entry<Long, Mas> entry : this.listadoMas.entrySet()) {
+			if(entry.getValue().getIdSensor() == idSensor) {
+				return entry.getKey();
+			}
+		}
+		return -1L;
 	}
 	
 }

@@ -11,13 +11,17 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.validator.internal.util.privilegedactions.NewSchema;
+
+import com.ingenieriahuemul.flamencoserver.Utilitarios;
 
 
 /*
@@ -32,6 +36,9 @@ public class Mas {
 	private Double ultimaTempMuestreo = -999.0;
 	private long ultimaHoraMuestreo = -1;
 	private EstadoMas estadoMas;
+	
+	//parametro para comprobar si el mas deberia recuperar estados no persistidos o no
+	private boolean enRecuperacion = false;
 	
 	//para conexion con mesh y comunicacion. 
 	//TODO: estos parametros es posible que los queramos configurables en algun momento
@@ -88,21 +95,22 @@ public class Mas {
         			throw new SocketException();
         		}
         		
-        		logger.info(msjLogMesh("enviando " + mensaje));
+        		logger.info(msjLogMesh("enviando " + (null != mensaje ? mensaje.trim() : null)));
         		writer.print(mensaje);
         		writer.flush();
         		
         		char[] cBuffer = new char[100];
 				reader.read(cBuffer);	      
 				respuesta = new String(cBuffer);
+								
+				Map<String, Object> datosParseados = parseRespuestaMsj(respuesta);
 				
-				datosObtenidos.putAll(parseRespuestaMsj(respuesta));
-				
-				datosObtenidos.put("respuesta", respuesta);
-				logger.info(msjLogMesh("recibido " + respuesta));
-				if(datosObtenidos == null || (datosObtenidos != null && datosObtenidos.isEmpty())) {
+				logger.info(msjLogMesh("recibido " + (null != respuesta ? respuesta.trim() : null)));
+				if(datosParseados == null) {
 					continue;
 				}
+				
+				datosObtenidos.putAll(datosParseados);
 				
 				break;
 			} catch (SocketTimeoutException e) {
@@ -137,16 +145,17 @@ public class Mas {
 		Map<String, Object> datosObtenidos = new HashMap<String,Object>();
 		
 		String[] campos = respuesta.split(SEPARADOR);
+		datosObtenidos.put("respuesta", respuesta);
 		
 //		if(campos.length < 3) {
 //			//esto no deberia pasar nunca
 //			return null;
-//		}
-		if(campos[0].equals("N")) {
+//		}		
+		if(campos[0].charAt(0) == 'N') {
 			//si devolvio una N es que el mensaje estaba malformado, esto seria una falla de mi lado y nunca deberia ocurrir
 			//logeo el mensaje para encontrar la falla, tambien seria buena idea levantar una excepcion para no perder el mensaje por accidente
 			logger.error(this.msjLogMesh("El coordinador devolvio N, el mensaje enviado estaria mal formado"));
-			return null;
+			return datosObtenidos;
 		}
 		//TODO: validar checksum
 		
@@ -160,69 +169,101 @@ public class Mas {
 		//todas las respuestas devuelven el estado
 		EstadoMas estadoMas = new EstadoMas();
 		
-		//recordatorio, a partir del 2 viene el payload
-		//{mac}|{codigo}|payload\n
-		char cod_respuesta = campos[1].charAt(0);
-		switch (cod_respuesta) {
-		case 'R':	{
-			Double valor = Double.valueOf(campos[2]);
-			boolean[] reles = parseEstadoReles(campos[3]);
-			
-			estadoMas.setValor(valor);
-			estadoMas.setEstadoR1S(reles[0]);
-			estadoMas.setEstadoR2S(reles[1]);
-			estadoMas.setEstadoR1E(reles[2]);
-			estadoMas.setEstadoR2E(reles[3]);
-			
-			datosObtenidos.put("estado", estadoMas);
-		}	break;
-		case 'P': {
-			String estaConfigurado = campos[2];
-			Double valor2 = Double.valueOf(campos[3]);
-			
-			estadoMas.setValor(valor2);
-			if(estaConfigurado.charAt(0)!='O') {
-				logger.info("No esta configurado el rele s1");
-			} 
-			if(estaConfigurado.charAt(1)!='O') {
-				logger.info("No esta configurado el rele s2");
+		try {
+			//recordatorio, a partir del 2 viene el payload
+			//{mac}|{codigo}|payload\n
+			char cod_respuesta = campos[1].charAt(0);
+			switch (cod_respuesta) {
+			case 'R':	{
+				Double valor = Double.valueOf(campos[2]);
+				boolean[] reles = parseEstadoReles(campos[3]);
+				
+				estadoMas.setValor(valor);
+				estadoMas.setEstadoReles(reles);
+			}	break;
+			case 'P': {
+				String estaConfigurado = campos[2];
+				Double valor = Double.valueOf(campos[3]);
+				
+				estadoMas.setValor(valor);
+				if(estaConfigurado.charAt(0)!='O') {
+					logger.info(this.msjLogMesh("No esta configurado el rele S1"));
+				} 
+				if(estaConfigurado.charAt(1)!='O') {
+					logger.info(this.msjLogMesh("No esta configurado el rele S2"));
+				}			
+			}	break;
+			case 'B': {
+				//el mas se configura en modo recuperacion, reemplazando los mensajes de status para obtener los status pendientes
+				this.setEnRecuperacion(true);
+				
+				Double valor;
+				try {
+					valor = Double.valueOf(campos[2]);
+
+					boolean[] reles = parseEstadoReles(campos[3]);
+					
+					estadoMas.setValor(valor);
+					estadoMas.setEstadoReles(reles);
+				} catch (NumberFormatException e) {
+					//caso 2 del mensaje, cuando algun relé no esta configurado
+					valor = Double.valueOf(campos[3]);
+					estadoMas.setValor(valor);
+					
+					String estaConfigurado = campos[2];
+					if(estaConfigurado.charAt(0)!='O') {
+						logger.info(this.msjLogMesh("No esta configurado el rele S1"));
+					} 
+					if(estaConfigurado.charAt(1)!='O') {
+						logger.info(this.msjLogMesh("No esta configurado el rele S2"));
+					}
+				}		
+			}	break;
+			case 'C': {
+				Double valor = Double.valueOf(campos[2]);
+				logger.info(this.msjLogMesh("Se configuró el relé correctamente"));			
+				estadoMas.setValor(valor);			
+			}	break;
+			case 'E':	{
+				char codRecuperacion = campos[2].charAt(0);
+				
+				if(codRecuperacion == 'E') {
+					EstadoMas estadoRecuperado = new EstadoMas();
+					
+					Date fecha = Utilitarios.parseFechaStatus(campos[3]);
+					Double valor = Double.valueOf(campos[4]);				
+					boolean[] reles = parseEstadoReles(campos[5]);
+					
+					estadoRecuperado.setValor(valor);
+					estadoRecuperado.setEstadoReles(reles);	
+					
+					datosObtenidos.put("estadoRecuperado", estadoRecuperado);
+					
+					valor = Double.valueOf(campos[6]);				
+					boolean[] reles2 = parseEstadoReles(campos[7]);
+					
+					estadoMas.setValor(valor);
+					estadoMas.setEstadoReles(reles2);	
+				} else {					
+					Date fecha = Utilitarios.parseFechaStatus(campos[3]);
+					Double valor = Double.valueOf(campos[4]);				
+					boolean[] reles = parseEstadoReles(campos[5]);
+					
+					estadoMas.setValor(valor);
+					estadoMas.setEstadoReles(reles);	
+					
+					this.setEnRecuperacion(false);
+				}				
+			}	break;
+			default:
+				break;
 			}
-			datosObtenidos.put("estado", estadoMas);
-			
-		}	break;
-		case 'B': {
-			Double valor = Double.valueOf(campos[2]);
-			boolean[] reles = parseEstadoReles(campos[3]);
-			
-			estadoMas.setValor(valor);
-			estadoMas.setEstadoR1S(reles[0]);
-			estadoMas.setEstadoR2S(reles[1]);
-			estadoMas.setEstadoR1E(reles[2]);
-			estadoMas.setEstadoR2E(reles[3]);
-			
-			datosObtenidos.put("estado", estadoMas);
-		}	break;
-		case 'C': {
-			Double valor = Double.valueOf(campos[2]);
-			
-			estadoMas.setValor(valor);
-			datosObtenidos.put("estado", estadoMas);
-		}	break;
-		case 'N': {
-//			Double valor = Double.valueOf(campos[2]);
-//			boolean[] reles = parseEstadoReles(campos[3]);
-//			
-//			estadoMas.setValor(valor);
-//			estadoMas.setEstadoR1S(reles[0]);
-//			estadoMas.setEstadoR2S(reles[1]);
-//			estadoMas.setEstadoR1E(reles[2]);
-//			estadoMas.setEstadoR2E(reles[3]);
-//			
-//			datosObtenidos.put("estado", estadoMas);
-		}	break;
-		default:
-			break;
-		}
+		} catch (Exception e) {
+			logger.error("Error parseando la respuesta del mesh: " + respuesta + "\nEsto no deberia ocurrir en ningun caso, es un error del servidor o del mesh a corregirse");
+			return null;
+		} 
+		
+		datosObtenidos.put("estado", estadoMas);
 		
 		return datosObtenidos;
 	}
@@ -233,7 +274,7 @@ public class Mas {
 		
 		for(int i=0; i<4; i++) {
 			if(reles[i]=='X') {
-				logger.info(this.msjLogMesh("No esta configurado el rele " + (i<2?"salida":"entrada") + " nro " + i%2+1));
+				logger.info(this.msjLogMesh("No esta configurado el rele " + (i<2?"salida":"entrada") + " nro " + (i%2+1)));
 			}
 			estadoReles[i] = reles[i]=='T' ? true : false;
 		}
@@ -353,6 +394,14 @@ public class Mas {
 
 	public void setUltimaHoraMuestreo(long ultimaHoraMuestreo) {
 		this.ultimaHoraMuestreo = ultimaHoraMuestreo;
+	}
+
+	public boolean isEnRecuperacion() {
+		return enRecuperacion;
+	}
+
+	public void setEnRecuperacion(boolean enRecuperacion) {
+		this.enRecuperacion = enRecuperacion;
 	}
 	
 }

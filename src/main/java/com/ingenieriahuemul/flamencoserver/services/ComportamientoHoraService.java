@@ -31,35 +31,24 @@ public class ComportamientoHoraService {
 	}
 	
 	public void crearComportamientoHora(ComportamientoHora cHora) {
-		Sensor sensor = sensorDao.findById(cHora.getId());
-		//validaciones
-		//enviar mensaje de configuracion al MAS
-		
-		//si se configura ok se continua sino se notifica el error
 		cHoraDao.save(cHora);
-		Monitor.setOutdated(true);
 	}
 	
 	public void modificarComportamientoHora(ComportamientoHora cHora) {
-		Sensor sensor = sensorDao.findById(cHora.getId());
-		//validaciones
-		//enviar mensaje de configuracion al MAS
-		
-		//si se configura ok se continua sino se notifica el error
 		cHoraDao.update(cHora);
-		Monitor.setOutdated(true);
 	}
 	
 	public void eliminarComportamientoHora(Long id) {
-		Sensor sensor = sensorDao.findById(
-				cHoraDao.findById(id).getId());
-		
-		//validaciones
-		//enviar mensaje de configuracion al MAS
-		
-		//si se configura ok se continua sino se notifica el error
-		
 		cHoraDao.delete(id);
-		Monitor.setOutdated(true);
+	}
+	
+	public void deshabilitarCompHora(Long idCompHora) {
+		if(idCompHora != null) {
+			ComportamientoHora comportamientoHora = obtenerComportamientoHora(idCompHora);
+			if(comportamientoHora != null) {
+				comportamientoHora.setHabilitado(false);
+				modificarComportamientoHora(comportamientoHora);
+			}
+		}
 	}
 }

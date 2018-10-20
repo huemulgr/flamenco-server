@@ -44,6 +44,7 @@ public class Monitor {
 	
 	@Scheduled(fixedRateString = "1000")
     public void monitorear() {
+    	logger.info("iniciando monitoreo..."); 
 		long start = System.currentTimeMillis();
 		
 		//si hubo cambios actualiza listado, cada vez que se modifique hay que setear en true outdated
@@ -69,7 +70,7 @@ public class Monitor {
     	//evaluar alarmas para cada mas
     	masService.evaluarAlarmas();
     	
-    	logger.info("fin monitoreo, duracion: " + (System.currentTimeMillis() - start)); 
+    	logger.info("fin monitoreo, duracion: " + (System.currentTimeMillis() - start) + "\n"); 
 	}
 	
 //	private void refrescarEstadoActual() {

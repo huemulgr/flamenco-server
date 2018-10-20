@@ -20,6 +20,9 @@ public class ComportamientoHoraDao extends BaseDao{
 	private static final String P_PERIODO = "Pperiodo";
 	private static final String P_CONTACTOR_SALIDA = "Pcontactorsalida";
 	private static final String P_ID_SENSOR = "Pidsensor";
+	private static final String P_CONTACTOR_ENTRADA = "Pcontactorentrada";
+	private static final String P_AND_ENTRADA = "Pumbralandcontactor";
+	private static final String P_HABILITAR_CE = "Phabilitarcontentrada";
 	
 	//stored procedures
 	private static final String CONSULTA = "flaCompHoraSele";
@@ -65,6 +68,9 @@ public class ComportamientoHoraDao extends BaseDao{
 		in.put(P_PERIODO, compHora.getPeriodo());
 		in.put(P_CONTACTOR_SALIDA, compHora.getContactorSalida());
 		in.put(P_ID_SENSOR, compHora.getIdSensor());
+		in.put(P_CONTACTOR_ENTRADA, compHora.getContactorEntrada());
+		in.put(P_AND_ENTRADA, compHora.getCondicionY());
+		in.put(P_HABILITAR_CE, compHora.getHabilitarContEntrada());
 		
 		Map<String, Object> out = new HashMap<String, Object>();
 		out.put(P_ID_COMP_HORA, compHora.getId());
@@ -96,6 +102,9 @@ public class ComportamientoHoraDao extends BaseDao{
 		in.put(P_PERIODO, compHora.getPeriodo());
 		in.put(P_CONTACTOR_SALIDA, compHora.getContactorSalida());
 		in.put(P_ID_SENSOR, compHora.getIdSensor());
+		in.put(P_CONTACTOR_ENTRADA, compHora.getContactorEntrada());
+		in.put(P_AND_ENTRADA, compHora.getCondicionY());
+		in.put(P_HABILITAR_CE, compHora.getHabilitarContEntrada());
 		
 		super.ejecutarStoredProcedure(MODIFICACION, in, null, ComportamientoHora.class);
 		return compHora;

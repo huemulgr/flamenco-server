@@ -20,10 +20,17 @@ public class ComportamientoHora {
 	private Boolean contactorSalida;
 	private Boolean habilitado;
 	private Long idSensor;
+	private Boolean contactorEntrada;
+	private Boolean condicionY;
+	private Boolean habilitarContEntrada;
 	private String sensor;
 	private String puntoSensado;
 		
 	
+	public int getNroContactorEntrada() {
+		int numero = contactorEntrada!=null && contactorEntrada == true ? 1 : 0;
+		return numero;
+	}
 	public int getNroContactorSalida() {
 		int numero = contactorSalida == false ? 0 : 1;
 		return numero;
@@ -82,5 +89,29 @@ public class ComportamientoHora {
 	}
 	public void setHabilitado(Boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+
+	public Boolean getContactorEntrada() {
+		return contactorEntrada;
+	}
+
+	public void setContactorEntrada(Boolean contactorEntrada) {
+		this.contactorEntrada = contactorEntrada;
+	}
+
+	public Boolean getCondicionY() {
+		return condicionY;
+	}
+
+	public void setCondicionY(Boolean condicionY) {
+		this.condicionY = condicionY;
+	}
+
+	public Boolean getHabilitarContEntrada() {
+		return habilitarContEntrada;
+	}
+
+	public void setHabilitarContEntrada(Boolean habilitarContEntrada) {
+		this.habilitarContEntrada = habilitarContEntrada;
 	}
 }

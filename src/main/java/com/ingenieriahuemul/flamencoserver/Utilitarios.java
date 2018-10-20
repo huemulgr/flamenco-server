@@ -1,6 +1,7 @@
 package com.ingenieriahuemul.flamencoserver;
 
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,7 +31,21 @@ public abstract class Utilitarios {
 	}
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss");
-	public static String formatofechaStatus(Date fecha) {
+	public static String formatoFechaStatus(Date fecha) {
 		return sdf.format(fecha);
+	}
+	
+	public static Date parseFechaStatus(String fecha) throws ParseException {
+		try {
+			return sdf.parse(fecha);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	private static SimpleDateFormat sdf2 = new SimpleDateFormat("HHmm");
+	public static String formatoHora(Time time) {
+		return sdf2.format(time);
 	}
 }

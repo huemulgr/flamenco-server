@@ -28,7 +28,7 @@ public class ComportamientoUmbral {
 	
 	
 	public int getNroContactorEntrada() {
-		int numero = contactorEntrada == false ? 0 : 1;
+		int numero = contactorEntrada != null && contactorEntrada == true ? 1 : 0;
 		return numero;
 	}
 	public int getNroContactorSalida() {
