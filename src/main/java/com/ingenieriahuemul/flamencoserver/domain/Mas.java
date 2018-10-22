@@ -51,12 +51,52 @@ public class Mas {
 	BufferedReader reader;
 	PrintWriter writer;
     
+	private static Map<String, Socket> coordinadores = new HashMap<String, Socket>();
+	
 	
 	public Mas() {	}
 	
+	private void abrirSocketCoordinador(String ip) throws Exception {
+		Socket socket = coordinadores.get(ip);
+		if(socket != null && !socket.isClosed()) {
+			this.socket = socket;
+			return;
+		}
+		
+		//no se pueden reutilizar socket, creo uno nuevo
+		Socket nuevoSocket = null; 
+		try {
+			nuevoSocket = new Socket(ip, PORT);
+			nuevoSocket.setSoTimeout(TIMEOUT_READ_MS);
+		} catch (UnknownHostException ex) {
+            logger.error("No se pudo llegar al coordinador de ip " + ip, ex);	
+        } catch (Exception ex) {
+            logger.error("No se pudo abrir conexion con el coordinador " + ip + ":" + this.PORT, ex);
+        }
+		coordinadores.put(ip, nuevoSocket);
+		this.socket = nuevoSocket;
+	}
+	
+	public Socket getSocket() {
+		return this.coordinadores.get(this.sensor.getMacDelCoordinador());
+	}
+	
+	//esto lo dejo por si en algun momento surge la necesidad, los socket los cierra el garbage collector o cuando se pisan con una nueva conexion
+	private void cerrarSocketCoordinador(String ip) {
+		Socket socket = coordinadores.get(ip);
+		if(socket != null) {
+			try {
+				socket.close();
+			} catch (Exception e) {
+				logger.info("No se pudo cerrar el socket con el coordinador de ip " + ip + " continua proceso...");
+			}
+		}
+		coordinadores.remove(ip);
+	}
+	
 	public boolean abrirConexionConMesh() {
 		try {
-			Socket socket = new Socket(this.sensor.getMacDelCoordinador(), PORT);
+			abrirSocketCoordinador(this.sensor.getMacDelCoordinador());			
 			
 			inputStream = socket.getInputStream();
 			outputStream = socket.getOutputStream();
@@ -70,11 +110,11 @@ public class Mas {
 		} catch (UnknownHostException ex) {	 
             logger.error("No se pudo llegar al coordinador de ip " + this.sensor.getMacDelCoordinador(), ex);	 
             return false;
-        } catch (ConnectException ex) {	 
-            logger.error("No se pudo abrir conexion con el coordinador " + this.sensor.getMacDelCoordinador() + ":" + this.PORT, ex);	 
-            return false;
         } catch (IOException ex) {	 
             logger.error("I/O error al obtener streams de la conexion del MAS " + this.puntoDeSensado.getNombreCorto(), ex);	
+            return false;
+        } catch (Exception ex) {	 
+            logger.error("No se pudo abrir conexion con el coordinador " + this.sensor.getMacDelCoordinador() + ":" + this.PORT, ex);	 
             return false;
         }
 	}
@@ -125,6 +165,11 @@ public class Mas {
 				
 				//Se perdio conexion con el mas, se reintenta abrir la conexion
 				logger.error(msjLogMesh("Se perdio la conexion con el coordinador " + sensor.getMacDelCoordinador()) + " intentando reabrir la conexion...", e);
+				try {
+					this.socket.close();
+				} catch (IOException e1) {
+					logger.info("No se pudo cerrar socket " + sensor.getMacDelCoordinador() + ":" + PORT + " continua proceso.");
+				}
 				this.abrirConexionConMesh();
 				break;
 			} catch (IOException e) {
@@ -230,8 +275,8 @@ public class Mas {
 				if(codRecuperacion == 'E') {
 					EstadoMas estadoRecuperado = new EstadoMas();
 					
-					Date fecha = Utilitarios.parseFechaStatus(campos[3]);
-					Double valor = Double.valueOf(campos[4]);				
+					Double valor = Double.valueOf(campos[3]);				
+					Date fecha = Utilitarios.parseFechaStatus(campos[4]);
 					boolean[] reles = parseEstadoReles(campos[5]);
 					
 					estadoRecuperado.setValor(valor);
@@ -245,9 +290,8 @@ public class Mas {
 					estadoMas.setValor(valor);
 					estadoMas.setEstadoReles(reles2);	
 				} else {					
-					Date fecha = Utilitarios.parseFechaStatus(campos[3]);
-					Double valor = Double.valueOf(campos[4]);				
-					boolean[] reles = parseEstadoReles(campos[5]);
+					Double valor = Double.valueOf(campos[3]);
+					boolean[] reles = parseEstadoReles(campos[4]);
 					
 					estadoMas.setValor(valor);
 					estadoMas.setEstadoReles(reles);	

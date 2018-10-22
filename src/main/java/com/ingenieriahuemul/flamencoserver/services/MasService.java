@@ -1,5 +1,14 @@
 package com.ingenieriahuemul.flamencoserver.services;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +55,15 @@ public class MasService {
 	//semaforo para asegurar que hay un unico mensaje en transito a la vez
 	private static Semaphore semaforoMesh = new Semaphore(1, true);
 	
+	//listado de coordinadores para mantener un unico socket por coordinador (posiblemente se haga un refactor para tenerlo por base de datos)
+	private static Map<String, Socket> coordinadores = new HashMap<String, Socket>();
+	
+	//TODO: estos parametros es posible que los queramos configurables en algun momento
+	private static final int PORT=23;
+	private static final int TIMEOUT_READ_MS = 3000;
+	
+	
+	
 	/* metodo para traer los sensores con sus alarmas
 	 * 
 	 * */
@@ -84,6 +102,12 @@ public class MasService {
 	
 	public void refrescarEstadoActual() {
 		for(Mas mas: listadoMas.values()) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			String status = obtenerStatus(mas);
 			
 //			logger.info("status recibido: " + status);
@@ -109,7 +133,9 @@ public class MasService {
 			logger.info("------------------------------Semaforo ABIERTO");
 				datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
 					String.format(
-						(mas.isEnRecuperacion() ? MensajesMesh.MESH_STATUS : MensajesMesh.MESH_STATUS_O), 
+						(!mas.isEnRecuperacion() ? 
+								MensajesMesh.MESH_STATUS
+								: MensajesMesh.MESH_STATUS_O), 
 						Utilitarios.formatoFechaStatus(new Date())
 					)
 				);
