@@ -143,11 +143,19 @@ public class Mas {
 				reader.read(cBuffer);	      
 				respuesta = new String(cBuffer);
 								
-				Map<String, Object> datosParseados = parseRespuestaMsj(respuesta);
-				
+				Map<String, Object> datosParseados = parseRespuestaMsj(respuesta);				
 				logger.info(msjLogMesh("recibido " + (null != respuesta ? respuesta.trim() : null)));
-				if(datosParseados == null) {
-					continue;
+				int j=0;
+				while(datosParseados == null && i<3) {
+					//en caso que llegue mensaje para otra mac intento vaciar el buffer del socket de mensajes encolados
+					//en teoria serian 2 asi que con un read alcanzaria, pero por las dudas hago 3 intentos hasta tener exito o descartar. 
+					//TODO: si hay un unico MAS, en ese caso la mac no alcanza para distinguir si es un mensaje encolado. 
+					//Habria que implementar validacion de la respuesta en el parser asi si llega una C como respuesta a un S se vacia el buffer
+					reader.read(cBuffer);	    
+					respuesta = new String(cBuffer);
+					datosParseados = parseRespuestaMsj(respuesta);
+					logger.info(msjLogMesh("recibido " + (null != respuesta ? respuesta.trim() : null)));
+					i++;
 				}
 				
 				datosObtenidos.putAll(datosParseados);
@@ -167,7 +175,7 @@ public class Mas {
 				logger.error(msjLogMesh("Se perdio la conexion con el coordinador " + sensor.getMacDelCoordinador()) + " intentando reabrir la conexion...", e);
 				try {
 					this.socket.close();
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					logger.info("No se pudo cerrar socket " + sensor.getMacDelCoordinador() + ":" + PORT + " continua proceso.");
 				}
 				this.abrirConexionConMesh();
@@ -190,31 +198,27 @@ public class Mas {
 		Map<String, Object> datosObtenidos = new HashMap<String,Object>();
 		
 		String[] campos = respuesta.split(SEPARADOR);
-		datosObtenidos.put("respuesta", respuesta);
-		
-//		if(campos.length < 3) {
-//			//esto no deberia pasar nunca
-//			return null;
-//		}		
-		if(campos[0].charAt(0) == 'N') {
-			//si devolvio una N es que el mensaje estaba malformado, esto seria una falla de mi lado y nunca deberia ocurrir
-			//logeo el mensaje para encontrar la falla, tambien seria buena idea levantar una excepcion para no perder el mensaje por accidente
-			logger.error(this.msjLogMesh("El coordinador devolvio N, el mensaje enviado estaria mal formado"));
-			return datosObtenidos;
-		}
-		//TODO: validar checksum
-		
-		String mac = campos[0];
-		if(! this.sensor.getMac().equalsIgnoreCase(mac)) {
-			logger.info(this.msjLogMesh("Se descarta mensaje con mac distinta a la del MAS sensado, "
-					+ "muy posiblemente es un retry que quedo perdido o un mensaje que llego pasado el timeout"));
-			return null;
-		}
+		datosObtenidos.put("respuesta", respuesta);	
 		
 		//todas las respuestas devuelven el estado
 		EstadoMas estadoMas = new EstadoMas();
 		
 		try {
+			if(campos[0].charAt(0) == 'N') {
+				//si devolvio una N es que el mensaje estaba malformado, esto seria una falla de mi lado y nunca deberia ocurrir
+				//logeo el mensaje para encontrar la falla, tambien seria buena idea levantar una excepcion para no perder el mensaje por accidente
+				logger.error(this.msjLogMesh("El coordinador devolvio N, el mensaje enviado estaria mal formado"));
+				return datosObtenidos;
+			}
+			//TODO: validar checksum
+			
+			String mac = campos[0];
+			if(! this.sensor.getMac().equalsIgnoreCase(mac)) {
+				logger.info(this.msjLogMesh("Se descarta mensaje con mac distinta a la del MAS sensado, "
+						+ "muy posiblemente es un retry que quedo perdido o un mensaje que llego pasado el timeout"));
+				return null;
+			}
+			
 			//recordatorio, a partir del 2 viene el payload
 			//{mac}|{codigo}|payload\n
 			char cod_respuesta = campos[1].charAt(0);
@@ -343,7 +347,8 @@ public class Mas {
 		}
 	}
 	
-	public void evaluarAlarmas() {
+	/** devuelve true si alguna alarma esta on, temporalmente se manejara asi en otro momento interesara saber cual seguramente*/
+	public boolean evaluarAlarmas() {
 		for(Alarma alarma : this.alarmas) {
 			
 			if(!alarma.getHabilitado() || !sensor.getHabilitado() || puntoDeSensado == null 
@@ -359,10 +364,7 @@ public class Mas {
 					+ ", Sup: " + alarma.getUmbralSuperior() + ", resultado: " + resultadoUmbral);
 				
 				alarma.setAlarmaOn(true);
-				
-//TODO: notificar nube
-//TODO: notificar interfaz web
-				
+				return true;			
 			} else {				
 				logger.info("Alarma: " + alarma.getNombre() + " OFF, Inf: " + alarma.getUmbralInferior() 
 					+ ", Sup: " + alarma.getUmbralSuperior() + ", resultado: " + resultadoUmbral);
@@ -370,6 +372,7 @@ public class Mas {
 				alarma.setAlarmaOn(false);
 			}
 		}
+		return false;
 	}
 	
 	/*

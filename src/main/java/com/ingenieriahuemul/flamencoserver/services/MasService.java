@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -109,20 +110,21 @@ public class MasService {
 				e.printStackTrace();
 			}
 			String status = obtenerStatus(mas);
-			
+			evaluarAlarmas(mas);
 //			logger.info("status recibido: " + status);
 		} 
 		
 		estadoActual = estadoMasService.obtenerEstadoActual();
 		
-		for(EstadoMas estadoMas : estadoActual) {
-			for(Mas mas : listadoMas.values()) {
-				if(mas.getPuntoDeSensado() != null && 
-						estadoMas.getIdPuntoSensado().equals(mas.getPuntoDeSensado().getId())) {
-					mas.setEstadoMas(estadoMas);
-				}
-			}
-		}
+//		for(EstadoMas estadoMas : estadoActual) {
+//			for(Mas mas : listadoMas.values()) {
+//				if(mas.getPuntoDeSensado() != null && 
+//						estadoMas.getIdPuntoSensado().equals(mas.getPuntoDeSensado().getId())) {
+//					mas.setEstadoMas(estadoMas);
+//					
+//				}
+//			}
+//		}
 	}
 	
 	public String obtenerStatus(Mas mas) {
@@ -150,6 +152,7 @@ public class MasService {
 			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
 			if(estado != null) {
 				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+				mas.setEstadoMas(estado);
 			}
 			
 			respuesta = (String)datosObtenidos.get("respuesta");
@@ -188,14 +191,23 @@ public class MasService {
 			semaforoMesh.release();			
 		}
 
-			EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
-			if(estado != null) {
-				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
-			} else {
-				return false;
-			}
+		
+		EstadoMas estado = (EstadoMas)datosObtenidos.get("estado");
+		if(estado != null) {
+			//en el caso de activacion manual si hubo exito viene una C sin los status de los reles
+			//aunque si hubo exito si puedo saber su status, es el previo mas el rele que se activo/desactivo
+			//porque interesa? porque si no se actualiza se muestra un estado de los reles en null (quedan off) en la interfaz
+			//hasta que se complete el proximo scan del mas, que como es round robin tarda un rato en llegar
+			//TODO: hacer lo mismo para configurar automatismos, no es tan urgente porque se hacen desde pantallas diferentes el scan ya podria haber terminado
+			boolean[] estadoPrevio = mas.getEstadoMas().getEstadoReles();
+			estadoPrevio[nroRele] = activar;
+			estado.setEstadoReles(estadoPrevio);
+			estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
+		} else {
+			return false;
+		}
 			
-			respuesta = (String)datosObtenidos.get("respuesta");
+		respuesta = (String)datosObtenidos.get("respuesta");
 		
 		return true;
 	}
@@ -283,12 +295,6 @@ public class MasService {
 		return true;
 	}
 	
-	public void evaluarAlarmas() {
-		for(Mas mas : listadoMas.values()) {
-    		mas.evaluarAlarmas();   			
-    	}
-	}
-	
 	/** encuentra si en el listado mas esta el idSensor de entrada, devuelve menos 1 en el caso que no exista como se da cuando no esta asignado el sensor */
 	private Long buscarIdPuntoSensadoXIdSensor(Long idSensor) {
 		for(Entry<Long, Mas> entry : this.listadoMas.entrySet()) {
@@ -299,4 +305,20 @@ public class MasService {
 		return -1L;
 	}
 	
+	//TODO: mejorar manejo de alarmas
+	private List<Long> puntosSensadoConAlarma = new ArrayList<Long>();
+	private void evaluarAlarmas(Mas mas) {
+		boolean algunaAlarmaOn = mas.evaluarAlarmas(); 
+    		
+    	if(algunaAlarmaOn) {
+    		if(!puntosSensadoConAlarma.contains(mas.getPuntoDeSensado().getId()))
+    			puntosSensadoConAlarma.add(mas.getPuntoDeSensado().getId());
+    	} else {
+    		puntosSensadoConAlarma.remove(mas.getPuntoDeSensado().getId());
+    	}
+	}
+
+	public List<Long> getPuntosSensadoConAlarma() {
+		return puntosSensadoConAlarma;
+	}
 }

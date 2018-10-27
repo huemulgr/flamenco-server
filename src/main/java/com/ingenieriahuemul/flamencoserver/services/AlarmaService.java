@@ -2,6 +2,7 @@ package com.ingenieriahuemul.flamencoserver.services;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,32 +13,37 @@ import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 @Service
 public class AlarmaService {
+	private final Logger logger = Logger.getLogger(AlarmaService.class);
+	
 	@Autowired
 	private AlarmaDao alarmaDao;
 	
-	public List<Alarma> obtenerAlarmas() {
+	public List<Alarma> findAll() {
 		return alarmaDao.findAll();
 	}
 	
-	public List<Alarma> obtenerAlarmasSensor(Long idSensor) {
+	public List<Alarma> findByIdSensor(Long idSensor) {
 		return alarmaDao.findByIdSensor(idSensor);
 	}
 	
-	public Alarma obtenerAlarma(Long id) {
+	public Alarma findById(Long id) {
 		return alarmaDao.findById(id);
 	}
 	
-	public void crearAlarma(Alarma alarma) {
+	public void create(Alarma alarma) {
+		logger.info("Creando alarma...");
 		alarmaDao.save(alarma);
 		Monitor.setOutdated(true);
 	}
 	
-	public void modificarAlarma(Alarma alarma) {
+	public void update(Alarma alarma) {
+		logger.info("Actualizando alarma...");
 		alarmaDao.update(alarma);
 		Monitor.setOutdated(true);
 	}
 	
-	public void eliminarAlarma(Long id) {
+	public void delete(Long id) {
+		logger.info("Eliminando alarma...");
 		alarmaDao.delete(id);
 		Monitor.setOutdated(true);
 	}

@@ -22,13 +22,18 @@ public class EstadoMas {
 	private Boolean estadoR2S;
 	
 	
+	@JsonIgnore
 	public void setEstadoReles(boolean[] reles) {
 		setEstadoR1S(reles[0]);
 		setEstadoR2S(reles[1]);
 		setEstadoR1E(reles[2]);
 		setEstadoR2E(reles[3]);
-	}
-	
+	}	
+	@JsonIgnore
+	public boolean[] getEstadoReles() {
+		boolean[] estadoReles = {estadoR1S, estadoR2S, estadoR1E, estadoR2E};
+		return estadoReles;
+	}	
 	//fecha y hora la recibo de la bd como timestamp, para json tambien lo paso como milisegundos que es mas facil de parsear
 	public Long getFechaHoraMilis() {
 		return fechaHora.getTime();

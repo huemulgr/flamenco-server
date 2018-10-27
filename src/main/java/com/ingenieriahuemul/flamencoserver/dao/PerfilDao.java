@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.ingenieriahuemul.flamencoserver.domain.Perfil;
+import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 @Component
 public class PerfilDao extends BaseDao{
@@ -28,7 +29,13 @@ public class PerfilDao extends BaseDao{
 	private static final String QUITAR_USUARIO = "flaQuitarPerfilUsuario";
 	private static final String ASIGNAR_SENSOR = "flaAsignarSensorPerfil";
 	private static final String QUITAR_SENSOR = "flaQuitarSensorPerfil";
+	private static final String SENSORES_ASIGNADOS = "flaPerfilSensoresSele";
 
+	public List<Sensor> findSensoresAsignados(Long idPerfil) {
+		Map<String, Object> in = new HashMap<String, Object>();
+		in.put(P_ID_PERFIL, idPerfil);
+		return (List<Sensor>) super.ejecutarStoredProcedure(SENSORES_ASIGNADOS, in, null, Sensor.class);
+	}	
 	
 //	IN `Pidperfil` MEDIUMINT UNSIGNED	
 	public List<Perfil> findAll() {

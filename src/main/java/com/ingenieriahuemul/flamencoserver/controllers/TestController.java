@@ -29,6 +29,7 @@ import com.ingenieriahuemul.flamencoserver.dao.PuntoDeSensadoDao;
 import com.ingenieriahuemul.flamencoserver.dao.SensorDao;
 import com.ingenieriahuemul.flamencoserver.dao.TipoSensorDao;
 import com.ingenieriahuemul.flamencoserver.dao.UsuarioDao;
+import com.ingenieriahuemul.flamencoserver.dao.UsuarioDao.AutenticacionResultado;
 import com.ingenieriahuemul.flamencoserver.domain.Alarma;
 import com.ingenieriahuemul.flamencoserver.domain.ComportamientoHora;
 import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
@@ -40,7 +41,10 @@ import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 import com.ingenieriahuemul.flamencoserver.domain.TipoSensor;
 import com.ingenieriahuemul.flamencoserver.domain.Usuario;
+import com.ingenieriahuemul.flamencoserver.services.AlarmaService;
 import com.ingenieriahuemul.flamencoserver.services.MasService;
+import com.ingenieriahuemul.flamencoserver.services.PuntoDeSensadoService;
+import com.ingenieriahuemul.flamencoserver.services.SensorService;
 
 
 @RestController
@@ -62,42 +66,36 @@ public class TestController extends BaseController{
 	}
 	
 	@Autowired
-	private AlarmaDao alarmaDao;
+	private AlarmaService alarmaService;
 	
 	@PostMapping(path = "/alarma")
-    public Alarma create(@RequestBody Alarma alarma){
-    	logger.info("creando usuario " + alarma + "...");
-        return alarmaDao.save(alarma);
+    public void create(@RequestBody Alarma alarma){
+    	alarmaService.create(alarma);
     }
 	
 	@GetMapping(path = "/alarma/{a}")
 	public Alarma get1 (@PathVariable("a") Long a) {
-		logger.info("ok");
-		
-		return alarmaDao.findById(Long.valueOf(a));
+		return alarmaService.findById(Long.valueOf(a));
 	}
 	
 	@GetMapping(path = "/alarma")
 	public List Listar1() {
-		return alarmaDao.findAll();
+		return alarmaService.findAll();
 	}
 	
 	@GetMapping(path = "/alarma/sensor/{idSensor}")
 	public List ListarPorSensor(@PathVariable("idSensor") Long idSensor) {
-		return alarmaDao.findByIdSensor(idSensor);
+		return alarmaService.findByIdSensor(idSensor);
 	}
 	
 	@DeleteMapping(path = "/alarma/{a}")
 	public void test1 (@PathVariable("a") int a) {
-		logger.info("ok1");
-
-		alarmaDao.delete(Long.valueOf(a));
+		alarmaService.delete(Long.valueOf(a));
 	}
 	
 	@PutMapping(path = "/alarma")
-    public Alarma update(@RequestBody Alarma alarma){
-    	logger.info("actualizando alarma " + alarma + "...");
-        return alarmaDao.update(alarma);
+    public void update(@RequestBody Alarma alarma){
+    	alarmaService.update(alarma);
     }
 //-----------------------------------------------------------------------------------
 //	chora
@@ -271,38 +269,44 @@ public class TestController extends BaseController{
     	logger.info("creando...");
         return perfilDao.save(perfil);
     }
+
+	@GetMapping(path = "/perfil")
+	public List listarPerfiles() {
+		return perfilDao.findAll();
+	}
+	
+	@GetMapping(path = "/perfil/sensores/{idPerfil}")
+	public List listarSensoresAsignados(@PathVariable("idPerfil") Long idPerfil) {
+		return perfilDao.findSensoresAsignados(idPerfil);
+	}
 	
 	@GetMapping(path = "/perfil/{a}")
 	public Perfil test5 (@PathVariable("a") Long a) {
 		return perfilDao.findById(Long.valueOf(a));
 	}
 	
-	@GetMapping(path = "/perfil/usuario")
+	@GetMapping(path = "/perfil/AsignarUsuario")
 	public void asignarUsuario (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idUsuario") Long idUsuario) {
 		perfilDao.asignarUsuario(idPerfil, idUsuario);
 	}
 	
-	@GetMapping(path = "/perfil/sensor")
+	@GetMapping(path = "/perfil/AsignarSensor")
 	public void asignarSensor (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idSensor") Long idSensor) {
 		perfilDao.asignarSensor(idPerfil, idSensor);
 	}
 	
-	@GetMapping(path = "/perfil")
-	public List Listar5() {
-		return perfilDao.findAll();
-	}
 	
 	@DeleteMapping(path = "/perfil/{a}")
 	public void test5 (@PathVariable("a") int a) {
 		perfilDao.delete(Long.valueOf(a));
 	}
 	
-	@DeleteMapping(path = "/perfil/usuario")
+	@DeleteMapping(path = "/perfil/QuitarUsuario")
 	public void quitarUsuario (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idUsuario") Long idUsuario) {
 		perfilDao.quitarUsuario(idPerfil, idUsuario);
 	}
 	
-	@DeleteMapping(path = "/perfil/sensor")
+	@DeleteMapping(path = "/perfil/QuitarSensor")
 	public void quitarSensor (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idSensor") Long idSensor) {
 		perfilDao.quitarSensor(idPerfil, idSensor);
 	}
@@ -350,64 +354,66 @@ public class TestController extends BaseController{
 //-----------------------------------------------------------------------------------	
 //	puntodesensado
 	@Autowired
-	private PuntoDeSensadoDao puntoDeSensadoDao;
+	private PuntoDeSensadoService puntoDeSensadoService;
+	
+	//TODO: reemplazar por manejo mas apropiado de las alarmas
+	@GetMapping(path = "/puntodesensado/alarmasOn")
+	public List getAlarmasOn() {
+		return masService.getPuntosSensadoConAlarma();
+	}
 	
 	@PostMapping("/puntodesensado")
-    public PuntoDeSensado create(@RequestBody PuntoDeSensado puntodesensado){
-    	logger.info("creando...");
-        return puntoDeSensadoDao.save(puntodesensado);
+    public void createPuntoSensado(@RequestBody PuntoDeSensado puntodesensado){
+        puntoDeSensadoService.create(puntodesensado);
     }
 	
 	@GetMapping(path = "/puntodesensado/{a}")
-	public PuntoDeSensado test7 (@PathVariable("a") Long a) {
-		return puntoDeSensadoDao.findById(Long.valueOf(a));
+	public PuntoDeSensado findPuntoDeSensado (@PathVariable("a") Long a) {
+		return puntoDeSensadoService.findById(Long.valueOf(a));
 	}
 	
 	@GetMapping(path = "/puntodesensado")
-	public List Listar7() {
-		return puntoDeSensadoDao.findAll();
+	public List findAllPuntosDeSensado() {
+		return puntoDeSensadoService.findAll();
 	}
 	
 	@DeleteMapping(path = "/puntodesensado/{a}")
-	public void test7 (@PathVariable("a") int a) {
-		puntoDeSensadoDao.delete(Long.valueOf(a));
+	public void deletePuntoDeSensado (@PathVariable("a") int a) {
+		puntoDeSensadoService.delete(Long.valueOf(a));
 	}
 	
 	@PutMapping(path = "/puntodesensado")
-    public PuntoDeSensado update(@RequestBody PuntoDeSensado puntodesensado){
-    	logger.info("actualizando...");
-        return puntoDeSensadoDao.update(puntodesensado);
+    public void updatePuntoDeSensado(@RequestBody PuntoDeSensado puntodesensado){
+    	puntoDeSensadoService.update(puntodesensado);
     }
 //-----------------------------------------------------------------------------------	
 //	sensor
 	@Autowired
-	private SensorDao sensorDao;
+	private SensorService sensorService;
 	
 	@PostMapping("/sensor")
-    public Sensor create(@RequestBody Sensor sensor){
-    	logger.info("creando...");
-        return sensorDao.save(sensor);
+    public void createSensor(@RequestBody Sensor sensor){
+    	sensorService.create(sensor);
     }
 	
 	@GetMapping(path = "/sensor/{a}")
-	public Sensor test8 (@PathVariable("a") Long a) {
-		return sensorDao.findById(Long.valueOf(a));
+	public Sensor findSensorById (@PathVariable("a") Long a) {
+		return sensorService.findById(Long.valueOf(a));
 	}
 	
 	@GetMapping(path = "/sensor")
-	public List Listar8() {
-		return sensorDao.findAll();
+	public List findAllSensores() {
+		return sensorService.findAll();
 	}
 	
 	@DeleteMapping(path = "/sensor/{a}")
-	public void test8 (@PathVariable("a") int a) {
-		sensorDao.delete(Long.valueOf(a));
+	public void deleteSensor (@PathVariable("a") int a) {
+		sensorService.delete(Long.valueOf(a));
 	}
 	
 	@PutMapping(path = "/sensor")
-    public Sensor update(@RequestBody Sensor sensor){
-    	logger.info("actualizando...");
-        return sensorDao.update(sensor);
+    public void updateSensor(@RequestBody Sensor sensor){
+    	sensorService.update(sensor);
     }
 //-----------------------------------------------------------------------------------	
 //	tiposensor
@@ -474,4 +480,29 @@ public class TestController extends BaseController{
         return usuarioDao.update(usuario);
     }	
 	
+	@PostMapping("/usuario/login")
+    public Usuario autenticar(@RequestBody Usuario usuario){
+        AutenticacionResultado ar = usuarioDao.autenticar(usuario.getNombreUsuario(), usuario.getPassword());
+        Long idUsuario = ar.getUsuario();
+        Usuario usuarioLogeado;
+        if(ar.getAutorizacion() == 1) {
+        	//login ok devuelvo usuario
+        	usuarioLogeado = usuarioDao.findById(idUsuario);
+        } else {
+        	//login no ok devuelvo objeto usuario vacio, con id negativo para discriminar el error
+        	usuarioLogeado = new Usuario();
+        	if(ar.getAutorizacion() == 2) {
+        		usuarioLogeado.setIdusuario(-2L);
+        	} else {
+        		usuarioLogeado.setIdusuario(-1L);
+        	}
+        }
+        
+        return usuarioLogeado;
+	}
+	
+	@GetMapping(path = "/usuario/sensores/{idUsuario}")
+	public List obtenerSensoresUsuario(@PathVariable("idUsuario") Long idUsuario) {
+		return usuarioDao.obtenerSensoresUsuario(idUsuario);
+	}
 }

@@ -59,17 +59,7 @@ public class Monitor {
     	//actualizar el estado desde la base de datos en memoria
     	logger.info("refrescando estado de los mas...");
     	masService.refrescarEstadoActual();
-    	
-//    	try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-    	
-    	//evaluar alarmas para cada mas
-    	masService.evaluarAlarmas();
-    	
+       	
     	logger.info("fin monitoreo, duracion: " + (System.currentTimeMillis() - start) + "\n"); 
 	}
 	
