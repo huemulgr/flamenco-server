@@ -31,7 +31,11 @@ public class EstadoMas {
 	}	
 	@JsonIgnore
 	public boolean[] getEstadoReles() {
-		boolean[] estadoReles = {estadoR1S, estadoR2S, estadoR1E, estadoR2E};
+		boolean[] estadoReles = new boolean[4];
+		estadoReles[0] = estadoR1S != null ? estadoR1S : false; 
+		estadoReles[1] = estadoR2S != null ? estadoR2S : false;
+		estadoReles[2] = estadoR1E != null ? estadoR1E : false;
+		estadoReles[3] = estadoR2E != null ? estadoR2E : false;
 		return estadoReles;
 	}	
 	//fecha y hora la recibo de la bd como timestamp, para json tambien lo paso como milisegundos que es mas facil de parsear

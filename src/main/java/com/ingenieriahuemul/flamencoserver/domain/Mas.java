@@ -6,12 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.text.ParseException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.hibernate.validator.internal.util.privilegedactions.NewSchema;
 
 import com.ingenieriahuemul.flamencoserver.Utilitarios;
 
@@ -43,7 +41,7 @@ public class Mas {
 	//para conexion con mesh y comunicacion. 
 	//TODO: estos parametros es posible que los queramos configurables en algun momento
 	private static final int PORT=23;
-	private static final int TIMEOUT_READ_MS = 3000;
+	private static final int TIMEOUT_READ_MS = 5000;
 	private static final int REINTENTOS = 3;
 	Socket socket;
 	InputStream inputStream;
@@ -146,27 +144,33 @@ public class Mas {
 				Map<String, Object> datosParseados = parseRespuestaMsj(respuesta);				
 				logger.info(msjLogMesh("recibido " + (null != respuesta ? respuesta.trim() : null)));
 				int j=0;
-				while(datosParseados == null && i<3) {
-					//en caso que llegue mensaje para otra mac intento vaciar el buffer del socket de mensajes encolados
-					//en teoria serian 2 asi que con un read alcanzaria, pero por las dudas hago 3 intentos hasta tener exito o descartar. 
-					//TODO: si hay un unico MAS, en ese caso la mac no alcanza para distinguir si es un mensaje encolado. 
-					//Habria que implementar validacion de la respuesta en el parser asi si llega una C como respuesta a un S se vacia el buffer
-					reader.read(cBuffer);	    
-					respuesta = new String(cBuffer);
-					datosParseados = parseRespuestaMsj(respuesta);
-					logger.info(msjLogMesh("recibido " + (null != respuesta ? respuesta.trim() : null)));
-					i++;
+				if(datosParseados == null) {
+//					en caso que llegue mensaje para otra mac intento vaciar el buffer del socket de mensajes encolados
+//					en teoria serian 2 asi que con un read alcanzaria, pero por las dudas hago 3 intentos hasta tener exito o descartar. 
+//					TODO: si hay un unico MAS, en ese caso la mac no alcanza para distinguir si es un mensaje encolado. 
+//					Habria que implementar validacion de la respuesta en el parser asi si llega una C como respuesta a un S se vacia el buffer
+					while(-1 != reader.read(cBuffer)) {
+						logger.info(msjLogMesh("mensaje encolado en buffer se descartan todos y se repite comunicacion: " + new String(cBuffer)));
+					}
+					continue;				
 				}
 				
-				datosObtenidos.putAll(datosParseados);
+				if(datosParseados != null) {
+					datosObtenidos.putAll(datosParseados);
+				}
 				
 				break;
+			
+			//tratamiento de excepciones, en todos los casos si falla lo seteo como fuera de modo recuperacion asi no bloquea al resto	
 			} catch (SocketTimeoutException e) {
+				this.enRecuperacion = false;
+				
 				if(i==REINTENTOS-1)
 					logger.info(msjLogMesh("fallaron reintentos se da por perdido el mensaje"));
 				else
 					logger.info(msjLogMesh("falla reintento nro. " + (i+1) + "..."));
 			} catch (SocketException e) {
+				this.enRecuperacion = false;
 				//hay todo un problema con los timeout de los mensajes en caso que no se hay perdido realmente sino que se haya demorado, 
 				//sobre todo si hay un solo mas porque comparo por mac
 				//ver si esto tiene logica quiza el coordinador devuelve otro dato que no conozco que permita establecer que hubo caida de un mas
@@ -174,6 +178,7 @@ public class Mas {
 				//Se perdio conexion con el mas, se reintenta abrir la conexion
 				logger.error(msjLogMesh("Se perdio la conexion con el coordinador " + sensor.getMacDelCoordinador()) + " intentando reabrir la conexion...", e);
 				try {
+					Thread.sleep(1000);
 					this.socket.close();
 				} catch (Exception e1) {
 					logger.info("No se pudo cerrar socket " + sensor.getMacDelCoordinador() + ":" + PORT + " continua proceso.");
@@ -181,10 +186,12 @@ public class Mas {
 				this.abrirConexionConMesh();
 				break;
 			} catch (IOException e) {
+				this.enRecuperacion = false;
 				//registro el error pero descarto la interrupcion, este es un buen punto para reportar MAS caido
 				logger.error(msjLogMesh("error inesperado."), e);
 				break;
 			} catch (Exception e) {
+				this.enRecuperacion = false;
 				logger.error(msjLogMesh("error generico al comunicarse con mesh, se descarta interrupcion:"), e);
 				break;
 			}
@@ -222,6 +229,7 @@ public class Mas {
 			//recordatorio, a partir del 2 viene el payload
 			//{mac}|{codigo}|payload\n
 			char cod_respuesta = campos[1].charAt(0);
+			datosObtenidos.put("codigo", cod_respuesta);
 			switch (cod_respuesta) {
 			case 'R':	{
 				Double valor = Double.valueOf(campos[2]);
@@ -283,6 +291,8 @@ public class Mas {
 					Date fecha = Utilitarios.parseFechaStatus(campos[4]);
 					boolean[] reles = parseEstadoReles(campos[5]);
 					
+					estadoRecuperado.setIdPuntoSensado(this.getPuntoDeSensado().getId());
+					estadoRecuperado.setFechaHora(new Timestamp(fecha.getTime()));
 					estadoRecuperado.setValor(valor);
 					estadoRecuperado.setEstadoReles(reles);	
 					

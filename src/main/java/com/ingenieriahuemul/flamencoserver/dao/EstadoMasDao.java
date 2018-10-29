@@ -80,7 +80,7 @@ public class EstadoMasDao extends BaseDao{
 	public void procesarAtrasadosPaso2(Date fechaHora, Double valor, Long idPs) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		
-		in.put(P_DATETIME, new java.sql.Date(fechaHora.getTime()));
+		in.put(P_DATETIME, new java.sql.Timestamp(fechaHora.getTime()));
 		in.put(P_VALOR2, valor);
 		in.put(P_ID_PS, idPs);
 		
@@ -98,8 +98,8 @@ public class EstadoMasDao extends BaseDao{
 	public void procesarAtrasadosPaso3(Long idEmpresa, Date fechaIni, Date fechaFin) {
 		Map<String, Object> in = new HashMap<String, Object>();
 		in.put(P_ID_EMPRESA, idEmpresa);
-		in.put(P_FECHA_INI, new Time(fechaIni.getTime()));
-		in.put(P_FECHA_FIN, new Time(fechaFin.getTime()));
+		in.put(P_FECHA_INI, new java.sql.Date(fechaIni.getTime()));
+		in.put(P_FECHA_FIN, new java.sql.Date(fechaFin.getTime()));
 		
 		super.ejecutarStoredProcedure(PROC_ATRASADOS_3, in, null, null);
 	}

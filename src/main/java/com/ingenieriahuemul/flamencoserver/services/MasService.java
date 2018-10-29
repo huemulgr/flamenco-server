@@ -32,6 +32,8 @@ import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
 import com.ingenieriahuemul.flamencoserver.domain.Mas;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
+import ch.qos.logback.classic.pattern.Util;
+
 
 
 /** servicio responsable de mantener listado de mas y regular acceso al mesh */
@@ -126,7 +128,7 @@ public class MasService {
 //			}
 //		}
 	}
-	
+		
 	public String obtenerStatus(Mas mas) {
 		Map<String, Object> datosObtenidos = null;
 		String respuesta=null;
@@ -135,9 +137,10 @@ public class MasService {
 			logger.info("------------------------------Semaforo ABIERTO");
 				datosObtenidos = mas.comunicarseConMesh(mas.getSensor().getMac() +
 					String.format(
-						(!mas.isEnRecuperacion() ? 
-								MensajesMesh.MESH_STATUS
-								: MensajesMesh.MESH_STATUS_O), 
+						(
+							!mas.isEnRecuperacion() ? 
+							MensajesMesh.MESH_STATUS
+							: MensajesMesh.MESH_STATUS_O), 
 						Utilitarios.formatoFechaStatus(new Date())
 					)
 				);
@@ -155,9 +158,47 @@ public class MasService {
 				mas.setEstadoMas(estado);
 			}
 			
+//			comprobarRecuperacionDeEstados(datosObtenidos);
+			
 			respuesta = (String)datosObtenidos.get("respuesta");
 		
 		return respuesta;
+	}
+	
+	private void comprobarRecuperacionDeEstados(Map<String, Object> datosObtenidos) {
+		if(datosObtenidos.get("codigo") == null) return;
+		
+		char codigo = (char)datosObtenidos.get("codigo");
+		try {
+			boolean algunoEnRecuperacion = false;
+			for(Mas modulo : listadoMas.values()) {
+				if(modulo.isEnRecuperacion()) {
+					algunoEnRecuperacion = true;
+					break;
+				}
+			}
+			if(codigo == 'B') {
+				//si algun modulo esta en recuperacion no vacio					
+				if(!algunoEnRecuperacion) {
+					logger.info("Se inicializa recuperadas...");
+					estadoMasService.procesarAtrasadosPaso1();
+				}
+			} else if(codigo == 'E') {
+				if(!algunoEnRecuperacion) {
+					estadoMasService.procesarAtrasadosPaso1();
+				}
+				logger.info("Se guarda temporalmente medicion recuperada...");
+				EstadoMas recuperado = (EstadoMas)datosObtenidos.get("estadoRecuperado");
+				estadoMasService.procesarAtrasadosPaso2(recuperado.getFechaHora(), recuperado.getValor(), recuperado.getIdPuntoSensado());
+			} else if(codigo == 'F') {				
+				logger.info("Se persisten mediciones recuperadas...");
+				//TODO: poner id empresa configurable
+				Date hoy = new Date();
+				estadoMasService.procesarAtrasadosPaso3(1000L, hoy, Utilitarios.sumarUnDia(hoy));
+			}
+		} catch (Exception e) {
+			logger.error("ocurrio un error al procesar la recuperacion de estados atrasados: ", e);
+		}
 	}
 	
 	/** activa manualmente un rele, al hacerlo se pierde la configuracion previa del mismo
