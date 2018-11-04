@@ -25,6 +25,8 @@ public class Empresa {
 	
 	private Integer columnasImpresion;
 	
+	private String qr;
+	
 	//campo para facilitar la comparacion del pass
 	private String passwordActual;
 
@@ -79,6 +81,12 @@ public class Empresa {
 	}
 	public void setColumnasImpresion(Integer columnasImpresion) {
 		this.columnasImpresion = columnasImpresion;
+	}
+	public String getQr() {
+		return qr;
+	}
+	public void setQr(String qr) {
+		this.qr = qr;
 	}
 
 }
