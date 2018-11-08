@@ -13,6 +13,7 @@ public class Perfil {
 	private String nombre;
 	private String empresa;
 	private String usuariosAsignados;
+	private String sensoresAsignados;
 	private Integer cantidadSensores;
 	
 	private Long idEmpresa;
@@ -53,6 +54,12 @@ public class Perfil {
 	}
 	public void setCantidadSensores(Integer cantidadSensores) {
 		this.cantidadSensores = cantidadSensores;
+	}
+	public String getSensoresAsignados() {
+		return sensoresAsignados;
+	}
+	public void setSensoresAsignados(String sensoresAsignados) {
+		this.sensoresAsignados = sensoresAsignados;
 	}
 		
 }

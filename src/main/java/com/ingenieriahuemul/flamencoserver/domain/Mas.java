@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -42,7 +43,8 @@ public class Mas {
 	//TODO: estos parametros es posible que los queramos configurables en algun momento
 	private static final int PORT=23;
 	private static final int TIMEOUT_READ_MS = 5000;
-	private static final int REINTENTOS = 3;
+	private static final int TIMEOUT_CONNECT_MS = 6000;
+	private static final int REINTENTOS = 2;
 	Socket socket;
 	InputStream inputStream;
 	OutputStream outputStream;
@@ -64,12 +66,19 @@ public class Mas {
 		//no se pueden reutilizar socket, creo uno nuevo
 		Socket nuevoSocket = null; 
 		try {
-			nuevoSocket = new Socket(ip, PORT);
+			logger.info("Intentando abrir conexion con coordinador " + ip + ":" + PORT + "...");
+			
+//			nuevoSocket = new Socket(ip, PORT);
+			nuevoSocket = new Socket();   
+			nuevoSocket.connect(new InetSocketAddress(ip, PORT), TIMEOUT_CONNECT_MS); 
+
 			nuevoSocket.setSoTimeout(TIMEOUT_READ_MS);
 		} catch (UnknownHostException ex) {
             logger.error("No se pudo llegar al coordinador de ip " + ip, ex);	
+            throw ex;
         } catch (Exception ex) {
             logger.error("No se pudo abrir conexion con el coordinador " + ip + ":" + this.PORT, ex);
+            throw ex;
         }
 		coordinadores.put(ip, nuevoSocket);
 		this.socket = nuevoSocket;
@@ -370,14 +379,14 @@ public class Mas {
 			
 			int resultadoUmbral = estaDentroUmbral(this.estadoMas.getValor(), alarma.getUmbralInferior(), alarma.getUmbralSuperior());
 			if(resultadoUmbral != 0) {
-				logger.warn("Alarma: " + alarma.getNombre() + " ON, Inf: " + alarma.getUmbralInferior() 
-					+ ", Sup: " + alarma.getUmbralSuperior() + ", resultado: " + resultadoUmbral);
+//				logger.warn("Alarma: " + alarma.getNombre() + " ON, Inf: " + alarma.getUmbralInferior() 
+//					+ ", Sup: " + alarma.getUmbralSuperior() + ", resultado: " + resultadoUmbral);
 				
 				alarma.setAlarmaOn(true);
 				return true;			
 			} else {				
-				logger.info("Alarma: " + alarma.getNombre() + " OFF, Inf: " + alarma.getUmbralInferior() 
-					+ ", Sup: " + alarma.getUmbralSuperior() + ", resultado: " + resultadoUmbral);
+//				logger.info("Alarma: " + alarma.getNombre() + " OFF, Inf: " + alarma.getUmbralInferior() 
+//					+ ", Sup: " + alarma.getUmbralSuperior() + ", resultado: " + resultadoUmbral);
 				
 				alarma.setAlarmaOn(false);
 			}
@@ -390,6 +399,9 @@ public class Mas {
 	 */
 	private int estaDentroUmbral(Double valor, Double valorUmbralInferior, Double valorUmbralSuperior) {
 		//por base ya vienen acomodados, pero por las dudas se valida de vuelta por si pifia algo en el medio
+		if (valor == null)
+			return 0;
+		
 		Double inferior = Math.min(valorUmbralInferior, valorUmbralSuperior);
 		Double superior = Math.max(valorUmbralInferior, valorUmbralSuperior);
 				

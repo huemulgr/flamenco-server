@@ -13,7 +13,7 @@ import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 @Service
 public class AlarmaService {
-	private final Logger logger = Logger.getLogger(AlarmaService.class);
+	private final Logger logger = Logger.getLogger(EmpresaService.class);
 	
 	@Autowired
 	private AlarmaDao alarmaDao;

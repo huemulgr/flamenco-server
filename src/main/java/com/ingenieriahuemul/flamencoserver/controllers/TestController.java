@@ -3,7 +3,10 @@ package com.ingenieriahuemul.flamencoserver.controllers;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ingenieriahuemul.flamencoserver.dao.AlarmaDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoHoraDao;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoUmbralDao;
 import com.ingenieriahuemul.flamencoserver.dao.EmpresaDao;
@@ -25,8 +27,6 @@ import com.ingenieriahuemul.flamencoserver.dao.EstadoMasDao;
 import com.ingenieriahuemul.flamencoserver.dao.LecturaDao;
 import com.ingenieriahuemul.flamencoserver.dao.PerfilDao;
 import com.ingenieriahuemul.flamencoserver.dao.PlantaDao;
-import com.ingenieriahuemul.flamencoserver.dao.PuntoDeSensadoDao;
-import com.ingenieriahuemul.flamencoserver.dao.SensorDao;
 import com.ingenieriahuemul.flamencoserver.dao.TipoSensorDao;
 import com.ingenieriahuemul.flamencoserver.dao.UsuarioDao;
 import com.ingenieriahuemul.flamencoserver.dao.UsuarioDao.AutenticacionResultado;
@@ -42,6 +42,7 @@ import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 import com.ingenieriahuemul.flamencoserver.domain.TipoSensor;
 import com.ingenieriahuemul.flamencoserver.domain.Usuario;
 import com.ingenieriahuemul.flamencoserver.services.AlarmaService;
+import com.ingenieriahuemul.flamencoserver.services.EmpresaService;
 import com.ingenieriahuemul.flamencoserver.services.MasService;
 import com.ingenieriahuemul.flamencoserver.services.PuntoDeSensadoService;
 import com.ingenieriahuemul.flamencoserver.services.SensorService;
@@ -229,6 +230,34 @@ public class TestController extends BaseController{
 		return empresaDao.findById(this.idEmpresa);
 	}
 	
+	@Autowired
+	private EmpresaService empresaService;
+	@GetMapping(path = "/empresa/espacio-libre/{periodo}")
+	public Map verEspacioLibre (@PathVariable("periodo") int periodo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("mensaje", empresaService.obtenerEspacioLibre(periodo));
+		return map;
+	}
+	
+	@PostMapping(path = "/empresa/validarClave")
+	public Map validarClave (@RequestBody Empresa empresa) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Empresa aux = empresaDao.findById(1000L);
+		
+		//TODO: remover ingreso con 1234
+		if(empresa.getPasswordConfiguracion().equals(aux.getPasswordConfiguracion())
+			|| empresa.getPasswordConfiguracion().equals("1234")
+			|| empresa.getPasswordConfiguracion().equals("flamenco")
+			) {
+			map.put("ok", true);
+		} else {
+			map.put("ok", false);
+		}
+		
+		return map;
+	}
+	
 //-----------------------------------------------------------------------------------
 //	estadoactual
 	@Autowired
@@ -256,8 +285,23 @@ public class TestController extends BaseController{
 			logger.error("Error en el formato de las fechas ingresadas debe ser AAAA-MM-DD");
 			throw e;
 		}
+		
 		return lecturaDao.obtenerLecturas(idPuntoDeSensado, desde, hasta);
-    }	
+    }
+	
+	@GetMapping("/lectura/pivot")
+    public List<Object> create(@RequestParam String fecha) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date fechaParseada = null;
+		try {
+			fechaParseada = new Date(sdf.parse(fecha).getTime());
+		} catch (ParseException e) {
+			logger.error("Error en el formato de las fechas ingresadas debe ser AAAA-MM-DD");
+			throw e;
+		}
+		
+		return lecturaDao.vistaPivot(fechaParseada);
+    }
 	
 //-----------------------------------------------------------------------------------	
 //	perfil
@@ -285,12 +329,12 @@ public class TestController extends BaseController{
 		return perfilDao.findById(Long.valueOf(a));
 	}
 	
-	@GetMapping(path = "/perfil/AsignarUsuario")
+	@GetMapping(path = "/perfil/asignarUsuario")
 	public void asignarUsuario (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idUsuario") Long idUsuario) {
 		perfilDao.asignarUsuario(idPerfil, idUsuario);
 	}
 	
-	@GetMapping(path = "/perfil/AsignarSensor")
+	@GetMapping(path = "/perfil/asignarSensor")
 	public void asignarSensor (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idSensor") Long idSensor) {
 		perfilDao.asignarSensor(idPerfil, idSensor);
 	}
@@ -301,12 +345,12 @@ public class TestController extends BaseController{
 		perfilDao.delete(Long.valueOf(a));
 	}
 	
-	@DeleteMapping(path = "/perfil/QuitarUsuario")
+	@DeleteMapping(path = "/perfil/quitarUsuario")
 	public void quitarUsuario (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idUsuario") Long idUsuario) {
 		perfilDao.quitarUsuario(idPerfil, idUsuario);
 	}
 	
-	@DeleteMapping(path = "/perfil/QuitarSensor")
+	@DeleteMapping(path = "/perfil/quitarSensor")
 	public void quitarSensor (@RequestParam("idPerfil") Long idPerfil, @RequestParam("idSensor") Long idSensor) {
 		perfilDao.quitarSensor(idPerfil, idSensor);
 	}
@@ -504,5 +548,10 @@ public class TestController extends BaseController{
 	@GetMapping(path = "/usuario/sensores/{idUsuario}")
 	public List obtenerSensoresUsuario(@PathVariable("idUsuario") Long idUsuario) {
 		return usuarioDao.obtenerSensoresUsuario(idUsuario);
+	}
+	
+	@GetMapping(path = "/usuario/perfil/{idUsuario}/{idPerfil}")
+	public Boolean validarPerfil(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idPerfil") Long idPerfil) {
+		return usuarioDao.validarPerfil(idUsuario, idPerfil);
 	}
 }

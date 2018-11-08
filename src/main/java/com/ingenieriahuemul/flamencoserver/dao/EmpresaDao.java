@@ -86,4 +86,28 @@ public class EmpresaDao extends BaseDao{
 		return empresa;
 	}
 	
+	//int ambos
+	private static final String P_MB_LIBRES = "PespacioLibreMB";
+	private static final String P_MIN_MUESTREO = "PminutosMuestreo";	
+	
+	private static final String ESPACIO_LIBRE = "flaCalcularEspacio";
+	public EspacioLibreRetorno espacioLibre(Integer espacioLibre, Integer minutosMuestreo) {
+		Map<String, Object> in = new HashMap<String, Object>();
+		in.put(P_MB_LIBRES, espacioLibre);
+		in.put(P_MIN_MUESTREO, minutosMuestreo);
+		
+		return ((List<EspacioLibreRetorno>)super.ejecutarStoredProcedure(ESPACIO_LIBRE, in, null, EspacioLibreRetorno.class)).get(0);		
+	}
+	
+	public static class EspacioLibreRetorno {
+		private Integer aniosAutonomia;
+		private Integer mesesAutonomia;
+		
+		public EspacioLibreRetorno() {}
+		
+		public Integer getAniosAutonomia() { return aniosAutonomia; }
+		public void setAniosAutonomia(Integer aniosAutonomia) {	this.aniosAutonomia = aniosAutonomia; }
+		public Integer getMesesAutonomia() { return mesesAutonomia; }
+		public void setMesesAutonomia(Integer mesesAutonomia) {	this.mesesAutonomia = mesesAutonomia; }		
+	}
 }

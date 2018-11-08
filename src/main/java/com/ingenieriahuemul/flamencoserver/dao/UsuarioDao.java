@@ -14,10 +14,12 @@ public class UsuarioDao extends BaseDao{
 	
 	//parametros
 	private static final String P_ID_USUARIO = "PidUsuario";
+	private static final String P_ID_PERFIL = "Pidperfil";
 	private static final String P_NOMBRE_USUARIO = "PnombreUsuario";
 	private static final String P_NOMBRE_COMPLETO = "PnombreCompleto";
 	private static final String P_EMAIL = "Pemail";
 	private static final String P_PASSWORD = "Ppassword";
+	
 	
 	//stored procedures
 	private static final String CONSULTA = "flaUsuarioSele";
@@ -26,7 +28,7 @@ public class UsuarioDao extends BaseDao{
 	private static final String MODIFICACION = "flaUsuarioModif";
 	private static final String AUTENTICACION = "flaValidaUsuario"; 
 	private static final String OBTENER_SENSORES = "flaUsuarioPerfilSensorSele"; 
-	
+	private static final String VALIDA_PERFIL = "flaValidaPerfilUsuario";
 	
 	//  IN Pnombreusuario char(15),
 	//	IN Ppassword char(20)
@@ -100,6 +102,30 @@ public class UsuarioDao extends BaseDao{
 		return usuario;
 	}
 	
+	
+	public Boolean validarPerfil(Long idUsuario, Long idPerfil) {
+		Map<String, Object> in = new HashMap<String, Object>();
+		in.put(P_ID_USUARIO, idUsuario);
+		in.put(P_ID_PERFIL, idPerfil);		
+
+		Map<String, Object> out = new HashMap<String, Object>();
+		
+		return ((List<RetornoValidaPerfil>)super.ejecutarStoredProcedure(VALIDA_PERFIL, in, out, RetornoValidaPerfil.class)).get(0).getPermiso();
+	}
+	
+	public static class RetornoValidaPerfil{
+		Boolean permiso;
+
+		public RetornoValidaPerfil (){}
+		
+		public Boolean getPermiso() {
+			return permiso;
+		}
+
+		public void setPermiso(Boolean permiso) {
+			this.permiso = permiso;
+		}		
+	}
 	
 //TODO: mover a archivo propio
 	public static class AutenticacionResultado {

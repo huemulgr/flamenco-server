@@ -156,6 +156,17 @@ public class MasService {
 			if(estado != null) {
 				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estado);
 				mas.setEstadoMas(estado);
+			} 
+			//comentar este bloque else si da problemas los estados desconectados
+			else {
+				EstadoMas estadoMas = new EstadoMas();
+				Double valor = null;
+				boolean[] reles = {false, false, false, false};
+				
+				estadoMas.setValor(valor);
+				estadoMas.setEstadoReles(reles);
+				estadoMasService.actualizarEstadoMas(mas.getSensor().getMac(), estadoMas);
+				mas.setEstadoMas(estadoMas);
 			}
 			
 //			comprobarRecuperacionDeEstados(datosObtenidos);
