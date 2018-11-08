@@ -50,8 +50,8 @@ import com.ingenieriahuemul.flamencoserver.services.SensorService;
 
 @RestController
 @RequestMapping("/test")
-public class TestController extends BaseController{
-	Logger logger = Logger.getLogger(TestController.class);
+public class MainController extends BaseController{
+	Logger logger = Logger.getLogger(MainController.class);
 	
 	@Autowired
 	private MasService masService;
