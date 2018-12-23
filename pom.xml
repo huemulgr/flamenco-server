@@ -10,7 +10,7 @@
 -->
 	<groupId>com.ingenieriahuemul</groupId>
 	<artifactId>flamenco-server</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<!-- war para deploy, jar para tomcat embebido  -->
 	<packaging>war</packaging>
 
