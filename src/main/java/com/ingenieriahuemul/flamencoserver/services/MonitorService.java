@@ -1,16 +1,12 @@
 package com.ingenieriahuemul.flamencoserver.services;
 
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 /*
  * Esta clase se uso como prueba para el manejo de funciones asincronicas en threads, 

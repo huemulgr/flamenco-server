@@ -1,11 +1,8 @@
 
 package com.ingenieriahuemul.flamencoserver.services;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -24,13 +21,16 @@ public class EmpresaService {
 	
 	public String obtenerEspacioLibre(Integer periodoImpresion) {
 		Integer espacio = null;
+		Path filePath = Paths.get("/opt/bitnami/apache-tomcat/webapps/espacio");
+		Scanner scanner = null;
 		try {
-			Path filePath = Paths.get("/opt/bitnami/apache-tomcat/webapps/espacio");
-			Scanner scanner = new Scanner(filePath);
+			scanner = new Scanner(filePath);
 			espacio = scanner.nextInt();
 		} catch (Exception e1) {
 			logger.error("Error leyendo archivo de espacio libre", e1);
 			return "<No se pudo comprobar el espacio libre>";
+		} finally {
+			scanner.close();
 		}
 		
 		if(espacio == null) {

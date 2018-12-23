@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
 
 @Component
+@SuppressWarnings("unchecked")
 public class PuntoDeSensadoDao extends BaseDao{
 	
 	//parametros

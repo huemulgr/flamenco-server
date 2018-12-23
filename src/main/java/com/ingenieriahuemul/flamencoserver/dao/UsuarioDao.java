@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.ingenieriahuemul.flamencoserver.domain.Usuario;
 
 @Component
+@SuppressWarnings("unchecked")
 public class UsuarioDao extends BaseDao{
 	
 	//parametros

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.ingenieriahuemul.flamencoserver.Monitor;
 import com.ingenieriahuemul.flamencoserver.dao.PuntoDeSensadoDao;
-import com.ingenieriahuemul.flamencoserver.domain.Alarma;
 import com.ingenieriahuemul.flamencoserver.domain.PuntoDeSensado;
 
 @Service

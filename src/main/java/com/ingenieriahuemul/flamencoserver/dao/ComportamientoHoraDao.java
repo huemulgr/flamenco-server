@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ingenieriahuemul.flamencoserver.domain.ComportamientoHora;
 
 @Component
+@SuppressWarnings("unchecked")
 public class ComportamientoHoraDao extends BaseDao{
 
 //los campos Time es mas sencillo guardarlos como un string con el formato "HH:MM:ss", falta decidir donde validar. Por ahora si estan mal los rebota el SP pero podria hacerse x aplicacion	

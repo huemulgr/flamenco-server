@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 @Component
+@SuppressWarnings("unchecked")
 public class SensorDao extends BaseDao{
 	
 	//parametros

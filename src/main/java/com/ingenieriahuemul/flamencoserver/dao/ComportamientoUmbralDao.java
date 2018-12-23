@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
 
 @Component
+@SuppressWarnings("unchecked")
 public class ComportamientoUmbralDao extends BaseDao{
 	
 	//parametros

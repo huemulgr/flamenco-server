@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.ingenieriahuemul.flamencoserver.Monitor;
 import com.ingenieriahuemul.flamencoserver.dao.AlarmaDao;
 import com.ingenieriahuemul.flamencoserver.domain.Alarma;
-import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 @Service
 public class AlarmaService {

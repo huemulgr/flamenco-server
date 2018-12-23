@@ -1,18 +1,13 @@
 package com.ingenieriahuemul.flamencoserver.dao;
 
-import java.sql.Time;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.validator.internal.util.privilegedactions.NewSchema;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.Utilitarios;
 import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
-import com.ingenieriahuemul.flamencoserver.domain.Perfil;
 
 @Component
 public class EstadoMasDao extends BaseDao{

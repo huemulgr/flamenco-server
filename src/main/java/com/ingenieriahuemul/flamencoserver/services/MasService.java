@@ -1,14 +1,6 @@
 package com.ingenieriahuemul.flamencoserver.services;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,8 +23,6 @@ import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
 import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
 import com.ingenieriahuemul.flamencoserver.domain.Mas;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
-
-import ch.qos.logback.classic.pattern.Util;
 
 
 
@@ -60,11 +50,6 @@ public class MasService {
 	
 	//listado de coordinadores para mantener un unico socket por coordinador (posiblemente se haga un refactor para tenerlo por base de datos)
 	private static Map<String, Socket> coordinadores = new HashMap<String, Socket>();
-	
-	//TODO: estos parametros es posible que los queramos configurables en algun momento
-	private static final int PORT=23;
-	private static final int TIMEOUT_READ_MS = 3000;
-	
 	
 	
 	/* metodo para traer los sensores con sus alarmas
@@ -227,7 +212,7 @@ public class MasService {
 	private boolean activacionManual(boolean activar, Long idPuntoSensado, int nroRele) {
 		Map<String, Object> datosObtenidos = null;
 		String respuesta="";
-		Mas mas = this.listadoMas.get(idPuntoSensado);
+		Mas mas = listadoMas.get(idPuntoSensado);
 		try {
 			semaforoMesh.acquire();
 			logger.info("------------------------------Semaforo ABIERTO");
@@ -272,7 +257,7 @@ public class MasService {
 		
 		Map<String, Object> datosObtenidos = null;
 		String respuesta="";
-		Mas mas = this.listadoMas.get(idPs);
+		Mas mas = listadoMas.get(idPs);
 		try {
 			semaforoMesh.acquire();
 			logger.info("------------------------------Semaforo ABIERTO");
@@ -313,7 +298,7 @@ public class MasService {
 		
 		Map<String, Object> datosObtenidos = null;
 		String respuesta="";
-		Mas mas = this.listadoMas.get(idPs);
+		Mas mas = listadoMas.get(idPs);
 		try {
 			semaforoMesh.acquire();
 			logger.info("------------------------------Semaforo ABIERTO");
@@ -349,7 +334,7 @@ public class MasService {
 	
 	/** encuentra si en el listado mas esta el idSensor de entrada, devuelve menos 1 en el caso que no exista como se da cuando no esta asignado el sensor */
 	private Long buscarIdPuntoSensadoXIdSensor(Long idSensor) {
-		for(Entry<Long, Mas> entry : this.listadoMas.entrySet()) {
+		for(Entry<Long, Mas> entry : listadoMas.entrySet()) {
 			if(entry.getValue().getIdSensor() == idSensor) {
 				return entry.getKey();
 			}

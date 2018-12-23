@@ -77,7 +77,7 @@ public class Mas {
             logger.error("No se pudo llegar al coordinador de ip " + ip, ex);	
             throw ex;
         } catch (Exception ex) {
-            logger.error("No se pudo abrir conexion con el coordinador " + ip + ":" + this.PORT, ex);
+            logger.error("No se pudo abrir conexion con el coordinador " + ip + ":" + PORT, ex);
             throw ex;
         }
 		coordinadores.put(ip, nuevoSocket);
@@ -85,10 +85,10 @@ public class Mas {
 	}
 	
 	public Socket getSocket() {
-		return this.coordinadores.get(this.sensor.getMacDelCoordinador());
+		return coordinadores.get(this.sensor.getMacDelCoordinador());
 	}
 	
-	//esto lo dejo por si en algun momento surge la necesidad, los socket los cierra el garbage collector o cuando se pisan con una nueva conexion
+	//TODO: esto lo dejo por si en algun momento surge la necesidad, los socket los cierra el garbage collector o cuando se pisan con una nueva conexion
 	private void cerrarSocketCoordinador(String ip) {
 		Socket socket = coordinadores.get(ip);
 		if(socket != null) {
@@ -121,7 +121,7 @@ public class Mas {
             logger.error("I/O error al obtener streams de la conexion del MAS " + this.puntoDeSensado.getNombreCorto(), ex);	
             return false;
         } catch (Exception ex) {	 
-            logger.error("No se pudo abrir conexion con el coordinador " + this.sensor.getMacDelCoordinador() + ":" + this.PORT, ex);	 
+            logger.error("No se pudo abrir conexion con el coordinador " + this.sensor.getMacDelCoordinador() + ":" + PORT, ex);	 
             return false;
         }
 	}

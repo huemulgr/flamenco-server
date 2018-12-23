@@ -10,6 +10,7 @@ import com.ingenieriahuemul.flamencoserver.domain.Perfil;
 import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 @Component
+@SuppressWarnings("unchecked")
 public class PerfilDao extends BaseDao{
 	
 	//parametros

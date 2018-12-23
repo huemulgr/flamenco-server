@@ -1,7 +1,5 @@
 package com.ingenieriahuemul.flamencoserver.domain;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

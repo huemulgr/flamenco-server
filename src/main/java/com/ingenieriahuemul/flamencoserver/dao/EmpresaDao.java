@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ingenieriahuemul.flamencoserver.domain.Empresa;
 
 @Component
+@SuppressWarnings("unchecked")
 public class EmpresaDao extends BaseDao{
 	
 	//parametros

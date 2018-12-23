@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ingenieriahuemul.flamencoserver.domain.Alarma;
 
 @Component
+@SuppressWarnings("unchecked")
 public class AlarmaDao extends BaseDao{
 	
 	//parametros

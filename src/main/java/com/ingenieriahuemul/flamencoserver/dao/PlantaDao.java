@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ingenieriahuemul.flamencoserver.domain.Planta;
 
 @Component
+@SuppressWarnings("unchecked")
 public class PlantaDao extends BaseDao{
 	
 	//parametros

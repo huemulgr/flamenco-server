@@ -5,19 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ingenieriahuemul.flamencoserver.Monitor;
 import com.ingenieriahuemul.flamencoserver.dao.ComportamientoUmbralDao;
-import com.ingenieriahuemul.flamencoserver.dao.SensorDao;
-import com.ingenieriahuemul.flamencoserver.domain.ComportamientoHora;
 import com.ingenieriahuemul.flamencoserver.domain.ComportamientoUmbral;
-import com.ingenieriahuemul.flamencoserver.domain.Sensor;
 
 @Service
 public class ComportamientoUmbralService {
 	@Autowired
 	private ComportamientoUmbralDao cUmbralDao;
-	@Autowired
-	private SensorDao sensorDao;
 	
 	public List<ComportamientoUmbral> obtenerComportamientoUmbrals() {
 		return cUmbralDao.findAll();

@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ingenieriahuemul.flamencoserver.dao.AlarmaDao;
 import com.ingenieriahuemul.flamencoserver.dao.EstadoMasDao;
 import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
 
@@ -16,8 +15,6 @@ public class EstadoMasService {
 	@Autowired
 	private EstadoMasDao estadoMasDao;
 	
-	@Autowired
-	private AlarmaDao alarmaDao;
 	
 	/** obtiene el status de todos los mas de la tabla en memoria */
 	public List<EstadoMas> obtenerEstadoActual() {

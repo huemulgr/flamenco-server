@@ -1,23 +1,14 @@
 package com.ingenieriahuemul.flamencoserver;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ingenieriahuemul.flamencoserver.domain.EstadoMas;
-import com.ingenieriahuemul.flamencoserver.domain.Mas;
 import com.ingenieriahuemul.flamencoserver.services.EstadoMasService;
 import com.ingenieriahuemul.flamencoserver.services.MasService;
 import com.ingenieriahuemul.flamencoserver.services.MonitorService;
-import com.ingenieriahuemul.flamencoserver.services.comunicacion.ComunicacionService;
 
 /* Servicio de monitoreo
  * 
@@ -36,8 +27,6 @@ public class Monitor {
     public static EstadoMasService estadoMasService;
     
     
-    @Autowired
-    private ComunicacionService comunicacionService;
     @Autowired MonitorService monitorService;
     
 	public Monitor() { }
